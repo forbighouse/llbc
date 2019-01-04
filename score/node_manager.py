@@ -1,7 +1,18 @@
 
 
+class BCClient(object):
 
-class Moniter():
+    def __init__(self):
+        print("I'm a blockchain")
+
+
+class EventsClient(object):
+
+    def __init__(self):
+        print("I'm a trans_client")
+
+
+class Monitor(object):
 
     def __init__(self):
         # Todo

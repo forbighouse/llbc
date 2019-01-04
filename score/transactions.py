@@ -2,15 +2,17 @@
 
 class Transaction(object):
 
-    def __init__(self, observations):
+    def __init__(self):
         self.to = 0x0
-        self.data = self.serialize(observations)
+        self.data = 0x0
 
     def parse(self):
         # rlp
         # Todo
         return
 
-    def serialize(self, observations):
-        return observations.get_time()
+    def tansaction_veri(self):
+        # 对事务验证其真实性
+        # Todo
+        pass
 

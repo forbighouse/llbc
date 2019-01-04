@@ -1,6 +1,6 @@
 
 
-class Score():
+class Score(object):
 
     def __init__(self):
         # Todo
@@ -13,3 +13,4 @@ class Score():
     @staticmethod
     def c_score_test():
         print("This is the c_score_test test file, it's import successed")
+
