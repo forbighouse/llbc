@@ -1,7 +1,7 @@
 from score.score_gen import Score
 from score.node_manager import Monitor
 from score.observation import Observation
-from score.transactions import Transaction
+from blockchain.transactions import Transaction
 
 
 def test():
@@ -38,7 +38,7 @@ def test():
     '''
 
     # 选择一个终端节点作为事件的观测和发布者
-    x1 = Monitor(obs)
+
 
     # 观测者调用通信协议将结果发出去
 

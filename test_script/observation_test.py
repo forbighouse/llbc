@@ -12,7 +12,7 @@ def test_ob():
     # ]
     # 位置txt
     # 10分钟
-    ServiceNode(node_type=1, veh_id='001', longitude=123, latitude=321, observe_vehs=[], current_time=12)
+    node1 = ServiceNode(node_type=1, veh_id='001', longitude=123, latitude=321, observe_vehs=[], current_time=12)
     # veh_traj = [
     #     {'veh_id': 0, 'longitude': 0, 'latitude': 0, 'observe_vehs': 'accident', 'current_time': 1},
     #     {'zone': 2, ' section': 'b', 'event': 'light', 'time': 2},
@@ -21,7 +21,7 @@ def test_ob():
     #     {'zone': 4, ' section': 'c', 'event': 'accident', 'time': 2},
     #     {'zone': 7, ' section': 'd', 'event': 'accident', 'time': 3},
     # ]
-    ServiceNode.showfield()
+    node1.observe_vehicle = '123'
 
     #
     # a = Observation()

@@ -1,6 +1,13 @@
 
 
+STATE_DEFAULTS = {
+
+}
+
+
 class Score(object):
+
+
 
     def __init__(self):
         # Todo
