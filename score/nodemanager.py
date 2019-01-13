@@ -60,12 +60,12 @@ class ServiceNode(object):
     def veh_id(self):
         return self._veh_id
 
-    @ property
-    @def latitude(self):
+    @property
+    def latitude(self):
         return self._latitude
 
-    @ property
-    @def longitude(self):
+    @property
+    def longitude(self):
         return self._latitude
 
     @observe_vehicle.setter

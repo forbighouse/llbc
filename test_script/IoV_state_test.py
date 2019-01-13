@@ -11,6 +11,10 @@ def iov_state_test():
                         current_time=12)
     b = DistanceManger()
     b.distance_valiate(node1)
+
+    d = distenance_calculate(IOV_LOCAL_MESSAGE["location"], IOV_LISTENING_MESSAGE["location"])
+    print(d)
+
     # veh_id = 'A'
     # node1 = DistanceManger(veh_id) # 需要获取可link的节点集合
     # could_link_with_set = node1.distance_valiate()
