@@ -30,6 +30,3 @@ class Observation(object):
         if not isinstance(observe_event, str):  # 以后要改成固定的几个选项
             raise TypeError('bad observe_event input, it should be str')
 
-# def set_observation(obs):
-#     ob1 = Observation()
-#     ob1.
