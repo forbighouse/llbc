@@ -4,9 +4,9 @@ from score.observation import Observation
 from blockchain.transactions import Transaction
 
 
-def test():
+def main():
 
 
 
 if __name__ == "__main__":
-    test()
+    main()

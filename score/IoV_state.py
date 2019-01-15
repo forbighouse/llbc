@@ -83,6 +83,7 @@ class DistanceManger(object):
     def distance_valiate(self, x):
         print(x.veh_id)
 
+
     def could_linked_set(self):
         return self._could_linked_set
 
