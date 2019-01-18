@@ -1,35 +1,42 @@
 import numpy as np
-from score.nodemanager import ServiceNode
+import time
 
 STATE_DEFAULTS = {
     "time": 0,
-    "ADJ_NODE_MATRIX":{},
+    "ADJ_NODE_MATRIX": {},
     "ADJ_DIS_MATRIX": {}
 }
 
 
-class Message(object):
-    pass
+class Message:
+    _fields = []
+
+    def __init__(self, *args):
+        if len(args) != len(self._fields):
+            raise TypeError('Expected {} arguments'.format(len(self._fields)))
+
+        for name, value in zip(self._fields, args):
+            setattr(self, name, value)
 
 
-class IoVMessage(Message):
+# 车辆发出的消息格式
+class IoVSendMessage(Message):
+    _fields = ['send_time', 'veh_id', 'location']
 
-    def __init__(self, time, veh_id, location):
-        self._time = time
-        self._veh_id = veh_id
-        self._location = location
+    def send(self):
+        return self.send_time, self.veh_id, self.location
 
-    @property
-    def time(self):
-        return self._time
 
-    @property
-    def veh_id(self):
-        return self._veh_id
+class IoVRecvMessage(Message):
+    _fields = ['current_time', 'send_time', 'veh_id', 'location']
 
-    @property
-    def location(self):
-        return self._location
+    def recv(self):
+        return self.current_time, self.send_time, self.veh_id, self.location
+
+
+def revc_message(message):
+    s = time.time(), message[0], message[1], message[2]
+    return s
 
 
 IOV_STATE_DEFAULTS = {
@@ -37,13 +44,15 @@ IOV_STATE_DEFAULTS = {
 }
 
 
+# 计算一个节点与它的地理位置接近的其他节点的邻接表
+# ///////////////////////////////////////////////////
+def adjacency_item(msg1, msg_set):
+    assert isinstance(msg1, Message)
+    return {msg1.veh_id: dis_list(msg1, msg_set)}
+
+
 def distance_cal(loc1, loc2):
     return np.linalg.norm(np.array(loc1) - np.array(loc2))
-
-
-def adjacency_item(msg1, msg_set):
-    assert isinstance(msg1, IoVMessage)
-    return {msg1.veh_id: dis_list(msg1, msg_set)}
 
 
 def dis_list(msg1, msg_set):
@@ -60,6 +69,7 @@ def dis_list(msg1, msg_set):
 
 def c(msg_dict, msg_set):
     msg_dict.update(msg_set)
+# ////////////////////////////////////////////////
 
 
 class DistanceManger(object):
