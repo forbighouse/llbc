@@ -12,7 +12,7 @@ def btdebug(msg):
 class BTPeer(object):
 
     def __init__(self, max_peers, server_port, my_id=None, server_host=None):
-        self.debug = False
+        self.debug = True
         self.max_peers = int(max_peers)
         self.server_port = int(server_port)
 
@@ -56,7 +56,7 @@ class BTPeer(object):
                      % (self.my_id, self.server_host, self.server_port))
         while not self.shutdown:
             try:
-                self.__debug('Lisenting for connections...')
+                self.__debug('Listening for connections...')
                 client_sock, client_addr = s.accept()
                 client_sock.settimeout(None)
 
@@ -123,17 +123,35 @@ class BTPeer(object):
                 traceback.print_exc()
         return msgreply
 
-    def startstabilizer(self, stabilizer, delay):
-        pass
+    def __run_stabilizer(self, stabilizer, delay):
+        while not self.shutdown:
+            stabilizer()
+            time.sleep(delay)
+
+    def start_stabilizer(self, stabilizer, delay):
+        """ Registers and starts a stabilizer function with this peer.
+        The function will be activated every <delay> seconds.
+        安置者：干啥用的？
+        """
+        t = threading.Thread(target=self.__run_stabilizer,
+                             args=[stabilizer, delay])
+        t.start()
 
     def addhandler(self, msgtype, handler):
-        pass
+        assert len(msgtype) == 4
+        self.handlers[msgtype] = handler
 
     def addrouter(self, router):
-        pass
+        self.router = router
 
     def addpeer(self, peerid, host, port):
-        pass
+        # 添加peer使list里面的peer与已知peer一致
+        if peerid not in self.peers and (self.max_peers == 0 or
+                         len(self.peers) < self.max_peers):
+            self.peers[peerid] = (host, int(port))
+            return True
+        else:
+            return False
 
     def getpeer(self, peerid):
         pass
