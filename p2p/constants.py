@@ -1,0 +1,20 @@
+import logging
+import coloredlogs
+
+KAD_ALPHA = 3
+BUCKET_SIZE = 16
+KAD_ID_SIZE = 256
+BUCKET_NUMBER = 17
+BUCKET_MIN_DISTANCE = KAD_ID_SIZE - BUCKET_NUMBER
+RE_VALIDATE_INTERVAL = 10
+REFRESH_INTERVAL = 3
+
+coloredlogs.install(level='DEBUG', datefmt='%Y-%m-%d %H:%M:%S.%f', fmt='%(asctime)s %(message)s')
+LOGGER = logging.getLogger()
+
+K_REQUEST_TIMEOUT = 1.0
+K_BOND_EXPIRATION = 86400
+K_EXPIRATION = 20
+K_MAX_NEIGHBORS = 12
+K_PUBKEY_SIZE = 512
+K_MAX_KEY_VALUE = 2 ** K_PUBKEY_SIZE - 1

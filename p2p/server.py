@@ -1,249 +1,131 @@
+from p2p.packet_val import *
+import gevent
+from xmlrpc.server import SimpleXMLRPCServer
 import socket
+from gevent import Greenlet
+from gevent.event import Event
+from gevent.select import select
 import struct
 import threading
 import time
+import rlp
+import hashlib
+import sha3
+import struct
+from ipaddress import ip_address
 import traceback
+from p2p.constants import LOGGER, BUCKET_SIZE, K_BOND_EXPIRATION, K_EXPIRATION, K_MAX_NEIGHBORS, K_REQUEST_TIMEOUT
+
+# class Pending(Greenlet):
+#
+#     def __init__(self, node, packet_type, callback, timeout=K_REQUEST_TIMEOUT):
 
 
-def btdebug(msg):
-    print("[%s] %s" % (str(threading.currentThread().getName()), msg))
+# class Server(object):
+#     def __init__(self, boot_nodes):
+#         self.end_point = EndPoint(u'127.0.0.1', 30303, 30303)
+#         self.boot_nodes = boot_nodes
+#
+#         self.pending_hold = []
+#         self.last_pong_received = {}
+#         self.last_ping_received = {}
+#
+#         priv_key_file = open('', 'r')
+#         priv_key_serialized = priv_key_file.read()
+#         priv_key_file.close()
+#         # self.priv_key =
+#
+#         # routing table
+#         self.table = RoutingTable()
+#
+#         # initialize udp socket
+#         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#         self.sock.bind(('0.0.0.0', self.end_point.udp_port))
+#         self.sock.setblocking(False)
+#
+#     def add_table(self, node):
+#         self.table.add_node(node)
+#
+#     def add_pending(self, pending):
+#         pending.start()
+#         self.pending_hold.append(pending)
+#         return pending
+#
+#     def run(self):
+#         gevent.spawm(self.clean_pending)
+#         gevent.spawn(self.listen)
+#         evt = Event()
+#         evt.wait()
+#
+#     def clean_pending(self):
+#         while True:
+#             for pending in list(self.pending_hold):
+#                 if not pending.is_alive:
+#                     self.pending_hold.remove(pending)
+#             time.sleep(K_REQUEST_TIMEOUT)
+#
+#     def listen(self):
+#         LOGGER.info("{:5} listening...".format(''))
+#         while True:
+#             ready = select([self.sock], [], [], 1.0)
+#             if ready[0]:
+#                 data, addr = self.sock.recvfrom(2048)
+#                 gevent.spawn(self.receive, data, addr)
+#
+#     def receive(self, data, addr):
+#         print("In reveive func")
+#         print("data: ", data)
+#         print("addr: ", addr)
+#         pass
+#
+#     def receive_pong(self, addr, pubkey, pong):
+#         pass
+
+class PingServer(object):
+    def __init__(self, my_end_point):
+        self.end_point = my_end_point
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock.bind(('0.0.0.0', self.end_point.udp_port))
+
+    def wrap_packet(self, packet):
+        b = rlp.encode(packet.pack())
+        payload = packet.packet_type + b
+
+        return payload
+
+    def udp_listen(self):
+        def receive_ping():
+            print("listening...")
+            data, addr = self.sock.recvfrom(2048)
+            print("received message[", addr, "]")
+        return threading.Thread(target=receive_ping)
+
+    def ping(self, end_point):
+        ping = PingNode(self.end_point, end_point, time.time())
+        message = self.wrap_packet(ping)
+        print("sending ping.")
+        self.sock.sendto(message, (end_point.address.exploded, end_point.udp_port))
 
 
-class BTPeer(object):
+class Pong(object):
+    packet_type = b'\x02'
 
-    def __init__(self, max_peers, server_port, my_id=None, server_host=None):
-        self.debug = True
-        self.max_peers = int(max_peers)
-        self.server_port = int(server_port)
-
-        if server_host:
-            self.server_host = server_host
-        else:
-            self.__initserver_host()
-
-        if my_id:
-            self.my_id = my_id
-        else:
-            self.my_id = '%s:%d' % (self.server_host, self.server_port)
-
-        self.peers = {}  # 已知peers的列表，内容可以是字典或者哈希表
-        self.shutdown = False  # 用来停止主循环
-
-        self.handlers = {}
-        self.router = None
-
-    def __initserver_host(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect(("www.baidu.com", 80))
-        self.serverhost = s.getsockname()[0]
-        s.close()
-
-    def __debug(self, msg):
-        if self.debug:
-            btdebug(msg)
-
-    def make_server_socket(self, port, back_log=5):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind(('', port))
-        s.listen(back_log)
-        return s
-
-    def main_loop(self):
-        s = self.make_server_socket(self.server_port)
-        s.settimeout(2)
-        self.__debug('Server started: %s (%s:%d)'
-                     % (self.my_id, self.server_host, self.server_port))
-        while not self.shutdown:
-            try:
-                self.__debug('Listening for connections...')
-                client_sock, client_addr = s.accept()
-                client_sock.settimeout(None)
-
-                t = threading.Thread(target=self.__handle_peer, args=[client_sock])
-                t.start()
-            except KeyboardInterrupt:
-                self.shutdown = True
-                continue
-            except:
-                if self.debug:
-                    traceback.print_exc()
-                    continue
-        self.__debug('Main loop exiting')
-        s.close()
-
-    def __handle_peer(self, client_sock):
-        self.__debug('Connected' + str(client_sock.getpeername()))
-
-        host, port = client_sock.getpeername()
-        peer_conn = BTPeerConnection(None, host, port, client_sock, debug=False)
-
-        try:
-            msgtype, msgdata = peer_conn.recvdata()
-            if msgtype: msgtype = msgtype.upper()
-            if msgtype not in self.handlers:
-                self.__debug('Not handled: %s:%s' % (msgtype, msgdata))
-            else:
-                self.__debug('Handling peer msg: %s, %s' % (msgtype, msgdata))
-                self.handlers[msgtype](peer_conn, msgdata)
-        except KeyboardInterrupt:
-            raise
-        except:
-            if self.debug:
-                traceback.print_exc()
-        self.__debug('Disconnecting' + str(client_sock.getpeername()))
-        peer_conn.close()
-
-    def sendtopeer(self, peerid, msgtype, msgdata, waitrely=True):
-        if self.router:
-            nextid, host, port = self.router(peerid)
-            if not self.router or not nextid:
-                self.__debug('Unable to route %s to %s' % (msgtype, peerid))
-                return None
-            return self.connect_send(host, port, msgtype, msgdata, pid=nextid, waitrely=waitrely)
-
-    def connect_send(self, host, port, msgtype, msgdata, pid=None, waitrely=True):
-        msgreply = []
-        try:
-            peerconn = BTPeerConnection(pid, host, port, debug=self.debug)
-            peerconn.senddata(msgtype, msgdata)
-            self.__debug('Sent %s: %s' % (pid, msgtype))
-
-            if waitrely:
-                onereply = peerconn.recvdata()
-                while (onereply != (None, None)):
-                    msgreply.append(onereply)
-                    self.__debug('Got reply %s: %s' % (pid, str(msgreply)))
-                    onereply = peerconn.recvdata()
-                peerconn.close()
-        except KeyboardInterrupt:
-            raise
-        except:
-            if self.debug:
-                traceback.print_exc()
-        return msgreply
-
-    def __run_stabilizer(self, stabilizer, delay):
-        while not self.shutdown:
-            stabilizer()
-            time.sleep(delay)
-
-    def start_stabilizer(self, stabilizer, delay):
-        """ Registers and starts a stabilizer function with this peer.
-        The function will be activated every <delay> seconds.
-        安置者：干啥用的？
-        """
-        t = threading.Thread(target=self.__run_stabilizer,
-                             args=[stabilizer, delay])
-        t.start()
-
-    def addhandler(self, msgtype, handler):
-        assert len(msgtype) == 4
-        self.handlers[msgtype] = handler
-
-    def addrouter(self, router):
-        self.router = router
-
-    def addpeer(self, peerid, host, port):
-        # 添加peer使list里面的peer与已知peer一致
-        if peerid not in self.peers and (self.max_peers == 0 or
-                         len(self.peers) < self.max_peers):
-            self.peers[peerid] = (host, int(port))
-            return True
-        else:
-            return False
-
-    def getpeer(self, peerid):
-        pass
-
-    def removepeer(self, peerid):
-        pass
-
-    def addpeerat(self, loc, peerid, host, port):
-        pass
-
-    def getpeerat(self, loc):
-        pass
-
-    def removepeerat(self, loc):
-        pass
-
-    def getpeerids(self):
-        pass
-
-    def numberofpeers(self):
-        pass
-
-    def maxpeersreached(self):
-        pass
-
-    def checklivepeers(self):
-        pass
-
-
-class BTPeerConnection:
-    def __init__(self, peer_id, host, port, sock=None, debug=False):
-        self.id = peer_id
-        self.debug = debug
-
-        if not sock:
-            self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.s.connect((host, int(port)))
-        else:
-            self.s = sock
-        self.sd = self.s.makefile('rw', 0)
-
-    def __makemsg(self, msgtype, msgdata):
-        msglen = len(msgdata)
-        msg = struct.pack("!4sL%ds" % msglen, msgtype, msglen, msgdata)
-        return msg
-
-    def __debug(self, msg):
-        if self.debug:
-            btdebug(msg)
-
-    def senddata(self, msgtype, msgdata):
-        try:
-            msg = self.__makemsg(msgtype, msgdata)
-            self.sd.write(msg)
-            self.sd.flush()
-        except KeyboardInterrupt:
-            raise
-        except:
-            if self.debug:
-                traceback.print_exc()
-                return False
-        return True
-
-    def recvdata(self):
-        try:
-            msgtype = self.sd.read(4)
-            if not msgtype:
-                return (None, None)
-            lenstr = self.sd.read(4)
-            msglen = int(struct.unpack("!L", lenstr)[0])
-            msg = ""
-            while len(msg) != msglen:
-                data = self.sd.read(min(2048, msglen - len(msg)))
-                if not len(data):
-                    break
-                msg += data
-
-                if len(msg) != msglen:
-                    return (None, None)
-            return (msgtype, msg)
-        except KeyboardInterrupt:
-            raise
-        except:
-            if self.debug:
-                traceback.print_exc()
-                return (None, None)
-
-    def close(self):
-        self.s.close()
-        self.s = None
-        self.sd = None
+    def __int__(self, to, echo, timestamp):
+        self.to = to
+        self.echo = echo
+        self.timestamp = timestamp
 
     def __str__(self):
-        return "|%s|" % self.id
+        return  "(Pong " + str(self.to) + " <echo hash=""> " + str(self.timestamp) + ")"
+
+    def pack(self):
+        return [self.to.pack(),
+                self.echo,
+                struct.pack(">I", self.timestamp)]
+
+    @staticmethod
+    def unpack(packed):
+        udp_port = struct.unpack(">H", packed[1])[0]
+        tcp_port = struct.unpack(">H", packed[2])[0]
+        return packed[0], udp_port, tcp_port
 
