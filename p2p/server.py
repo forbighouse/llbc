@@ -88,44 +88,24 @@ class PingServer(object):
         self.sock.bind(('0.0.0.0', self.end_point.udp_port))
 
     def wrap_packet(self, packet):
+        # FIXME
         b = rlp.encode(packet.pack())
         payload = packet.packet_type + b
-
         return payload
 
     def udp_listen(self):
-        def receive_ping():
-            print("listening...")
-            data, addr = self.sock.recvfrom(2048)
-            print("received message[", addr, "]")
-        return threading.Thread(target=receive_ping)
+        return threading.Thread(target=self.receive)
+
+    def receive(self):
+        print("listening...")
+        data, addr = self.sock.recvfrom(1024)
 
     def ping(self, end_point):
         ping = PingNode(self.end_point, end_point, time.time())
         message = self.wrap_packet(ping)
-        print("sending ping.")
+        print("sending ", str(ping))
         self.sock.sendto(message, (end_point.address.exploded, end_point.udp_port))
 
 
-class Pong(object):
-    packet_type = b'\x02'
 
-    def __int__(self, to, echo, timestamp):
-        self.to = to
-        self.echo = echo
-        self.timestamp = timestamp
-
-    def __str__(self):
-        return  "(Pong " + str(self.to) + " <echo hash=""> " + str(self.timestamp) + ")"
-
-    def pack(self):
-        return [self.to.pack(),
-                self.echo,
-                struct.pack(">I", self.timestamp)]
-
-    @staticmethod
-    def unpack(packed):
-        udp_port = struct.unpack(">H", packed[1])[0]
-        tcp_port = struct.unpack(">H", packed[2])[0]
-        return packed[0], udp_port, tcp_port
 
