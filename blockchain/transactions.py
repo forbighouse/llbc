@@ -2,17 +2,32 @@
 
 class Transaction(object):
 
-    def __init__(self):
-        self.to = 0x0
-        self.data = 0x0
+    def __init__(self, to, value, data, sig):
+        self.to = to
+        self.value = value
+        self.data = data
+        self.sig = sig
 
-    def parse(self):
+    def hash(self):
         # rlp
         # Todo
-        return
+        return [self.to,
+                self.value,
+                self.sig,
+                self.data]
 
-    def tansaction_veri(self):
-        # 对事务验证其真实性
-        # Todo
-        pass
 
+class TransactionOffset(object):
+    def __init__(self, vin, offset):
+        self._vin = vin
+        self._offset = offset
+        try:
+            self.data()
+        finally:
+            print("rating translate %s" % self._vin)
+
+    def data(self):
+        return [
+            self._vin,
+            self._offset
+        ]
