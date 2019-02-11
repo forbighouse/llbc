@@ -1,5 +1,6 @@
 import uuid
 import random
+import time
 from score.IoV_state import distance_cal_x
 
 
@@ -13,12 +14,14 @@ road_len = 5000
 time_len = 200000
 
 
-class UploadMessage(object):
+# 数据结构，veh发布rating的格式
+class Rating(object):
     def __init__(self, rec_veh_id, send_veh_id, m1, rating):
         self._rec_veh_id = rec_veh_id
         self._send_veh_id = send_veh_id
         self._m1 = m1
         self._rating = rating
+        self.pack()
 
     def pack(self):
         return [
@@ -29,12 +32,33 @@ class UploadMessage(object):
         ]
 
 
+class Message(object):
+    def __init__(self, veh_id, accident_location, report_time):
+        self._veh_id = veh_id
+        self._accident_location = accident_location
+        self._report_time = report_time
+        self.pac()
+
+    def pac(self):
+        return [
+            self._veh_id,
+            self._accident_location,
+            self._report_time
+        ]
+
+
+def message(veh_id, accident_id):
+    return Message(veh_id, accident_id, time.clock())
+
+
+# 生成rsu的位置
 def rsu_location():
     rsu_id_list = [uuid.uuid3(uuid.NAMESPACE_DNS, str(i)) for i in range(RSU_NUM)]
-    rsu_list = [i for i in range(250, 5000, 250)]
+    rsu_list = [location for location in range(250, 5000, 250)]
     return dict(zip(rsu_id_list, rsu_list))
 
 
+# 生成accident
 def accident_factory():
     accident_id = []
     accident_location = []
@@ -44,19 +68,31 @@ def accident_factory():
     return dict(zip(accident_id, accident_location))
 
 
+# 生成veh的位置
 def veh_trajectory():
     distance_veh = random.sample(range(5, 100), 50)
     start_point = random.sample(range(5, 100), 1)
     veh_locations = []
-    d = 0
+    d_location = 0
     for i in distance_veh:
-        d += start_point[0] + i
-        veh_locations.append(d)
+        d_location += start_point[0] + i
+        veh_locations.append(d_location)
     veh_id_list = [uuid.uuid3(uuid.NAMESPACE_DNS, str(i)) for i in range(veh_num)]
     return dict(zip(veh_id_list, veh_locations))
 
 
+# 返回离veh最近的rsu
 def rsu_search(veh_location_s, rsu_list):
+    """
+    :param veh_location_s: 单一的一辆veh
+    :param rsu_list: 所有的rsu的地址列表
+    :return: 离veh_location_s最近的一个rsu
+    """
+
+    if not veh_location_s:
+        print("No vehcile closed to accident")
+        return
+
     belong_rsu_optional = []
     for rsu_id, rsu_locations in rsu_list.items():
         if abs(rsu_locations - veh_location_s) < RSU_DISTANCE:
@@ -79,7 +115,6 @@ if __name__ == '__main__':
 
     # 随机产生的车辆位置 dict, (veh_id: location
     veh_location = veh_trajectory()
-
     # 每一辆车与事件的距离, list, (veh_id, distance)
     distance_list = []
     # 位置距离小于THRESHOLD_COMMUNICATION的具体距离，list, (veh_id, distance)
@@ -102,8 +137,11 @@ if __name__ == '__main__':
     # 每一个rsu的位置，dict, (id, location)
     rsu_location_list = rsu_location()
 
-    for i in vail_veh:
-        for j in i:
+    #
+    for index_accident, veh_list in enumerate(vail_veh):
+        message_veh = random.sample(veh_list, 1)
+        message(message_veh[0], index_accident)
+        for j in veh_list:
             veh_id_single = j[0]
             veh_location_single = veh_location[veh_id_single]
             # rsu_id_single, ((rsu_id, location), distance between rsu and veh
