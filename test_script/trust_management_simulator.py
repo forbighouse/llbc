@@ -12,43 +12,55 @@ veh_num = 50
 # rsu_num = 20
 road_len = 5000
 time_len = 200000
+VEHICLE_PERCEPTION_DISTANCE = 150
+ACCIDENT_TYPE = 0
 
 
-# 数据结构，veh发布rating的格式
-class Rating(object):
-    def __init__(self, rec_veh_id, send_veh_id, m1, rating):
-        self._rec_veh_id = rec_veh_id
-        self._send_veh_id = send_veh_id
-        self._m1 = m1
-        self._rating = rating
-        self.pack()
-
-    def pack(self):
-        return [
-            self._rec_veh_id,
-            self._send_veh_id,
-            self._m1,
-            self._rating
-        ]
+def rate(veh_id, vec_locations, message_list):
+    """
+    :param veh_id: 发出此rate的veh的id
+    :param vec_locations: 发出此rate的veh的位置
+    :param message_list: 收到的所有message的列表
+    :return: 当前veh给所有message的评价
+    """
+    rating_list = []
+    for msg in message_list:
+        if abs(vec_locations - msg[0][0]) < VEHICLE_PERCEPTION_DISTANCE:
+            for vehs in range(len(msg[1])):
+                rating_list.append([veh_id, msg[1][vehs][0][0], )
+                print(msg[1][vehs])
 
 
-class Message(object):
-    def __init__(self, veh_id, accident_location, report_time):
-        self._veh_id = veh_id
-        self._accident_location = accident_location
-        self._report_time = report_time
-        self.pac()
+def message(vaild_veh_list, accidents, report_cycle):
+    """
+    :param vaild_veh_list:
+    :param accidents:
+    :param report_cycle: time.clock()
+    :return:返回当前网络内的所有message的列表
+    """
+    if not len(vaild_veh_list):
+        print("vaild_veh_list empty")
 
-    def pac(self):
-        return [
-            self._veh_id,
-            self._accident_location,
-            self._report_time
-        ]
+    message_list = []
+    for index, accident_veh in enumerate(vaild_veh_list):
+        accident_location = accidents[str(index)]
 
+        if len(accident_veh):
+            # 随机找1到3辆车message同一个accident
+            veh_report = random.sample(accident_veh, random.randint(1, 3))
+            # 给每一次message添加汇报时间
+            veh_report_final = []
+            for veh in range(len(veh_report)):
+                # 给report_cycle添加或减少一个时间差量
+                report_time = random.uniform(-1, 1)
+                # 打包并重新构造添加了时间的车辆列表
+                veh_report_final.append([veh_report[veh], report_cycle+report_time])
+            message_list.append([accident_location, veh_report_final])
+        else:
+            veh_report = []
+            message_list.append([accident_location, veh_report])
 
-def message(veh_id, accident_id):
-    return Message(veh_id, accident_id, time.clock())
+    return message_list
 
 
 # 生成rsu的位置
@@ -65,7 +77,8 @@ def accident_factory():
     for i in range(ACCIDENT_NUM):
         accident_id.append(str(i))
         accident_location.append((random.randint(0, road_len), 0))
-    return dict(zip(accident_id, accident_location))
+    accident_type =
+    return [accident_id, accident_location, accident_type]
 
 
 # 生成veh的位置
@@ -120,12 +133,15 @@ if __name__ == '__main__':
     # 位置距离小于THRESHOLD_COMMUNICATION的具体距离，list, (veh_id, distance)
     vail_veh = []
 
-    for k1, v1 in accident_list.items():
+    # Todo
+    # accident的格式从字典改成了元组，部分代码需要调整
+    for v1 in accident_list:
+        veh
         d = []
         for k2, v2 in veh_location.items():
-            d.append((k2, int(distance_cal_x(v1[0], v2))))
+            d.append((k2, int(distance_cal_x(v1[1][0], v2))))
         distance_list.append(d)
-    adjacency_list = dict(zip(list(accident_list.keys()), distance_list))
+    adjacency_list = dict(zip(list(v1[0], distance_list))
 
     for k, v in adjacency_list.items():
         d = []
@@ -137,10 +153,18 @@ if __name__ == '__main__':
     # 每一个rsu的位置，dict, (id, location)
     rsu_location_list = rsu_location()
 
+    report_cycle = time.clock()
     #
+
+    messages = message(vail_veh, accident_list, report_cycle)
+
+    rating_list = []
+    for veh, locations in veh_location.items():
+        rating_list.append(rate(veh, locations, messages))
+
+
     for index_accident, veh_list in enumerate(vail_veh):
         message_veh = random.sample(veh_list, 1)
-        message(message_veh[0], index_accident)
         for j in veh_list:
             veh_id_single = j[0]
             veh_location_single = veh_location[veh_id_single]
