@@ -1,6 +1,7 @@
 import uuid
 import random
 import time
+import math
 from score.IoV_state import distance_cal_x
 
 
@@ -16,7 +17,8 @@ VEHICLE_PERCEPTION_DISTANCE = 150
 ACCIDENT_TYPE = 0
 
 
-def rate(veh_id, vec_locations, message_list):
+#
+def rate(veh_id, vec_locations, message_list, veh_location):
     """
     :param veh_id: 发出此rate的veh的id
     :param vec_locations: 发出此rate的veh的位置
@@ -24,11 +26,44 @@ def rate(veh_id, vec_locations, message_list):
     :return: 当前veh给所有message的评价
     """
     rating_list = []
-    for msg in message_list:
-        if abs(vec_locations - msg[0][0]) < VEHICLE_PERCEPTION_DISTANCE:
-            for vehs in range(len(msg[1])):
-                rating_list.append([veh_id, msg[1][vehs][0][0], )
-                print(msg[1][vehs])
+    for veh_id, veh_locations in veh_location.items():
+        veh_recv_msg = []
+        for msg in message_list:
+            for veh_msg_index in range(len(msg[1])):
+                if veh_id != msg[1][veh_msg_index][0]:
+                    msg_list = rate_collet_msg(veh_locations,
+                                               veh_location[msg[1][veh_msg_index][0]], #
+
+                                               )
+                else:
+                    msg_list = []
+                    veh_recv_msg.append(msg_list)
+
+
+        # for vehs in range(len(msg[1])):
+        #     rating_list.append([veh_id, msg[1][vehs][0][0], msg[0][1], rate_rating(msg[1][vehs][0][1])])
+    return rating_list
+
+def rate_collet_msg(veh_locations, veh_send_location,):
+    msg_list = []
+    if abs(veh_locations - veh_send_location) < THRESHOLD_COMMUNICATION:
+        msg_list.append(rate_rating(msg[1][veh_msg_index][1]))
+    else:
+        msg_list.append(0)
+
+
+# 评分c = b + e(-γd)
+def rate_rating(distance, b=0, gamma=1):
+    return b + pow(math.e, ((-gamma)*distance))
+
+
+def rate_condition_report(location1, location2):
+    """
+    :param location1: 发出此rate的veh的位置
+    :param location2: accident的位置
+    :return:
+    """
+    return abs(location1 - location2) < VEHICLE_PERCEPTION_DISTANCE
 
 
 def message(vaild_veh_list, accidents, report_cycle):
@@ -43,7 +78,8 @@ def message(vaild_veh_list, accidents, report_cycle):
 
     message_list = []
     for index, accident_veh in enumerate(vaild_veh_list):
-        accident_location = accidents[str(index)]
+        accident_location = accidents[index][1][0]
+        accident_type = accidents[index][2]
 
         if len(accident_veh):
             # 随机找1到3辆车message同一个accident
@@ -55,10 +91,10 @@ def message(vaild_veh_list, accidents, report_cycle):
                 report_time = random.uniform(-1, 1)
                 # 打包并重新构造添加了时间的车辆列表
                 veh_report_final.append([veh_report[veh], report_cycle+report_time])
-            message_list.append([accident_location, veh_report_final])
+            message_list.append([[accident_location, accident_type], veh_report_final])
         else:
             veh_report = []
-            message_list.append([accident_location, veh_report])
+            message_list.append([[accident_location, accident_type], veh_report])
 
     return message_list
 
@@ -72,13 +108,11 @@ def rsu_location():
 
 # 生成accident
 def accident_factory():
-    accident_id = []
-    accident_location = []
+    accident_type = ACCIDENT_TYPE
+    accidents = []
     for i in range(ACCIDENT_NUM):
-        accident_id.append(str(i))
-        accident_location.append((random.randint(0, road_len), 0))
-    accident_type =
-    return [accident_id, accident_location, accident_type]
+        accidents.append([str(i), (random.randint(0, road_len), 0), accident_type])
+    return accidents
 
 
 # 生成veh的位置
@@ -133,15 +167,13 @@ if __name__ == '__main__':
     # 位置距离小于THRESHOLD_COMMUNICATION的具体距离，list, (veh_id, distance)
     vail_veh = []
 
-    # Todo
-    # accident的格式从字典改成了元组，部分代码需要调整
+    accident_id_list = [m for m in range(ACCIDENT_NUM)]
     for v1 in accident_list:
-        veh
         d = []
         for k2, v2 in veh_location.items():
-            d.append((k2, int(distance_cal_x(v1[1][0], v2))))
+            d.append((k2, int(distance_cal_x(int(v1[1][0]), v2))))
         distance_list.append(d)
-    adjacency_list = dict(zip(list(v1[0], distance_list))
+    adjacency_list = dict(zip(accident_id_list, distance_list))
 
     for k, v in adjacency_list.items():
         d = []
