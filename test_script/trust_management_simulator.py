@@ -4,21 +4,34 @@ import time
 import math
 from score.IoV_state import distance_cal_x
 
-
+# 仿真的事件数量
 ACCIDENT_NUM = 5
+# RSU的设定数量
 RSU_NUM = 20
+# 通信距离设定
 THRESHOLD_COMMUNICATION = 300
+# RSU的间距
 RSU_DISTANCE = 250
-veh_num = 50
-# rsu_num = 20
+# 仿真车辆的数量
+VEH_NUM = 50
+# 道路长度，目前只有一条直路
 road_len = 5000
+# 仿真时间
 time_len = 200000
+# 车辆感知范围，设定车辆在多近的距离才可以汇报事件
 VEHICLE_PERCEPTION_DISTANCE = 150
+# 事件的类型，例如车祸、红绿灯、限行、拥堵等
 ACCIDENT_TYPE = 0
+# 一个消息的时效性
+TIME_TOLERANCE = 1
+# 测试模式
+DEBUG = 1
+# 更新所有的txt文件
+UPDATE_TXT = 0
 
 
 #
-def rate(veh_id, vec_locations, message_list, veh_location):
+def rate(message_list, veh_location):
     """
     :param veh_id: 发出此rate的veh的id
     :param vec_locations: 发出此rate的veh的位置
@@ -29,27 +42,39 @@ def rate(veh_id, vec_locations, message_list, veh_location):
     for veh_id, veh_locations in veh_location.items():
         veh_recv_msg = []
         for msg in message_list:
+            veh_for_one_msg = []
             for veh_msg_index in range(len(msg[1])):
                 if veh_id != msg[1][veh_msg_index][0]:
-                    msg_list = rate_collet_msg(veh_locations,
-                                               veh_location[msg[1][veh_msg_index][0]], #
-
-                                               )
-                else:
-                    msg_list = []
-                    veh_recv_msg.append(msg_list)
-
+                    veh_for_one_msg = rate_collect_msg(veh_locations,
+                                                       veh_location[msg[1][veh_msg_index][0][0]],
+                                                       msg[0],
+                                                       msg[1][veh_msg_index])
+                    # msg_list.append(veh_for_one_msg)
+            veh_recv_msg.append(veh_for_one_msg)
+                # else:
+                #     msg_list = []
+                #     veh_recv_msg.append(msg_list)
+        rating_list.append(veh_recv_msg)
 
         # for vehs in range(len(msg[1])):
         #     rating_list.append([veh_id, msg[1][vehs][0][0], msg[0][1], rate_rating(msg[1][vehs][0][1])])
     return rating_list
 
-def rate_collet_msg(veh_locations, veh_send_location,):
-    msg_list = []
+
+def rate_collect_msg(veh_locations, veh_send_location, msg0, msg1):
+    """
+    :param veh_locations: 任意一辆车的位置，其实是接收message的veh
+    :param veh_send_location: 发送message的车辆的位置
+    :param
+    :return:
+    """
+    # 还应该判断消息的时效性，应该在哪判断？
     if abs(veh_locations - veh_send_location) < THRESHOLD_COMMUNICATION:
-        msg_list.append(rate_rating(msg[1][veh_msg_index][1]))
+        # [汇报message的id, ,accident的位置， accident的类型，评分]
+        return [msg1[0][0], msg0[0], msg0[1], rate_rating(msg1[0][1])]
     else:
-        msg_list.append(0)
+        # 如果小于通信距离，当前车辆无法接收到message，所以msg_list在该车辆位置置0
+        return
 
 
 # 评分c = b + e(-γd)
@@ -110,9 +135,29 @@ def rsu_location():
 def accident_factory():
     accident_type = ACCIDENT_TYPE
     accidents = []
+    write_to_file = []
     for i in range(ACCIDENT_NUM):
         accidents.append([str(i), (random.randint(0, road_len), 0), accident_type])
-    return accidents
+        write_to_file.append('{};{};{}'.format(str(i), str((random.randint(0, road_len), 0)), str(accident_type)))
+    # ==============================================
+    if UPDATE_TXT:
+        with open('accident_list.txt', 'w') as w:
+            for strs in write_to_file:
+                w.write(strs)
+                w.write('\n')
+    # ==============================================
+    if not DEBUG:
+        return accidents
+    else:
+        accidentss = []
+        with open('accident_list.txt', 'r') as handler:
+            for x in handler:
+                x = x.strip('\n').split(';')
+                y = x[1].split(',')
+                int1 = int(y[0][1:])
+                int2 = int(y[1][1:-1])
+                accidentss.append([x[0], (int1, int2), int(x[2])])
+        return accidentss
 
 
 # 生成veh的位置
@@ -124,8 +169,26 @@ def veh_trajectory():
     for i in distance_veh:
         d_location += start_point[0] + i
         veh_locations.append(d_location)
-    veh_id_list = [uuid.uuid3(uuid.NAMESPACE_DNS, str(i)) for i in range(veh_num)]
-    return dict(zip(veh_id_list, veh_locations))
+    veh_id_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(VEH_NUM)]
+    if UPDATE_TXT:
+        with open('veh_list.txt', 'w')as w:
+            for id_index in range(VEH_NUM):
+                strw = '{};{}'.format(str(veh_id_list[id_index]), veh_locations[id_index])
+                w.write(strw)
+                w.write('\n')
+    if not DEBUG:
+        return dict(zip(veh_id_list, veh_locations))
+    else:
+        ids = []
+        locationss = []
+        with open('veh_list.txt', 'r') as handler:
+            for x in handler:
+                x = x.strip('\n').split(';')
+                print(x[0])
+                ids.append(x[0])
+                locationss.append(int(x[1]))
+        return dict(zip(ids, locationss))
+
 
 
 # 返回离veh最近的rsu
@@ -190,9 +253,10 @@ if __name__ == '__main__':
 
     messages = message(vail_veh, accident_list, report_cycle)
 
-    rating_list = []
-    for veh, locations in veh_location.items():
-        rating_list.append(rate(veh, locations, messages))
+    # rating_list = []
+    # for veh, locations in veh_location.items():
+    #     rating_list.append(rate(veh, locations, messages, veh_location))
+    rating_list = rate(messages, veh_location)
 
 
     for index_accident, veh_list in enumerate(vail_veh):
