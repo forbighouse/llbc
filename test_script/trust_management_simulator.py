@@ -44,16 +44,16 @@ def rate(message_list, veh_location):
         for msg in message_list:
             veh_for_one_msg = []
             for veh_msg_index in range(len(msg[1])):
-                if veh_id != msg[1][veh_msg_index][0]:
+                if veh_id != msg[1][veh_msg_index][0][0]:
                     veh_for_one_msg = rate_collect_msg(veh_locations,
                                                        veh_location[msg[1][veh_msg_index][0][0]],
                                                        msg[0],
                                                        msg[1][veh_msg_index])
                     # msg_list.append(veh_for_one_msg)
+                else:
+                    veh_for_one_msg = -1
             veh_recv_msg.append(veh_for_one_msg)
-                # else:
-                #     msg_list = []
-                #     veh_recv_msg.append(msg_list)
+
         rating_list.append(veh_recv_msg)
 
         # for vehs in range(len(msg[1])):
@@ -184,7 +184,6 @@ def veh_trajectory():
         with open('veh_list.txt', 'r') as handler:
             for x in handler:
                 x = x.strip('\n').split(';')
-                print(x[0])
                 ids.append(x[0])
                 locationss.append(int(x[1]))
         return dict(zip(ids, locationss))
@@ -256,6 +255,7 @@ if __name__ == '__main__':
     # rating_list = []
     # for veh, locations in veh_location.items():
     #     rating_list.append(rate(veh, locations, messages, veh_location))
+
     rating_list = rate(messages, veh_location)
 
 
