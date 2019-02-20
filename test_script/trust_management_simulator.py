@@ -42,17 +42,23 @@ def rate(message_list, veh_location):
     for veh_id, veh_locations in veh_location.items():
         veh_recv_msg = []
         for msg in message_list:
-            veh_for_one_msg = []
+            msg_list = []
             for veh_msg_index in range(len(msg[1])):
-                if veh_id != msg[1][veh_msg_index][0][0]:
+                if veh_id != msg[1][veh_msg_index][0][0]:  # 他自己也报
                     veh_for_one_msg = rate_collect_msg(veh_locations,
                                                        veh_location[msg[1][veh_msg_index][0][0]],
                                                        msg[0],
                                                        msg[1][veh_msg_index])
-                    # msg_list.append(veh_for_one_msg)
-                else:
-                    veh_for_one_msg = -1
-            veh_recv_msg.append(veh_for_one_msg)
+                    if veh_for_one_msg:
+                        msg_list.append(veh_for_one_msg)
+                    else:
+                        continue
+
+            # veh_recv_msg.append(veh_for_one_msg)
+            if len(msg_list):
+                veh_recv_msg.append(msg_list)
+            else:
+                veh_recv_msg.append(0)
 
         rating_list.append(veh_recv_msg)
 
@@ -74,7 +80,7 @@ def rate_collect_msg(veh_locations, veh_send_location, msg0, msg1):
         return [msg1[0][0], msg0[0], msg0[1], rate_rating(msg1[0][1])]
     else:
         # 如果小于通信距离，当前车辆无法接收到message，所以msg_list在该车辆位置置0
-        return
+        return 0
 
 
 # 评分c = b + e(-γd)
@@ -126,9 +132,34 @@ def message(vaild_veh_list, accidents, report_cycle):
 
 # 生成rsu的位置
 def rsu_location():
-    rsu_id_list = [uuid.uuid3(uuid.NAMESPACE_DNS, str(i)) for i in range(RSU_NUM)]
+    rsu_id_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(RSU_NUM)]
     rsu_list = [location for location in range(250, 5000, 250)]
     return dict(zip(rsu_id_list, rsu_list))
+
+
+# RSU收集评分
+def rsu_rating_collection(send_id, recv_msg, rsu_location_list, veh_location):
+    rsu_for_send = rsu_search(veh_location[send_id], rsu_location_list)
+    tag_for_no_msg = 0
+    upload_msg = []
+    for accident in recv_msg:
+        if accident[0] == 0 or accident[0] == -1:
+            tag_for_no_msg += 1
+        else:
+            assert type(accident) is list
+            for msg in accident:
+                upload_msg.append([rsu_for_send[0],  # 接收的transaction的RSU
+                                   send_id,  # 发送这个transaction的veh
+                                   msg[0],   # 报告message的veh
+                                   msg[2],   # 报告的事件类型
+                                   msg[3]])  # 该message的评分 Todo
+    if tag_for_no_msg == 5:
+        return
+    else:
+        return upload_msg
+
+
+
 
 
 # 生成accident
@@ -193,7 +224,7 @@ def veh_trajectory():
 # 返回离veh最近的rsu
 def rsu_search(veh_location_s, rsu_list):
     """
-    :param veh_location_s: 单一的一辆veh
+    :param veh_location_s: 需要找到附近RSU的veh地址
     :param rsu_list: 所有的rsu的地址列表
     :return: 离veh_location_s最近的一个rsu
     """
@@ -212,7 +243,7 @@ def rsu_search(veh_location_s, rsu_list):
 
     if len(belong_rsu_optional) == 2:
         belong_rsu_optional.sort(key=distance)
-
+    # [rsu的id, rsu的位置, rsu和veh的距离
     return belong_rsu_optional[0]
 
 
@@ -247,16 +278,22 @@ if __name__ == '__main__':
     # 每一个rsu的位置，dict, (id, location)
     rsu_location_list = rsu_location()
 
+    # 得到评分列表
     report_cycle = time.clock()
-    #
-
     messages = message(vail_veh, accident_list, report_cycle)
 
-    # rating_list = []
-    # for veh, locations in veh_location.items():
-    #     rating_list.append(rate(veh, locations, messages, veh_location))
-
     rating_list = rate(messages, veh_location)
+
+    # 评分发送给RSU
+    veh_id_list = []
+    for key,values in veh_location.items():
+        veh_id_list.append(key)
+
+    for veh_index in range(len(rating_list)):
+        rsu_rating_list = rsu_rating_collection(veh_id_list[veh_index],
+                                                rating_list[veh_index],
+                                                rsu_location_list,
+                                                veh_location)
 
 
     for index_accident, veh_list in enumerate(vail_veh):
