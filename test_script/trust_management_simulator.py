@@ -7,7 +7,7 @@ from score.IoV_state import distance_cal_x
 # 仿真的事件数量
 ACCIDENT_NUM = 5
 # RSU的设定数量
-RSU_NUM = 20
+RSU_NUM = 25
 # 通信距离设定
 THRESHOLD_COMMUNICATION = 300
 # RSU的间距
@@ -84,7 +84,7 @@ def rate_collect_msg(veh_locations, veh_send_location, msg0, msg1):
 
 
 # 评分c = b + e(-γd)
-def rate_rating(distance, b=0, gamma=1):
+def rate_rating(distance, b=0.5, gamma=0.014):
     return b + pow(math.e, ((-gamma)*distance))
 
 
@@ -115,6 +115,9 @@ def message(vaild_veh_list, accidents, report_cycle):
         if len(accident_veh):
             # 随机找1到3辆车message同一个accident
             veh_report = random.sample(accident_veh, random.randint(1, 3))
+            if DEBUG:
+                veh_report = []
+                veh_report.append(accident_veh[0])
             # 给每一次message添加汇报时间
             veh_report_final = []
             for veh in range(len(veh_report)):
@@ -132,8 +135,10 @@ def message(vaild_veh_list, accidents, report_cycle):
 
 # 生成rsu的位置
 def rsu_location():
-    rsu_id_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(RSU_NUM)]
-    rsu_list = [location for location in range(250, 5000, 250)]
+    # rsu也用UUID的话，后续跟veh的名字很容易混
+    # rsu_id_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(RSU_NUM)]
+    rsu_id_list = [str(i) for i in range(RSU_NUM)]
+    rsu_list = [location for location in range(250, (RSU_DISTANCE*RSU_NUM), RSU_DISTANCE)]
     return dict(zip(rsu_id_list, rsu_list))
 
 
@@ -143,7 +148,7 @@ def rsu_rating_collection(send_id, recv_msg, rsu_location_list, veh_location):
     tag_for_no_msg = 0
     upload_msg = []
     for accident in recv_msg:
-        if accident[0] == 0 or accident[0] == -1:
+        if accident == 0 or accident == -1:
             tag_for_no_msg += 1
         else:
             assert type(accident) is list
@@ -154,12 +159,9 @@ def rsu_rating_collection(send_id, recv_msg, rsu_location_list, veh_location):
                                    msg[2],   # 报告的事件类型
                                    msg[3]])  # 该message的评分 Todo
     if tag_for_no_msg == 5:
-        return
+        pass
     else:
         return upload_msg
-
-
-
 
 
 # 生成accident
@@ -220,7 +222,6 @@ def veh_trajectory():
         return dict(zip(ids, locationss))
 
 
-
 # 返回离veh最近的rsu
 def rsu_search(veh_location_s, rsu_list):
     """
@@ -251,15 +252,17 @@ if __name__ == '__main__':
 
     # 随机产生的事件的位置 dict, location
     accident_list = accident_factory()
-    # accident_list = random.randint(0, road_len)
 
     # 随机产生的车辆位置 dict, (veh_id: location
     veh_location = veh_trajectory()
+
     # 每一辆车与事件的距离, list, (veh_id, distance)
     distance_list = []
+
     # 位置距离小于THRESHOLD_COMMUNICATION的具体距离，list, (veh_id, distance)
     vail_veh = []
 
+    # 求得vail_veh
     accident_id_list = [m for m in range(ACCIDENT_NUM)]
     for v1 in accident_list:
         d = []
@@ -275,25 +278,32 @@ if __name__ == '__main__':
                 d.append(v1)
         vail_veh.append(d)
 
-    # 每一个rsu的位置，dict, (id, location)
+    # rsu的位置列表，dict, (id, location)
     rsu_location_list = rsu_location()
 
     # 得到评分列表
     report_cycle = time.clock()
     messages = message(vail_veh, accident_list, report_cycle)
-
     rating_list = rate(messages, veh_location)
 
     # 评分发送给RSU
     veh_id_list = []
-    for key,values in veh_location.items():
+    for key, values in veh_location.items():
         veh_id_list.append(key)
 
+        # 一轮下来RSUs得到的所有评分
+    rsu_rating_list = []
     for veh_index in range(len(rating_list)):
-        rsu_rating_list = rsu_rating_collection(veh_id_list[veh_index],
-                                                rating_list[veh_index],
-                                                rsu_location_list,
-                                                veh_location)
+        rsu_rating = rsu_rating_collection(veh_id_list[veh_index],
+                                           rating_list[veh_index],
+                                           rsu_location_list,
+                                           veh_location)
+        if rsu_rating:
+            if len(rsu_rating) > 1:
+                for i in rsu_rating:
+                    rsu_rating_list.append(i)
+            else:
+                rsu_rating_list.append(rsu_rating[0])
 
 
     for index_accident, veh_list in enumerate(vail_veh):
@@ -303,10 +313,3 @@ if __name__ == '__main__':
             veh_location_single = veh_location[veh_id_single]
             # rsu_id_single, ((rsu_id, location), distance between rsu and veh
             rsu_id_single = rsu_search(veh_location_single, rsu_location_list)
-
-
-
-
-    for i in vail_veh:
-        print(i)
-    print('yhr')
