@@ -24,17 +24,19 @@ VEHICLE_PERCEPTION_DISTANCE = 150
 ACCIDENT_TYPE = 0
 # 一个消息的时效性
 TIME_TOLERANCE = 1
+# 事件发生的阈值
+THRESHOLD = 0.5
+# 事件发生的概率
+PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测试
 # 测试模式
 DEBUG = 1
 # 更新所有的txt文件
 UPDATE_TXT = 0
 
 
-#
 def rate(message_list, veh_location):
     """
-    :param veh_id: 发出此rate的veh的id
-    :param vec_locations: 发出此rate的veh的位置
+    :param veh_location: 发出此rate的veh的位置
     :param message_list: 收到的所有message的列表
     :return: 当前veh给所有message的评价
     """
@@ -59,11 +61,7 @@ def rate(message_list, veh_location):
                 veh_recv_msg.append(msg_list)
             else:
                 veh_recv_msg.append(0)
-
         rating_list.append(veh_recv_msg)
-
-        # for vehs in range(len(msg[1])):
-        #     rating_list.append([veh_id, msg[1][vehs][0][0], msg[0][1], rate_rating(msg[1][vehs][0][1])])
     return rating_list
 
 
@@ -97,6 +95,65 @@ def rate_condition_report(location1, location2):
     return abs(location1 - location2) < VEHICLE_PERCEPTION_DISTANCE
 
 
+# 每一辆车给出得到的message的评分
+def veh_rate(msg_list):
+    accident_probiblity = []
+    for accident in msg_list:
+        rates = []
+        if accident != 0:
+            for msgs in accident:
+                rates.append(msgs[3])
+                # 发出message的veh_id
+            accident_probiblity.append(occur_probability(PE, rates))
+        else:
+            accident_probiblity.append(0)
+    # 给出最后的对每一个message的评分
+    return rate_get(msg_list, accident_probiblity)
+
+
+# event的概率
+def occur_probability(pe, peck):
+    peck_ = []
+    for x in peck:
+        peck_.append(1-x)
+
+    def multiplicator(num_list):
+        result = 1
+        for num in num_list:
+            result = result * num
+        return result
+    part1 = pe * multiplicator(peck)
+    part2 = (1-pe) * multiplicator(peck_)
+    return part1 / (part1 + part2)
+
+
+# 每一辆车计算message的评分
+def rate_get(msg_list, accident_probiblity):
+    assert type(msg_list) is list
+    accident_act = []
+    for y in accident_probiblity:
+        if y > THRESHOLD:
+            accident_act.append(1)
+        else:
+            accident_act.append(0)
+
+    rate_result_for_one_veh = []
+    for msg_index in range(len(msg_list)):
+        if msg_list[msg_index] != 0:
+            d = []
+            for msgs in msg_list[msg_index]:
+                if accident_act[msg_index] == 1:  rates_for = 1
+                else:  rates_for = -1
+                d.append([msgs[0],  # 报告message的veh
+                          msgs[1],  # 报告accident的位置
+                          msgs[2],  # 报告accident的类型
+                          rates_for])  # 该message的评分
+            rate_result_for_one_veh.append(d)
+        else:
+            rate_result_for_one_veh.append(0)
+    return rate_result_for_one_veh
+
+
 def message(vaild_veh_list, accidents, report_cycle):
     """
     :param vaild_veh_list:
@@ -114,10 +171,14 @@ def message(vaild_veh_list, accidents, report_cycle):
 
         if len(accident_veh):
             # 随机找1到3辆车message同一个accident
-            veh_report = random.sample(accident_veh, random.randint(1, 3))
-            if DEBUG:
-                veh_report = []
-                veh_report.append(accident_veh[0])
+            # veh_report = random.sample(accident_veh, random.randint(1, 3))
+            # if DEBUG:
+            #     veh_report = []
+            #     veh_report.append(accident_veh[0])
+
+            # 全部车辆上报
+            veh_report = accident_veh
+
             # 给每一次message添加汇报时间
             veh_report_final = []
             for veh in range(len(veh_report)):
@@ -156,8 +217,8 @@ def rsu_rating_collection(send_id, recv_msg, rsu_location_list, veh_location):
                 upload_msg.append([rsu_for_send[0],  # 接收的transaction的RSU
                                    send_id,  # 发送这个transaction的veh
                                    msg[0],   # 报告message的veh
-                                   msg[2],   # 报告的事件类型
-                                   msg[3]])  # 该message的评分 Todo
+                                   msg[1],   # 报告的事件类型
+                                   msg[3]])  # 该message的评分
     if tag_for_no_msg == 5:
         pass
     else:
@@ -248,6 +309,24 @@ def rsu_search(veh_location_s, rsu_list):
     return belong_rsu_optional[0]
 
 
+# 每个基站开始计算offset
+def offset(value_list):
+    veh_count = [veh[2] for veh in value_list]
+    veh_rate_count = [[] for count in range(len(value_list))]
+    veh_count_dict = dict(zip(veh_count, veh_rate_count))
+    for rate_line in value_list:
+        veh_count_dict[rate_line[2]].append(rate_line[-1])
+
+    for veh_id, rating in veh_count_dict:
+        offset_result = offset_count(rating)
+
+    return veh_count_dict
+
+
+def offset_count(rating_list):
+    pass
+
+
 if __name__ == '__main__':
 
     # 随机产生的事件的位置 dict, location
@@ -286,16 +365,23 @@ if __name__ == '__main__':
     messages = message(vail_veh, accident_list, report_cycle)
     rating_list = rate(messages, veh_location)
 
-    # 评分发送给RSU
+    # veh的id列表
     veh_id_list = []
     for key, values in veh_location.items():
         veh_id_list.append(key)
 
+    # 每辆车统计评分
+    msg_rate_list = []
+    for msg_index in range(len(rating_list)):
+        if len(rating_list[msg_index]) == 5:
+            msg_rate_list.append(veh_rate(rating_list[msg_index]))
+
+    # 评分发送给RSU
         # 一轮下来RSUs得到的所有评分
     rsu_rating_list = []
-    for veh_index in range(len(rating_list)):
+    for veh_index in range(len(msg_rate_list)):
         rsu_rating = rsu_rating_collection(veh_id_list[veh_index],
-                                           rating_list[veh_index],
+                                           msg_rate_list[veh_index],
                                            rsu_location_list,
                                            veh_location)
         if rsu_rating:
@@ -305,6 +391,15 @@ if __name__ == '__main__':
             else:
                 rsu_rating_list.append(rsu_rating[0])
 
+    # 每一个RSU用收到的rate计算对应车辆的offset，使用区块链的来竞争记账权
+    rsu_id_list = [rsu_rating[0] for rsu_rating in rsu_rating_list]
+    rsu_id_num_list = [[] for i in range(len(rsu_id_list))]
+    rsu_id_dict = dict(zip(rsu_id_list, rsu_id_num_list))
+    for rsu_rating in rsu_rating_list:
+        rsu_id_dict[rsu_rating[0]].append(rsu_rating)
+
+    for key, value in rsu_id_dict.items():
+        offset(value)
 
     for index_accident, veh_list in enumerate(vail_veh):
         message_veh = random.sample(veh_list, 1)
