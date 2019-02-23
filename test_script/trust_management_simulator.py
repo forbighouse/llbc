@@ -309,7 +309,7 @@ def rsu_search(veh_location_s, rsu_list):
     return belong_rsu_optional[0]
 
 
-# 每个基站开始计算offset
+# 一个基站开始计算offset
 def offset(value_list):
     veh_count = [veh[2] for veh in value_list]
     veh_rate_count = [[] for count in range(len(value_list))]
@@ -317,14 +317,40 @@ def offset(value_list):
     for rate_line in value_list:
         veh_count_dict[rate_line[2]].append(rate_line[-1])
 
-    for veh_id, rating in veh_count_dict:
-        offset_result = offset_count(rating)
+    rating_count = []
+    for veh_id, rating in veh_count_dict.items():
+        p_num, n_num = rate_count(rating)
+        rating_count.append([veh_id, p_num, n_num])
 
-    return veh_count_dict
+    offset_result = []
+    for each_coung in rating_count:
+        offset_result.append([each_coung[0], offset_count(each_coung)])
+
+    return offset_result
 
 
-def offset_count(rating_list):
-    pass
+# 计算正负rating的数量
+def rate_count(rating_each_list):
+    """
+    :param rating_each_list:
+    :return: 正面rating的数量，负面rating的数量
+    """
+    positive_num = 0
+    negative_num = 0
+    for num in rating_each_list:
+        if num == 1:
+            positive_num += 1
+        elif num == -1:
+            negative_num += 1
+    return positive_num, negative_num
+
+
+# offset的统计计算
+def offset_count(rating_count):
+    rating_count[1]  # 正
+    rating_count[2]  # 负
+
+    return
 
 
 if __name__ == '__main__':
