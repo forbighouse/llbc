@@ -1,27 +1,23 @@
-import uuid
 import random
 import time
 import math
 from score.IoV_state import distance_cal_x
+from test_script.veh_trust.base_veh_location import ACCIDENT_TYPE, ACCIDENT_NUM, ROAD_LEN
 
-# 仿真的事件数量
-ACCIDENT_NUM = 5
+# 仿真轮数
+SIMULATION_ROUND = 50
 # RSU的设定数量
-RSU_NUM = 25
+RSU_NUM = 35
 # 通信距离设定
 THRESHOLD_COMMUNICATION = 300
 # RSU的间距
 RSU_DISTANCE = 250
 # 仿真车辆的数量
 VEH_NUM = 50
-# 道路长度，目前只有一条直路
-road_len = 5000
 # 仿真时间
 time_len = 200000
 # 车辆感知范围，设定车辆在多近的距离才可以汇报事件
 VEHICLE_PERCEPTION_DISTANCE = 150
-# 事件的类型，例如车祸、红绿灯、限行、拥堵等
-ACCIDENT_TYPE = 0
 # 一个消息的时效性
 TIME_TOLERANCE = 1
 # 事件发生的阈值
@@ -29,7 +25,7 @@ THRESHOLD = 0.5
 # 事件发生的概率
 PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测试
 # 测试模式
-DEBUG = 1
+DEBUG = 0
 # 更新所有的txt文件
 UPDATE_TXT = 0
 
@@ -200,7 +196,7 @@ def rsu_location():
     # rsu_id_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(RSU_NUM)]
     rsu_id_list = [str(i) for i in range(RSU_NUM)]
     rsu_list = [location for location in range(250, (RSU_DISTANCE*RSU_NUM), RSU_DISTANCE)]
-    return dict(zip(rsu_id_list, rsu_list))
+    return rsu_id_list, dict(zip(rsu_id_list, rsu_list))
 
 
 # RSU收集评分
@@ -226,21 +222,13 @@ def rsu_rating_collection(send_id, recv_msg, rsu_location_list, veh_location):
 
 
 # 生成accident
-def accident_factory():
+def accident_factory(accident_fast_mode=0):
     accident_type = ACCIDENT_TYPE
     accidents = []
-    write_to_file = []
     for i in range(ACCIDENT_NUM):
-        accidents.append([str(i), (random.randint(0, road_len), 0), accident_type])
-        write_to_file.append('{};{};{}'.format(str(i), str((random.randint(0, road_len), 0)), str(accident_type)))
-    # ==============================================
-    if UPDATE_TXT:
-        with open('accident_list.txt', 'w') as w:
-            for strs in write_to_file:
-                w.write(strs)
-                w.write('\n')
-    # ==============================================
-    if not DEBUG:
+        accidents.append([str(i), (random.randint(0, ROAD_LEN), 0), accident_type])
+
+    if accident_fast_mode:
         return accidents
     else:
         accidentss = []
@@ -256,31 +244,29 @@ def accident_factory():
 
 # 生成veh的位置
 def veh_trajectory():
-    distance_veh = random.sample(range(5, 100), 50)
-    start_point = random.sample(range(5, 100), 1)
-    veh_locations = []
-    d_location = 0
-    for i in distance_veh:
-        d_location += start_point[0] + i
-        veh_locations.append(d_location)
-    veh_id_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(VEH_NUM)]
-    if UPDATE_TXT:
-        with open('veh_list.txt', 'w')as w:
-            for id_index in range(VEH_NUM):
-                strw = '{};{}'.format(str(veh_id_list[id_index]), veh_locations[id_index])
-                w.write(strw)
-                w.write('\n')
+    veh_id_list = []
+    locationss = []
+    print()
+    with open('veh_list.txt', 'r') as handler:
+        for x in handler:
+            x = x.strip('\n').split(';')
+            veh_id_list.append(x[0])
+            locationss.append(int(x[1]))
+    # 每一次都更新位置
     if not DEBUG:
-        return dict(zip(veh_id_list, veh_locations))
+        # 随机veh之间的距离和随机第一辆veh的起始位置
+        distance_veh = random.sample(range(5, 100), len(veh_id_list))
+        start_point = random.sample(range(5, 100), 1)
+        veh_locations = []
+        d_location = 0
+        for i in distance_veh:
+            d_location += start_point[0] + i
+            veh_locations.append(d_location)
+        random.shuffle(veh_locations)
+        return veh_id_list, dict(zip(veh_id_list, veh_locations))
+    # 测试模式：每次都从txt文件中读取位置
     else:
-        ids = []
-        locationss = []
-        with open('veh_list.txt', 'r') as handler:
-            for x in handler:
-                x = x.strip('\n').split(';')
-                ids.append(x[0])
-                locationss.append(int(x[1]))
-        return dict(zip(ids, locationss))
+        return veh_id_list, dict(zip(veh_id_list, locationss))
 
 
 # 返回离veh最近的rsu
@@ -323,8 +309,8 @@ def offset(value_list):
         rating_count.append([veh_id, p_num, n_num])
 
     offset_result = []
-    for each_coung in rating_count:
-        offset_result.append([each_coung[0], offset_count(each_coung)])
+    for each_count in rating_count:
+        offset_result.append([each_count[0], offset_count(each_count)])
 
     return offset_result
 
@@ -347,90 +333,137 @@ def rate_count(rating_each_list):
 
 # offset的统计计算
 def offset_count(rating_count):
-    rating_count[1]  # 正
-    rating_count[2]  # 负
+    m = rating_count[1]  # 正
+    n = rating_count[2]  # 负
 
-    return
+    def sensitivity_fun(xx): return xx*xx
+
+    sita1 = sensitivity_fun(m) / (sensitivity_fun(m) + sensitivity_fun(n))
+    sita2 = sensitivity_fun(n) / (sensitivity_fun(m) + sensitivity_fun(n))
+
+    return (sita1*m - sita2*n) / (m + n)
+
+
+def simulator_count(offset_list):
+    pos_num = 0
+    neg_num = 0
+    for num in offset_list:
+        if num > 0:
+            pos_num += 1
+        elif num < 0:
+            neg_num += 1
+    return pos_num, neg_num
 
 
 if __name__ == '__main__':
-
-    # 随机产生的事件的位置 dict, location
-    accident_list = accident_factory()
-
-    # 随机产生的车辆位置 dict, (veh_id: location
-    veh_location = veh_trajectory()
-
-    # 每一辆车与事件的距离, list, (veh_id, distance)
-    distance_list = []
-
-    # 位置距离小于THRESHOLD_COMMUNICATION的具体距离，list, (veh_id, distance)
-    vail_veh = []
-
-    # 求得vail_veh
-    accident_id_list = [m for m in range(ACCIDENT_NUM)]
-    for v1 in accident_list:
-        d = []
-        for k2, v2 in veh_location.items():
-            d.append((k2, int(distance_cal_x(int(v1[1][0]), v2))))
-        distance_list.append(d)
-    adjacency_list = dict(zip(accident_id_list, distance_list))
-
-    for k, v in adjacency_list.items():
-        d = []
-        for v1 in v:
-            if v1[1] < THRESHOLD_COMMUNICATION:
-                d.append(v1)
-        vail_veh.append(d)
-
     # rsu的位置列表，dict, (id, location)
-    rsu_location_list = rsu_location()
+    rsu_ids, rsu_location_list = rsu_location()
+    rsu_transaction_list = [[] for ids in range(len(rsu_ids))]
+    rsu_transaction = dict(zip(rsu_ids, rsu_transaction_list))
+    veh_ids = []
+    for epoch in range(SIMULATION_ROUND):
+        # 随机产生的车辆位置 dict, (veh_id: location
+        veh_ids, veh_location = veh_trajectory()
 
-    # 得到评分列表
-    report_cycle = time.clock()
-    messages = message(vail_veh, accident_list, report_cycle)
-    rating_list = rate(messages, veh_location)
+        # 随机产生的事件的位置 dict, location
+        accident_list = accident_factory()
 
-    # veh的id列表
-    veh_id_list = []
-    for key, values in veh_location.items():
-        veh_id_list.append(key)
+        # 每一辆车与事件的距离, list, (veh_id, distance)
+        distance_list = []
 
-    # 每辆车统计评分
-    msg_rate_list = []
-    for msg_index in range(len(rating_list)):
-        if len(rating_list[msg_index]) == 5:
-            msg_rate_list.append(veh_rate(rating_list[msg_index]))
+        # 位置距离小于THRESHOLD_COMMUNICATION的具体距离，list, (veh_id, distance)
+        vail_veh = []
 
-    # 评分发送给RSU
+        # 求得vail_veh
+        accident_id_list = [m for m in range(ACCIDENT_NUM)]
+        for v1 in accident_list:
+            d = []
+            for k2, v2 in veh_location.items():
+                d.append((k2, int(distance_cal_x(int(v1[1][0]), v2))))
+            distance_list.append(d)
+        adjacency_list = dict(zip(accident_id_list, distance_list))
+
+        for k, v in adjacency_list.items():
+            d = []
+            for v1 in v:
+                if v1[1] < THRESHOLD_COMMUNICATION:
+                    d.append(v1)
+            vail_veh.append(d)
+
+        # 得到评分列表
+        report_cycle = time.clock()
+        messages = message(vail_veh, accident_list, report_cycle)
+        rating_list = rate(messages, veh_location)
+
+        # veh的id列表
+        veh_id_list = []
+        for key, values in veh_location.items():
+            veh_id_list.append(key)
+
+        # 每辆车统计评分
+        msg_rate_list = []
+        for msg_index in range(len(rating_list)):
+            if len(rating_list[msg_index]) == 5:
+                msg_rate_list.append(veh_rate(rating_list[msg_index]))
+
+        # 评分发送给RSU
         # 一轮下来RSUs得到的所有评分
-    rsu_rating_list = []
-    for veh_index in range(len(msg_rate_list)):
-        rsu_rating = rsu_rating_collection(veh_id_list[veh_index],
-                                           msg_rate_list[veh_index],
-                                           rsu_location_list,
-                                           veh_location)
-        if rsu_rating:
-            if len(rsu_rating) > 1:
-                for i in rsu_rating:
-                    rsu_rating_list.append(i)
-            else:
-                rsu_rating_list.append(rsu_rating[0])
+        rsu_rating_list = []
+        for veh_index in range(len(msg_rate_list)):
+            rsu_rating = rsu_rating_collection(veh_id_list[veh_index],
+                                               msg_rate_list[veh_index],
+                                               rsu_location_list,
+                                               veh_location)
+            if rsu_rating:
+                if len(rsu_rating) > 1:
+                    for i in rsu_rating:
+                        rsu_rating_list.append(i)
+                else:
+                    rsu_rating_list.append(rsu_rating[0])
 
-    # 每一个RSU用收到的rate计算对应车辆的offset，使用区块链的来竞争记账权
-    rsu_id_list = [rsu_rating[0] for rsu_rating in rsu_rating_list]
-    rsu_id_num_list = [[] for i in range(len(rsu_id_list))]
-    rsu_id_dict = dict(zip(rsu_id_list, rsu_id_num_list))
-    for rsu_rating in rsu_rating_list:
-        rsu_id_dict[rsu_rating[0]].append(rsu_rating)
+        # 每一个RSU用收到的rate计算对应车辆的offset，使用区块链的来竞争记账权
+        rsu_id_list = [rsu_rating[0] for rsu_rating in rsu_rating_list]
+        rsu_id_num_list = [[] for i in range(len(rsu_id_list))]
+        rsu_id_dict = dict(zip(rsu_id_list, rsu_id_num_list))
+        for rsu_rating in rsu_rating_list:
+            rsu_id_dict[rsu_rating[0]].append(rsu_rating)
 
-    for key, value in rsu_id_dict.items():
-        offset(value)
+        # npd: not update
+        npd_transaction_by_rsu_list = []
+        rsu_id_list_v2 = []
+        for key, value in rsu_id_dict.items():
+            rsu_transaction[key].append(offset(value))
+            # rsu_id_list_v2.append(key)
+            # npd_transaction_by_rsu_list.append(offset(value))
 
+        # npd_transaction_by_rsu_dict = dict(zip(rsu_id_list_v2, npd_transaction_by_rsu_list))
+# --------------------------------------------------------------------------------------
+    rsu_active_list = []
+    trans = []
+    for key, rsus in rsu_transaction.items():
+        if len(rsus) > 0:
+            rsu_active_list.append(key)
+            trans.append(rsus)
+
+    count = [None, 0]
+    for i in range(len(trans)):
+        count_veh_trans = 0
+        for j in trans[i]:
+            count_veh_trans += len(j)
+        if count_veh_trans > count[1]:
+            count[1] = count_veh_trans
+            count[0] = rsu_active_list[i]
+
+    consensus_node = count[0]
+
+    veh_offset_list = [[] for i in range(len(veh_ids))]
+    veh_offset_dict = dict(zip(veh_ids, veh_offset_list))
+    veh_offset_result_dict = veh_offset_dict
+    for ep in rsu_transaction[count[0]]:
+        for eps in ep:
+            veh_offset_dict[eps[0]].append(eps[1])
+
+    for key,value in veh_offset_dict.items():
+        veh_offset_result_dict
     for index_accident, veh_list in enumerate(vail_veh):
         message_veh = random.sample(veh_list, 1)
-        for j in veh_list:
-            veh_id_single = j[0]
-            veh_location_single = veh_location[veh_id_single]
-            # rsu_id_single, ((rsu_id, location), distance between rsu and veh
-            rsu_id_single = rsu_search(veh_location_single, rsu_location_list)
