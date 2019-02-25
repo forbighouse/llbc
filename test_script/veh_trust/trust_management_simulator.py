@@ -352,7 +352,7 @@ def simulator_count(offset_list):
             pos_num += 1
         elif num < 0:
             neg_num += 1
-    return pos_num, neg_num
+    return [pos_num, neg_num]
 
 
 if __name__ == '__main__':
@@ -463,7 +463,7 @@ if __name__ == '__main__':
         for eps in ep:
             veh_offset_dict[eps[0]].append(eps[1])
 
-    for key,value in veh_offset_dict.items():
-        veh_offset_result_dict
+    for key, value in veh_offset_dict.items():
+        veh_offset_result_dict[key] = simulator_count(value)
     for index_accident, veh_list in enumerate(vail_veh):
         message_veh = random.sample(veh_list, 1)
