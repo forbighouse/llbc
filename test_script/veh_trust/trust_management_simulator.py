@@ -30,6 +30,111 @@ DEBUG = 0
 UPDATE_TXT = 0
 
 
+# 生成rsu的位置
+def rsu_location():
+    # rsu也用UUID的话，后续跟veh的名字很容易混
+    # rsu_id_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(RSU_NUM)]
+    rsu_id_list = [str(i) for i in range(RSU_NUM)]
+    rsu_list = [location for location in range(250, (RSU_DISTANCE*RSU_NUM), RSU_DISTANCE)]
+    return rsu_id_list, dict(zip(rsu_id_list, rsu_list))
+
+
+# RSU收集评分
+def rsu_rating_collection(send_id, recv_msg, rsu_location_list, veh_location):
+    rsu_for_send = rsu_search(veh_location[send_id], rsu_location_list)
+    tag_for_no_msg = 0
+    upload_msg = []
+    for accident in recv_msg:
+        if accident == 0 or accident == -1:
+            tag_for_no_msg += 1
+        else:
+            assert type(accident) is list
+            for msg in accident:
+                upload_msg.append([rsu_for_send[0],  # 接收的transaction的RSU
+                                   send_id,  # 发送这个transaction的veh
+                                   msg[0],   # 报告message的veh
+                                   msg[1],   # 报告的事件类型
+                                   msg[3]])  # 该message的评分
+    if tag_for_no_msg == 5:
+        pass
+    else:
+        return upload_msg
+
+
+# 生成accident
+def accident_factory(accident_fast_mode=0):
+    accident_type = ACCIDENT_TYPE
+    accidents = []
+    for i in range(ACCIDENT_NUM):
+        accidents.append([str(i), (random.randint(0, ROAD_LEN), 0), accident_type])
+
+    if accident_fast_mode:
+        return accidents
+    else:
+        accidentss = []
+        with open('accident_list.txt', 'r') as handler:
+            for x in handler:
+                x = x.strip('\n').split(';')
+                y = x[1].split(',')
+                int1 = int(y[0][1:])
+                int2 = int(y[1][1:-1])
+                accidentss.append([x[0], (int1, int2), int(x[2])])
+        return accidentss
+
+
+# 生成veh的位置
+def veh_trajectory():
+    veh_id_list = []
+    locationss = []
+    print()
+    with open('veh_list.txt', 'r') as handler:
+        for x in handler:
+            x = x.strip('\n').split(';')
+            veh_id_list.append(x[0])
+            locationss.append(int(x[1]))
+    # 每一次都更新位置
+    if not DEBUG:
+        # 随机veh之间的距离和随机第一辆veh的起始位置
+        distance_veh = random.sample(range(5, 100), len(veh_id_list))
+        start_point = random.sample(range(5, 100), 1)
+        veh_locations = []
+        d_location = 0
+        for i in distance_veh:
+            d_location += start_point[0] + i
+            veh_locations.append(d_location)
+        random.shuffle(veh_locations)
+        return veh_id_list, dict(zip(veh_id_list, veh_locations))
+    # 测试模式：每次都从txt文件中读取位置
+    else:
+        return veh_id_list, dict(zip(veh_id_list, locationss))
+
+
+# 返回离veh最近的rsu
+def rsu_search(veh_location_s, rsu_list):
+    """
+    :param veh_location_s: 需要找到附近RSU的veh地址
+    :param rsu_list: 所有的rsu的地址列表
+    :return: 离veh_location_s最近的一个rsu
+    """
+
+    if not veh_location_s:
+        print("No vehcile closed to accident")
+        return
+
+    belong_rsu_optional = []
+    for rsu_id, rsu_locations in rsu_list.items():
+        if abs(rsu_locations - veh_location_s) < RSU_DISTANCE:
+            belong_rsu_optional.append((rsu_id, rsu_locations, abs(rsu_locations - veh_location_s)))
+
+    def distance(elem):
+        return elem[1]
+
+    if len(belong_rsu_optional) == 2:
+        belong_rsu_optional.sort(key=distance)
+    # [rsu的id, rsu的位置, rsu和veh的距离
+    return belong_rsu_optional[0]
+
+
 def rate(message_list, veh_location):
     """
     :param veh_location: 发出此rate的veh的位置
@@ -190,111 +295,6 @@ def message(vaild_veh_list, accidents, report_cycle):
     return message_list
 
 
-# 生成rsu的位置
-def rsu_location():
-    # rsu也用UUID的话，后续跟veh的名字很容易混
-    # rsu_id_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(RSU_NUM)]
-    rsu_id_list = [str(i) for i in range(RSU_NUM)]
-    rsu_list = [location for location in range(250, (RSU_DISTANCE*RSU_NUM), RSU_DISTANCE)]
-    return rsu_id_list, dict(zip(rsu_id_list, rsu_list))
-
-
-# RSU收集评分
-def rsu_rating_collection(send_id, recv_msg, rsu_location_list, veh_location):
-    rsu_for_send = rsu_search(veh_location[send_id], rsu_location_list)
-    tag_for_no_msg = 0
-    upload_msg = []
-    for accident in recv_msg:
-        if accident == 0 or accident == -1:
-            tag_for_no_msg += 1
-        else:
-            assert type(accident) is list
-            for msg in accident:
-                upload_msg.append([rsu_for_send[0],  # 接收的transaction的RSU
-                                   send_id,  # 发送这个transaction的veh
-                                   msg[0],   # 报告message的veh
-                                   msg[1],   # 报告的事件类型
-                                   msg[3]])  # 该message的评分
-    if tag_for_no_msg == 5:
-        pass
-    else:
-        return upload_msg
-
-
-# 生成accident
-def accident_factory(accident_fast_mode=0):
-    accident_type = ACCIDENT_TYPE
-    accidents = []
-    for i in range(ACCIDENT_NUM):
-        accidents.append([str(i), (random.randint(0, ROAD_LEN), 0), accident_type])
-
-    if accident_fast_mode:
-        return accidents
-    else:
-        accidentss = []
-        with open('accident_list.txt', 'r') as handler:
-            for x in handler:
-                x = x.strip('\n').split(';')
-                y = x[1].split(',')
-                int1 = int(y[0][1:])
-                int2 = int(y[1][1:-1])
-                accidentss.append([x[0], (int1, int2), int(x[2])])
-        return accidentss
-
-
-# 生成veh的位置
-def veh_trajectory():
-    veh_id_list = []
-    locationss = []
-    print()
-    with open('veh_list.txt', 'r') as handler:
-        for x in handler:
-            x = x.strip('\n').split(';')
-            veh_id_list.append(x[0])
-            locationss.append(int(x[1]))
-    # 每一次都更新位置
-    if not DEBUG:
-        # 随机veh之间的距离和随机第一辆veh的起始位置
-        distance_veh = random.sample(range(5, 100), len(veh_id_list))
-        start_point = random.sample(range(5, 100), 1)
-        veh_locations = []
-        d_location = 0
-        for i in distance_veh:
-            d_location += start_point[0] + i
-            veh_locations.append(d_location)
-        random.shuffle(veh_locations)
-        return veh_id_list, dict(zip(veh_id_list, veh_locations))
-    # 测试模式：每次都从txt文件中读取位置
-    else:
-        return veh_id_list, dict(zip(veh_id_list, locationss))
-
-
-# 返回离veh最近的rsu
-def rsu_search(veh_location_s, rsu_list):
-    """
-    :param veh_location_s: 需要找到附近RSU的veh地址
-    :param rsu_list: 所有的rsu的地址列表
-    :return: 离veh_location_s最近的一个rsu
-    """
-
-    if not veh_location_s:
-        print("No vehcile closed to accident")
-        return
-
-    belong_rsu_optional = []
-    for rsu_id, rsu_locations in rsu_list.items():
-        if abs(rsu_locations - veh_location_s) < RSU_DISTANCE:
-            belong_rsu_optional.append((rsu_id, rsu_locations, abs(rsu_locations - veh_location_s)))
-
-    def distance(elem):
-        return elem[1]
-
-    if len(belong_rsu_optional) == 2:
-        belong_rsu_optional.sort(key=distance)
-    # [rsu的id, rsu的位置, rsu和veh的距离
-    return belong_rsu_optional[0]
-
-
 # 一个基站开始计算offset
 def offset(value_list):
     veh_count = [veh[2] for veh in value_list]
@@ -355,7 +355,7 @@ def simulator_count(offset_list):
     return [pos_num, neg_num]
 
 
-if __name__ == '__main__':
+def traditional_version(round):
     # rsu的位置列表，dict, (id, location)
     rsu_ids, rsu_location_list = rsu_location()
     rsu_transaction_list = [[] for ids in range(len(rsu_ids))]
@@ -373,6 +373,7 @@ if __name__ == '__main__':
 
         # 位置距离小于THRESHOLD_COMMUNICATION的具体距离，list, (veh_id, distance)
         vail_veh = []
+        false_veh = []
 
         # 求得vail_veh
         accident_id_list = [m for m in range(ACCIDENT_NUM)]
@@ -383,12 +384,19 @@ if __name__ == '__main__':
             distance_list.append(d)
         adjacency_list = dict(zip(accident_id_list, distance_list))
 
+        # 控制msg的真假数量
         for k, v in adjacency_list.items():
-            d = []
+            true_msg_veh = []
+            false_msg_veh = []
             for v1 in v:
                 if v1[1] < THRESHOLD_COMMUNICATION:
-                    d.append(v1)
-            vail_veh.append(d)
+                    true_msg_veh.append(v1)
+                else:
+                    false_msg_veh.append(v1)
+            vail_veh.append(true_msg_veh)
+            false_veh.append(false_msg_veh)
+
+        # 拆分用户名
 
         # 得到评分列表
         report_cycle = time.clock()
@@ -437,7 +445,7 @@ if __name__ == '__main__':
             # npd_transaction_by_rsu_list.append(offset(value))
 
         # npd_transaction_by_rsu_dict = dict(zip(rsu_id_list_v2, npd_transaction_by_rsu_list))
-# --------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------
     rsu_active_list = []
     trans = []
     for key, rsus in rsu_transaction.items():
@@ -459,11 +467,20 @@ if __name__ == '__main__':
     veh_offset_list = [[] for i in range(len(veh_ids))]
     veh_offset_dict = dict(zip(veh_ids, veh_offset_list))
     veh_offset_result_dict = veh_offset_dict
-    for ep in rsu_transaction[count[0]]:
+    for ep in rsu_transaction[consensus_node]:
         for eps in ep:
             veh_offset_dict[eps[0]].append(eps[1])
 
     for key, value in veh_offset_dict.items():
         veh_offset_result_dict[key] = simulator_count(value)
-    for index_accident, veh_list in enumerate(vail_veh):
-        message_veh = random.sample(veh_list, 1)
+
+    return veh_offset_result_dict
+
+
+if __name__ == '__main__':
+    res = traditional_version(SIMULATION_ROUND)
+
+
+
+
+
