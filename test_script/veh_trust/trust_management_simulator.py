@@ -25,7 +25,7 @@ THRESHOLD = 0.5
 # 事件发生的概率
 PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测试
 # 测试模式
-DEBUG = 0
+DEBUG = 1
 # 更新所有的txt文件
 UPDATE_TXT = 0
 
@@ -151,7 +151,8 @@ def rate(message_list, veh_location):
                     veh_for_one_msg = rate_collect_msg(veh_locations,
                                                        veh_location[msg[1][veh_msg_index][0][0]],
                                                        msg[0],
-                                                       msg[1][veh_msg_index])
+                                                       msg[1][veh_msg_index],
+                                                       msg[1][veh_msg_index][1])
                     if veh_for_one_msg:
                         msg_list.append(veh_for_one_msg)
                     else:
@@ -166,7 +167,7 @@ def rate(message_list, veh_location):
     return rating_list
 
 
-def rate_collect_msg(veh_locations, veh_send_location, msg0, msg1):
+def rate_collect_msg(veh_locations, veh_send_location, msg0, msg1, fake_tag):
     """
     :param veh_locations: 任意一辆车的位置，其实是接收message的veh
     :param veh_send_location: 发送message的车辆的位置
@@ -175,8 +176,8 @@ def rate_collect_msg(veh_locations, veh_send_location, msg0, msg1):
     """
     # 还应该判断消息的时效性，应该在哪判断？
     if abs(veh_locations - veh_send_location) < THRESHOLD_COMMUNICATION:
-        # [汇报message的id, ,accident的位置， accident的类型，评分]
-        return [msg1[0][0], msg0[0], msg0[1], rate_rating(msg1[0][1])]
+        # [汇报message的id, ,accident的位置， accident的类型，评分, 是否为假消息]
+        return [msg1[0][0], msg0[0], msg0[1], rate_rating(msg1[0][1]), fake_tag]
     else:
         # 如果小于通信距离，当前车辆无法接收到message，所以msg_list在该车辆位置置0
         return 0
@@ -248,17 +249,40 @@ def rate_get(msg_list, accident_probiblity):
                 d.append([msgs[0],  # 报告message的veh
                           msgs[1],  # 报告accident的位置
                           msgs[2],  # 报告accident的类型
-                          rates_for])  # 该message的评分
+                          rates_for,  # 该message的评分
+                          msgs[4]])  # 该message的真伪
             rate_result_for_one_veh.append(d)
         else:
             rate_result_for_one_veh.append(0)
     return rate_result_for_one_veh
 
 
-def message(vaild_veh_list, accidents, report_cycle):
+# 生成产生message的veh列表
+def merge_veh(vail_veh, false_veh, false_ratio):
+    if false_ratio == 0:
+        return vail_veh
+    else:
+        merge_veh_list = []
+        pos_veh_list = []
+        neg_veh_list = []
+        for accident_index in range(len(vail_veh)):
+            vail_veh_num = len(vail_veh[accident_index])
+            false_veh_num = round(vail_veh_num * false_ratio)
+            pos_veh_each_list = random.sample(vail_veh[accident_index], (vail_veh_num - false_veh_num))
+            neg_veh_each_list = random.sample(false_veh[accident_index], false_veh_num)
+            pos_veh_list.append(pos_veh_each_list)
+            neg_veh_list.append(neg_veh_each_list)
+            pos_veh_each_list.extend(neg_veh_each_list)
+            merge_veh_list.append(pos_veh_each_list)
+
+        return merge_veh_list, pos_veh_list, neg_veh_list
+
+
+def message(vaild_veh_list, accidents, neg_veh_list, report_cycle):
     """
     :param vaild_veh_list:
     :param accidents:
+    :param neg_veh_list:
     :param report_cycle: time.clock()
     :return:返回当前网络内的所有message的列表
     """
@@ -269,7 +293,6 @@ def message(vaild_veh_list, accidents, report_cycle):
     for index, accident_veh in enumerate(vaild_veh_list):
         accident_location = accidents[index][1][0]
         accident_type = accidents[index][2]
-
         if len(accident_veh):
             # 随机找1到3辆车message同一个accident
             # veh_report = random.sample(accident_veh, random.randint(1, 3))
@@ -282,17 +305,31 @@ def message(vaild_veh_list, accidents, report_cycle):
 
             # 给每一次message添加汇报时间
             veh_report_final = []
+
             for veh in range(len(veh_report)):
                 # 给report_cycle添加或减少一个时间差量
                 report_time = random.uniform(-1, 1)
                 # 打包并重新构造添加了时间的车辆列表
-                veh_report_final.append([veh_report[veh], report_cycle+report_time])
+                fake_tag = message_fake_tag(veh_report[veh][0], neg_veh_list[index])
+                assert type(fake_tag) is int
+                veh_report_final.append([veh_report[veh], fake_tag, report_cycle + report_time])
             message_list.append([[accident_location, accident_type], veh_report_final])
         else:
             veh_report = []
             message_list.append([[accident_location, accident_type], veh_report])
 
     return message_list
+
+
+def message_fake_tag(veh_id, _neg_veh_list):
+    if len(_neg_veh_list):
+        for i in _neg_veh_list:
+            if i[0] == veh_id:
+                return 1
+            else:
+                return 0
+    else:
+        return 0
 
 
 # 一个基站开始计算offset
@@ -355,13 +392,13 @@ def simulator_count(offset_list):
     return [pos_num, neg_num]
 
 
-def traditional_version(round):
+def traditional_version(round_num, false_ratio):
     # rsu的位置列表，dict, (id, location)
     rsu_ids, rsu_location_list = rsu_location()
     rsu_transaction_list = [[] for ids in range(len(rsu_ids))]
     rsu_transaction = dict(zip(rsu_ids, rsu_transaction_list))
     veh_ids = []
-    for epoch in range(SIMULATION_ROUND):
+    for epoch in range(round_num):
         # 随机产生的车辆位置 dict, (veh_id: location
         veh_ids, veh_location = veh_trajectory()
 
@@ -396,11 +433,15 @@ def traditional_version(round):
             vail_veh.append(true_msg_veh)
             false_veh.append(false_msg_veh)
 
-        # 拆分用户名
+        # 拆分veh,返回的是拼接好的
+        merge_veh_list, pos_veh_list, neg_veh_list = merge_veh(vail_veh, false_veh, false_ratio)
 
         # 得到评分列表
         report_cycle = time.clock()
-        messages = message(vail_veh, accident_list, report_cycle)
+        messages = message(merge_veh_list,
+                           accident_list,
+                           neg_veh_list,
+                           report_cycle)
         rating_list = rate(messages, veh_location)
 
         # veh的id列表
@@ -478,7 +519,7 @@ def traditional_version(round):
 
 
 if __name__ == '__main__':
-    res = traditional_version(SIMULATION_ROUND)
+    res = traditional_version(SIMULATION_ROUND, 0.2)
 
 
 
