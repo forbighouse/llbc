@@ -258,16 +258,32 @@ def rate_get(msg_list, accident_probiblity):
 
 
 # 生成产生message的veh列表
+# 一辆veh可能发出多个msg，所以所谓的虚假消息应该与对应数量的车有关，但是仿真很难控制，
+# 所以此处假定msg假不假与车无关，只与msg有关
 def merge_veh(vail_veh, false_veh, false_ratio):
+    """
+    :param vail_veh:
+    :param false_veh:
+    :param false_ratio:
+    :return:
+    """
     if false_ratio == 0:
         return vail_veh
     else:
         merge_veh_list = []
         pos_veh_list = []
         neg_veh_list = []
+        len_vail_veh_num = 0
+        for veh_num in vail_veh:
+            len_vail_veh_num += len(veh_num)
+        false_veh_num = round(len_vail_veh_num * false_ratio)
+
+        # 随机删掉false_veh_num数量的车
+        merge_list = merge_veh_delicate(false_veh_num, vail_veh)
+
         for accident_index in range(len(vail_veh)):
             vail_veh_num = len(vail_veh[accident_index])
-            false_veh_num = round(vail_veh_num * false_ratio)
+
             pos_veh_each_list = random.sample(vail_veh[accident_index], (vail_veh_num - false_veh_num))
             neg_veh_each_list = random.sample(false_veh[accident_index], false_veh_num)
             pos_veh_list.append(pos_veh_each_list)
@@ -276,6 +292,31 @@ def merge_veh(vail_veh, false_veh, false_ratio):
             merge_veh_list.append(pos_veh_each_list)
 
         return merge_veh_list, pos_veh_list, neg_veh_list
+
+
+def merge_veh_delicate(false_veh_num, vail_veh):
+    all_veh = []
+    accident_num_list = []
+    accident_list_list = []
+    for i in range(len(vail_veh)):
+        accident_num_list.append(i)
+        accident_list_list.append([])
+        for j in vail_veh[i]:
+            all_veh.append([i, j])
+
+    veil_veh_dict = dict(zip(accident_num_list, accident_list_list))
+
+    pos_veh_each_list = random.sample(all_veh, (len(all_veh) - false_veh_num))
+
+    for line in pos_veh_each_list:
+        veil_veh_dict[line[0]].append(line[1])
+
+    # fake_msg sender selector
+
+
+    return veil_veh_dict
+
+
 
 
 def message(vaild_veh_list, accidents, neg_veh_list, report_cycle):
@@ -430,8 +471,8 @@ def traditional_version(round_num, false_ratio):
                     true_msg_veh.append(v1)
                 else:
                     false_msg_veh.append(v1)
-            vail_veh.append(true_msg_veh)
-            false_veh.append(false_msg_veh)
+            vail_veh.append(true_msg_veh)  # accident周围的车辆
+            false_veh.append(false_msg_veh)  # 远离accideng的车辆
 
         # 拆分veh,返回的是拼接好的
         merge_veh_list, pos_veh_list, neg_veh_list = merge_veh(vail_veh, false_veh, false_ratio)
