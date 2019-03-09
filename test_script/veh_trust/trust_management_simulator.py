@@ -270,28 +270,14 @@ def merge_veh(vail_veh, false_veh, false_ratio):
     if false_ratio == 0:
         return vail_veh
     else:
-        merge_veh_list = []
-        pos_veh_list = []
-        neg_veh_list = []
         len_vail_veh_num = 0
         for veh_num in vail_veh:
             len_vail_veh_num += len(veh_num)
         false_veh_num = round(len_vail_veh_num * false_ratio)
 
-        # 随机删掉false_veh_num数量的车
-        merge_list = merge_veh_delicate(false_veh_num, vail_veh)
-
-        for accident_index in range(len(vail_veh)):
-            vail_veh_num = len(vail_veh[accident_index])
-
-            pos_veh_each_list = random.sample(vail_veh[accident_index], (vail_veh_num - false_veh_num))
-            neg_veh_each_list = random.sample(false_veh[accident_index], false_veh_num)
-            pos_veh_list.append(pos_veh_each_list)
-            neg_veh_list.append(neg_veh_each_list)
-            pos_veh_each_list.extend(neg_veh_each_list)
-            merge_veh_list.append(pos_veh_each_list)
-
-        return merge_veh_list, pos_veh_list, neg_veh_list
+        # 从vail_veh中找出与false_veh_num对应数量的车作为fake_msg的发送者
+        pos_veh_list, neg_veh_list = merge_veh_delicate(false_veh_num, vail_veh)
+        return pos_veh_list, neg_veh_list
 
 
 def merge_veh_delicate(false_veh_num, vail_veh):
@@ -305,18 +291,21 @@ def merge_veh_delicate(false_veh_num, vail_veh):
             all_veh.append([i, j])
 
     veil_veh_dict = dict(zip(accident_num_list, accident_list_list))
+    random.shuffle(all_veh)
 
-    pos_veh_each_list = random.sample(all_veh, (len(all_veh) - false_veh_num))
+    pos_veh_each_list = all_veh[false_veh_num:]
+    neg_veh_each_list = all_veh[:false_veh_num]
 
     for line in pos_veh_each_list:
         veil_veh_dict[line[0]].append(line[1])
 
-    # fake_msg sender selector
+    veil_veh_list = list(veil_veh_dict.values())
 
+    neg_veh_list = []
+    for neg_line in neg_veh_each_list:
+        neg_veh_list.append([neg_line[1]])
 
-    return veil_veh_dict
-
-
+    return veil_veh_list, neg_veh_list
 
 
 def message(vaild_veh_list, accidents, neg_veh_list, report_cycle):
