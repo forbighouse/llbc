@@ -308,45 +308,57 @@ def merge_veh_delicate(false_veh_num, vail_veh):
     return veil_veh_list, neg_veh_list
 
 
-def message(vaild_veh_list, accidents, neg_veh_list, report_cycle):
+def message(vaild_veh_list, accidents, veh_location_dict, report_cycle):
     """
     :param vaild_veh_list:
     :param accidents:
-    :param neg_veh_list:
+    :param veh_location_dict:
     :param report_cycle: time.clock()
     :return:返回当前网络内的所有message的列表
     """
     if not len(vaild_veh_list):
         print("vaild_veh_list empty")
 
+    vail_accident_num = len(accidents)
+
     message_list = []
     for index, accident_veh in enumerate(vaild_veh_list):
-        accident_location = accidents[index][1][0]
-        accident_type = accidents[index][2]
-        if len(accident_veh):
-            # 随机找1到3辆车message同一个accident
-            # veh_report = random.sample(accident_veh, random.randint(1, 3))
-            # if DEBUG:
-            #     veh_report = []
-            #     veh_report.append(accident_veh[0])
+        if index < vail_accident_num:
+            accident_location = accidents[index][1][0]
+            accident_type = accidents[index][2]
+            if len(accident_veh):
+                # 随机找1到3辆车message同一个accident
+                # veh_report = random.sample(accident_veh, random.randint(1, 3))
+                # if DEBUG:
+                #     veh_report = []
+                #     veh_report.append(accident_veh[0])
 
-            # 全部车辆上报
-            veh_report = accident_veh
+                # 全部车辆上报
+                veh_report = accident_veh
 
+                # 给每一次message添加汇报时间
+                veh_report_final = []
+
+                for veh in range(len(veh_report)):
+                    # 给report_cycle添加或减少一个时间差量
+                    report_time = random.uniform(-1, 1)
+                    # 打包并重新构造添加了时间的车辆列表
+                    fake_tag = 0
+                    veh_report_final.append([veh_report[veh], fake_tag, report_cycle + report_time])
+                message_list.append([[accident_location, accident_type], veh_report_final])
+            else:
+                veh_report = []
+                message_list.append([[accident_location, accident_type], veh_report])
+        else:
             # 给每一次message添加汇报时间
             veh_report_final = []
-
-            for veh in range(len(veh_report)):
-                # 给report_cycle添加或减少一个时间差量
-                report_time = random.uniform(-1, 1)
-                # 打包并重新构造添加了时间的车辆列表
-                fake_tag = message_fake_tag(veh_report[veh][0], neg_veh_list[index])
-                assert type(fake_tag) is int
-                veh_report_final.append([veh_report[veh], fake_tag, report_cycle + report_time])
-            message_list.append([[accident_location, accident_type], veh_report_final])
-        else:
-            veh_report = []
-            message_list.append([[accident_location, accident_type], veh_report])
+            for veh in range(len(accident_veh)):
+                fake_tag = 1
+                veh_report_final.append([accident_veh[veh], fake_tag, report_cycle])
+                vec_id = accident_veh[veh][0]
+                accident_location = veh_location_dict[vec_id] + accident_veh[veh][1] + random.choice([50, 70, 90])
+                accident_type = random.choice([2, 0, 1])
+                message_list.append([[accident_location, accident_type], veh_report_final])
 
     return message_list
 
@@ -464,32 +476,34 @@ def traditional_version(round_num, false_ratio):
             false_veh.append(false_msg_veh)  # 远离accideng的车辆
 
         # 拆分veh,返回的是拼接好的
-        merge_veh_list, pos_veh_list, neg_veh_list = merge_veh(vail_veh, false_veh, false_ratio)
+        pos_veh_list, neg_veh_list = merge_veh(vail_veh, false_veh, false_ratio)
+        merge_veh_list = pos_veh_list + neg_veh_list
 
         # 得到评分列表
         report_cycle = time.clock()
         messages = message(merge_veh_list,
                            accident_list,
-                           neg_veh_list,
+                           veh_location,
                            report_cycle)
         rating_list = rate(messages, veh_location)
 
         # veh的id列表
-        veh_id_list = []
-        for key, values in veh_location.items():
-            veh_id_list.append(key)
+        # veh_id_list = []
+        # for key, values in veh_location.items():
+        #     veh_id_list.append(key)
 
         # 每辆车统计评分
+        len_accident = len(merge_veh_list)  # 算上假的msg总共有多少种
         msg_rate_list = []
         for msg_index in range(len(rating_list)):
-            if len(rating_list[msg_index]) == 5:
+            if len(rating_list[msg_index]) == len_accident:
                 msg_rate_list.append(veh_rate(rating_list[msg_index]))
 
         # 评分发送给RSU
         # 一轮下来RSUs得到的所有评分
         rsu_rating_list = []
         for veh_index in range(len(msg_rate_list)):
-            rsu_rating = rsu_rating_collection(veh_id_list[veh_index],
+            rsu_rating = rsu_rating_collection(veh_ids[veh_index],
                                                msg_rate_list[veh_index],
                                                rsu_location_list,
                                                veh_location)
