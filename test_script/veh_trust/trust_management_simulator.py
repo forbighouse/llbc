@@ -28,6 +28,8 @@ PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测�
 DEBUG = 1
 # 更新所有的txt文件
 UPDATE_TXT = 0
+# veh和accident的距离值修正，根据accident的可能性判定公式，太近了超出1
+RATE_CORRECT = 50
 
 
 # 生成rsu的位置
@@ -184,8 +186,13 @@ def rate_collect_msg(veh_locations, veh_send_location, msg0, msg1, fake_tag):
 
 
 # 评分c = b + e(-γd)
-def rate_rating(distance, b=0.5, gamma=0.014):
-    return b + pow(math.e, ((-gamma)*distance))
+# RATE_CORRECT制定为50
+def rate_rating(distance, rate_correct=RATE_CORRECT, b=0.5, gamma=0.014):
+    if distance < rate_correct:
+        distance = rate_correct
+    ck = b + pow(math.e, ((-gamma)*distance))
+    assert ck < 1
+    return ck
 
 
 def rate_condition_report(location1, location2):
@@ -219,21 +226,22 @@ def occur_probability(pe, peck):
     for x in peck:
         peck_.append(1-x)
 
-    def multiplicator(num_list):
+    def multi_plicator(num_list):
         result = 1
         for num in num_list:
             result = result * num
+        assert 0 < result < 1
         return result
-    part1 = pe * multiplicator(peck)
-    part2 = (1-pe) * multiplicator(peck_)
+    part1 = pe * multi_plicator(peck)
+    part2 = (1-pe) * multi_plicator(peck_)
     return part1 / (part1 + part2)
 
 
 # 每一辆车计算message的评分
-def rate_get(msg_list, accident_probiblity):
+def rate_get(msg_list, accident_probability):
     assert type(msg_list) is list
     accident_act = []
-    for y in accident_probiblity:
+    for y in accident_probability:
         if y > THRESHOLD:
             accident_act.append(1)
         else:
@@ -356,7 +364,7 @@ def message(vaild_veh_list, accidents, veh_location_dict, report_cycle):
                 fake_tag = 1
                 veh_report_final.append([accident_veh[veh], fake_tag, report_cycle])
                 vec_id = accident_veh[veh][0]
-                accident_location = veh_location_dict[vec_id] + accident_veh[veh][1] + random.choice([50, 70, 90])
+                accident_location = veh_location_dict[vec_id] + accident_veh[veh][1] + random.choice([250, 270, 290])
                 accident_type = random.choice([2, 0, 1])
                 message_list.append([[accident_location, accident_type], veh_report_final])
 
