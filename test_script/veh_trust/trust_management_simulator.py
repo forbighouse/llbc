@@ -1,6 +1,8 @@
 import random
 import time
 import math
+import copy
+import numpy as np
 import matplotlib.pyplot as plt
 from score.IoV_state import distance_cal_x
 from test_script.veh_trust.base_veh_location import ACCIDENT_TYPE, ACCIDENT_NUM, ROAD_LEN
@@ -142,15 +144,14 @@ def rsu_search(veh_location_s, rsu_list):
 # 生成产生message的veh列表
 # 一辆veh可能发出多个msg，所以所谓的虚假消息应该与对应数量的车有关，但是仿真很难控制，
 # 所以此处假定msg假不假与车无关，只与msg有关
-def merge_veh(vail_veh, false_veh, false_ratio):
+def merge_veh(vail_veh, false_ratio):
     """
     :param vail_veh:
-    :param false_veh:
     :param false_ratio:
     :return:
     """
     if false_ratio == 0:
-        return vail_veh
+        return vail_veh, []
     else:
         len_vail_veh_num = 0
         for veh_num in vail_veh:
@@ -158,7 +159,7 @@ def merge_veh(vail_veh, false_veh, false_ratio):
         false_veh_num = round(len_vail_veh_num * false_ratio)
 
         # 从vail_veh中找出与false_veh_num对应数量的车作为fake_msg的发送者
-        pos_veh_list, neg_veh_list = merge_veh_delicate(false_veh_num, vail_veh)
+        pos_veh_list, neg_veh_list = merge_veh_delicate(int(false_veh_num), vail_veh)
         return pos_veh_list, neg_veh_list
 
 
@@ -175,19 +176,30 @@ def merge_veh_delicate(false_veh_num, vail_veh):
     veil_veh_dict = dict(zip(accident_num_list, accident_list_list))
     random.shuffle(all_veh)
 
-    pos_veh_each_list = all_veh[false_veh_num:]
-    neg_veh_each_list = all_veh[:false_veh_num]
+    if false_veh_num:
+        pos_veh_each_list = all_veh[false_veh_num:]
+        neg_veh_each_list = all_veh[:false_veh_num]
 
-    for line in pos_veh_each_list:
-        veil_veh_dict[line[0]].append(line[1])
+        for line in pos_veh_each_list:
+            veil_veh_dict[line[0]].append(line[1])
 
-    veil_veh_list = list(veil_veh_dict.values())
+        veil_veh_list = list(veil_veh_dict.values())
 
-    neg_veh_list = []
-    for neg_line in neg_veh_each_list:
-        neg_veh_list.append([neg_line[1]])
+        neg_veh_list = []
+        for neg_line in neg_veh_each_list:
+            neg_veh_list.append([neg_line[1]])
 
-    return veil_veh_list, neg_veh_list
+        return veil_veh_list, neg_veh_list
+
+    else:
+        pos_veh_each_list = all_veh
+
+        for line in pos_veh_each_list:
+            veil_veh_dict[line[0]].append(line[1])
+
+        veil_veh_list = list(veil_veh_dict.values())
+
+        return veil_veh_list, []
 
 
 def message(vaild_veh_list, accidents, veh_location_dict, report_cycle):
@@ -457,9 +469,12 @@ def traditional_version(round_num, false_ratio):
     rsu_ids, rsu_location_list = rsu_location()
     rsu_transaction_list = [[] for ids in range(len(rsu_ids))]
     rsu_transaction = dict(zip(rsu_ids, rsu_transaction_list))
+    # 记录每一个rsu获得的评分情况，与rsu_transaction区别开
+    rsu_rating_for_count = copy.deepcopy(rsu_transaction)
     rsu_max_id_list = []
     veh_ids = []
     neg_veh_all_list = []
+
     for epoch in range(round_num):
         # 随机产生的车辆位置 dict, (veh_id: location
         veh_ids, veh_location = veh_trajectory()
@@ -496,7 +511,7 @@ def traditional_version(round_num, false_ratio):
             false_veh.append(false_msg_veh)  # 远离accideng的车辆
 
         # 拆分veh,返回的是拼接好的
-        pos_veh_list, neg_veh_list = merge_veh(vail_veh, false_veh, false_ratio)
+        pos_veh_list, neg_veh_list = merge_veh(vail_veh, false_ratio)
         merge_veh_list = pos_veh_list + neg_veh_list
         neg_veh_all_list.append(neg_veh_list)
 
@@ -549,6 +564,7 @@ def traditional_version(round_num, false_ratio):
         rsu_transaction_max_id = 0
         for key, value in rsu_id_dict.items():
             rsu_transaction[key].append(offset(value))
+            rsu_rating_for_count[key].append(value)
 
             if len(offset(value)) > rsu_transaction_len:
                 rsu_transaction_len = len(offset(value))
@@ -587,27 +603,36 @@ def traditional_version(round_num, false_ratio):
     for key, value in veh_offset_dict.items():
         veh_offset_result_dict[key] = simulator_count(value)
 
-    return veh_offset_result_dict
+    return veh_offset_result_dict, rsu_rating_for_count[consensus_node]
 
 
 if __name__ == '__main__':
 
     unfair_offset_ratio = []
-    rounds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+    rounds = np.arange(0, 1, 0.05)
     for x in rounds:
-        res = traditional_version(SIMULATION_ROUND, x)
+        print(x)
+        res, rsu_rating_res = traditional_version(SIMULATION_ROUND, x)
 
-        trust_offset_sum = 0  # 共有多少个评分
-        false_offset_sum = 0
-        false_msg_sum = 0
-        for i in res.values():
-            trust_offset_sum += i[0]
-            false_offset_sum += i[1]
-            false_msg_sum += i[2]
+        # trust_offset_sum = 0  # 共有多少个评分
+        # false_offset_sum = 0
+        # false_msg_sum = 0
+        # for i in res.values():
+        #     trust_offset_sum += i[0]
+        #     false_offset_sum += i[1]
+        #     false_msg_sum += i[2]
+        #
+        # false_ratio = false_msg_sum / (trust_offset_sum + false_offset_sum)
+        # unfair_offset_ratio.append(false_ratio)
 
-        false_ratio = false_msg_sum / (trust_offset_sum + false_offset_sum)
+        rating_num = 0
+        false_msg_num = 0
+        for rsuss in rsu_rating_res:
+            for i in rsuss:
+                rating_num += i[4]
+                false_msg_num += i[5]
+        false_ratio = false_msg_num / rating_num
         unfair_offset_ratio.append(false_ratio)
-        pass
 
     plt.plot(rounds, unfair_offset_ratio, color='k', linestyle='-', marker='s', label='line 1')
     # plt.plot(x, arrs[1], color='r', linestyle='-', marker='o', label='line 2')
