@@ -3,7 +3,7 @@ import time
 import math
 import copy
 import numpy as np
-import matplotlib.pyplot as plt
+import json
 from score.IoV_state import distance_cal_x
 from test_script.veh_trust.base_veh_location import ACCIDENT_TYPE, ACCIDENT_NUM, ROAD_LEN
 
@@ -71,21 +71,32 @@ def rsu_rating_collection(send_id, recv_msg, rsu_location_list, veh_location):
 def accident_factory(accident_fast_mode=0):
     accident_type = ACCIDENT_TYPE
     accidents = []
+    ids = []
+    contents = []
     for i in range(ACCIDENT_NUM):
-        accidents.append([str(i), (random.randint(0, ROAD_LEN), 0), accident_type])
+        x = random.randint(0, ROAD_LEN)
+        accidents.append([str(i), (x, 0), accident_type])
+        ids.append(str(i))
+        contents.append([(x, 0), accident_type])
 
     if accident_fast_mode:
-        return accidents
+        accident_dict = dict(zip(ids, contents))
+        return accidents, accident_dict
     else:
-        accidentss = []
+        accidents2 = []
+        ids_2 = []
+        contents_2 = []
         with open('accident_list.txt', 'r') as handler:
             for x in handler:
                 x = x.strip('\n').split(';')
                 y = x[1].split(',')
                 int1 = int(y[0][1:])
                 int2 = int(y[1][1:-1])
-                accidentss.append([x[0], (int1, int2), int(x[2])])
-        return accidentss
+                accidents2.append([x[0], (int1, int2), int(x[2])])
+                ids_2.append(x[0])
+                contents_2.append([(int1, int2), int(x[2])])
+        accident_dict_2 = dict(zip(ids_2, contents_2))
+        return accidents2, accident_dict_2
 
 
 # 生成veh的位置
@@ -467,6 +478,9 @@ def simulator_count(offset_list):
 def traditional_version(round_num, false_ratio):
     # rsu的位置列表，dict, (id, location)
     rsu_ids, rsu_location_list = rsu_location()
+    # 随机产生的事件的位置 dict, location
+    accident_list, accident_dict = accident_factory()
+
     rsu_transaction_list = [[] for ids in range(len(rsu_ids))]
     rsu_transaction = dict(zip(rsu_ids, rsu_transaction_list))
     # 记录每一个rsu获得的评分情况，与rsu_transaction区别开
@@ -475,12 +489,10 @@ def traditional_version(round_num, false_ratio):
     veh_ids = []
     neg_veh_all_list = []
 
+
     for epoch in range(round_num):
         # 随机产生的车辆位置 dict, (veh_id: location
         veh_ids, veh_location = veh_trajectory()
-
-        # 随机产生的事件的位置 dict, location
-        accident_list = accident_factory()
 
         # 每一辆车与事件的距离, list, (veh_id, distance)
         distance_list = []
@@ -603,7 +615,31 @@ def traditional_version(round_num, false_ratio):
     for key, value in veh_offset_dict.items():
         veh_offset_result_dict[key] = simulator_count(value)
 
-    return veh_offset_result_dict, rsu_rating_for_count[consensus_node]
+    return veh_offset_result_dict, rsu_rating_for_count[consensus_node], veh_ids, accident_dict
+
+
+def statistic_fun(rsu_rating_res, ids, accident_dict):
+    accident_dict_key = [k for k in accident_dict.keys()]
+    accident_dict_empty = [[] for j in range(len(accident_dict))]
+    accident_iter = dict(zip(accident_dict_key, accident_dict_empty))
+    veh_list = [accident_iter for i in range(len(ids))]
+    veh_dict = dict(zip(ids, veh_list))
+
+    # 反转accident，索引其地址，返回其序号
+    accident_dict = {v[0][0]: [k, v[1]] for k, v in accident_dict.items()}
+
+    # ------------------------------------------------------------
+    # | 接收msg的车号 | accident序号1 | ...... | accident序号n |
+    #
+    # ------------------------------------------------------------
+    for rsu_rating in rsu_rating_res:
+        for msg in rsu_rating:
+            # msg[2]发出msg的车号，msg[4]该msg的rating(可能作废)， msg[5]fake标记
+            receiver_msg = msg[1]
+            accident_tag = accident_dict[msg[3]][0]
+            veh_dict[receiver_msg][accident_tag].append([msg[2], msg[4], msg[5]])
+
+    pass
 
 
 if __name__ == '__main__':
@@ -612,7 +648,7 @@ if __name__ == '__main__':
     rounds = np.arange(0, 1, 0.05)
     for x in rounds:
         print(x)
-        res, rsu_rating_res = traditional_version(SIMULATION_ROUND, x)
+        res, rsu_rating_res, veh_ids, accident_list = traditional_version(SIMULATION_ROUND, x)
 
         # trust_offset_sum = 0  # 共有多少个评分
         # false_offset_sum = 0
@@ -627,20 +663,21 @@ if __name__ == '__main__':
 
         rating_num = 0
         false_msg_num = 0
+
+        res_list = statistic_fun(rsu_rating_res, veh_ids, accident_list)
+
         for rsuss in rsu_rating_res:
             for i in rsuss:
                 rating_num += i[4]
                 false_msg_num += i[5]
         false_ratio = false_msg_num / rating_num
         unfair_offset_ratio.append(false_ratio)
+        c_dict = dict(zip(rounds, unfair_offset_ratio))
 
-    plt.plot(rounds, unfair_offset_ratio, color='k', linestyle='-', marker='s', label='line 1')
-    # plt.plot(x, arrs[1], color='r', linestyle='-', marker='o', label='line 2')
-    # plt.plot(x, arrs[2], color='b', linestyle='-', marker='v', label='line 3')
-    # plt.plot(x, arrs[3], color='g', linestyle='-', marker='^', label='line 4')
-
-    plt.legend(loc='upper right')
-    plt.show()
+        c_list = json.dumps(c_dict)
+        a = open(r"data_source_list.txt", "w", encoding='UTF-8')
+        a.write(c_list)
+        a.close()
 
 
 
