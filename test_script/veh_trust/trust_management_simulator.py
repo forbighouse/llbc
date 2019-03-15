@@ -268,6 +268,50 @@ def message(vaild_veh_list, accidents, veh_location_dict, report_cycle):
     return message_list
 
 
+def message_merge(messages, veh_location):
+    message_list = []
+    for veh_id, veh_locations in veh_location.items():
+        veh_recv_msg = []
+        for msg in messages:
+            msg_list = []
+            for veh_msg_index in range(len(msg[1])):
+                if veh_id != msg[1][veh_msg_index][0][0]:  # 他自己也报
+                    veh_for_one_msg = message_collect(veh_id,
+                                                      veh_locations,
+                                                      veh_location[msg[1][veh_msg_index][0][0]],
+                                                      msg[0],
+                                                      msg[1][veh_msg_index],
+                                                      msg[1][veh_msg_index][1])
+                    if veh_for_one_msg:
+                        msg_list.append(veh_for_one_msg)
+                    else:
+                        continue
+
+            # veh_recv_msg.append(veh_for_one_msg)
+            if len(msg_list):
+                veh_recv_msg.append(msg_list)
+            else:
+                veh_recv_msg.append(0)
+        message_list.append(veh_recv_msg)
+    return message_list
+
+
+def message_collect(veh_id, veh_locations, veh_send_location, msg0, msg1, fake_tag):
+    """
+    :param veh_locations: 任意一辆车的位置，其实是接收message的veh
+    :param veh_send_location: 发送message的车辆的位置
+    :param
+    :return:
+    """
+    # 还应该判断消息的时效性，应该在哪判断？
+    if abs(veh_locations - veh_send_location) < THRESHOLD_COMMUNICATION:
+        # [汇报message的id, ,accident的位置， accident的类型, 是否为假消息]
+        return [veh_id, msg1[0][0], msg0[0], msg0[1], fake_tag]
+    else:
+        # 如果小于通信距离，当前车辆无法接收到message，所以msg_list在该车辆位置置0
+        return 0
+
+
 def message_fake_tag(veh_id, _neg_veh_list):
     if len(_neg_veh_list):
         for i in _neg_veh_list:
@@ -488,6 +532,16 @@ def traditional_version(round_num, false_ratio):
     rsu_max_id_list = []
     veh_ids = []
     neg_veh_all_list = []
+    # 所有轮产生的所有的message
+    messages_list = []
+
+    # message_dict收集所有轮积攒下的msg
+    accident_dict_key = [k for k in accident_dict.keys()]
+    accident_dict_empty = [[] for j in range(len(accident_dict))]
+    message_dict = dict(zip(accident_dict_key, accident_dict_empty))
+
+    # 反转accident，索引其地址，返回其序号
+    accident_dict_reverse = {v[0][0]: [k, v[1]] for k, v in accident_dict.items()}
 
 
     for epoch in range(round_num):
@@ -533,58 +587,69 @@ def traditional_version(round_num, false_ratio):
                            accident_list,
                            veh_location,
                            report_cycle)
-        rating_list = rate(messages, veh_location)
 
-        # veh的id列表
-        # veh_id_list = []
-        # for key, values in veh_location.items():
-        #     veh_id_list.append(key)
+        for one_epoch in messages:
+            accid_num = accident_dict_reverse[one_epoch[0][0]][0]
+            message_dict[accid_num].append(one_epoch[1])
 
-        # 每辆车统计评分
-        len_accident = len(merge_veh_list)  # 算上假的msg总共有多少种
-        msg_rate_list = []
-        for msg_index in range(len(rating_list)):
-            if len(rating_list[msg_index]) == len_accident:
-                msg_rate_list.append(veh_rate(rating_list[msg_index]))
+        message_list = message_merge(messages, veh_location)
 
-        # 评分发送给RSU
-        # 一轮下来RSUs得到的所有评分
-        rsu_rating_list = []
-        for veh_index in range(len(msg_rate_list)):
-            rsu_rating = rsu_rating_collection(veh_ids[veh_index],
-                                               msg_rate_list[veh_index],
-                                               rsu_location_list,
-                                               veh_location)
-            if rsu_rating:
-                if len(rsu_rating) > 1:
-                    for i in rsu_rating:
-                        rsu_rating_list.append(i)
-                else:
-                    rsu_rating_list.append(rsu_rating[0])
+    for key_x, accident_x in message_dict.items():
+        messages_list.append([accident_dict[key_x], accident_x])
 
-        # 每一个RSU用收到的rate计算对应车辆的offset，使用区块链的来竞争记账权
-        rsu_id_list = [rsu_rating[0] for rsu_rating in rsu_rating_list]
-        rsu_id_num_list = [[] for i in range(len(rsu_id_list))]
-        rsu_id_dict = dict(zip(rsu_id_list, rsu_id_num_list))
-        for rsu_rating in rsu_rating_list:
-            rsu_id_dict[rsu_rating[0]].append(rsu_rating)
 
-        # npd: not update
-        npd_transaction_by_rsu_list = []
-        rsu_id_list_v2 = []
-        rsu_transaction_len = 0
-        rsu_transaction_max_id = 0
-        for key, value in rsu_id_dict.items():
-            rsu_transaction[key].append(offset(value))
-            rsu_rating_for_count[key].append(value)
+    rating_list = rate(messages_list[1], veh_location)
 
-            if len(offset(value)) > rsu_transaction_len:
-                rsu_transaction_len = len(offset(value))
-                rsu_transaction_max_id = key
-        rsu_max_id_list.append(rsu_transaction_max_id)
-            # rsu_id_list_v2.append(key)
-            # npd_transaction_by_rsu_list.append(offset(value))
-        pass
+    # veh的id列表
+    # veh_id_list = []
+    # for key, values in veh_location.items():
+    #     veh_id_list.append(key)
+
+    # 每辆车统计评分
+    len_accident = len(merge_veh_list)  # 算上假的msg总共有多少种
+    msg_rate_list = []
+    for msg_index in range(len(rating_list)):
+        if len(rating_list[msg_index]) == len_accident:
+            msg_rate_list.append(veh_rate(rating_list[msg_index]))
+
+    # 评分发送给RSU
+    # 一轮下来RSUs得到的所有评分
+    rsu_rating_list = []
+    for veh_index in range(len(msg_rate_list)):
+        rsu_rating = rsu_rating_collection(veh_ids[veh_index],
+                                           msg_rate_list[veh_index],
+                                           rsu_location_list,
+                                           veh_location)
+        if rsu_rating:
+            if len(rsu_rating) > 1:
+                for i in rsu_rating:
+                    rsu_rating_list.append(i)
+            else:
+                rsu_rating_list.append(rsu_rating[0])
+
+    # 每一个RSU用收到的rate计算对应车辆的offset，使用区块链的来竞争记账权
+    rsu_id_list = [rsu_rating[0] for rsu_rating in rsu_rating_list]
+    rsu_id_num_list = [[] for i in range(len(rsu_id_list))]
+    rsu_id_dict = dict(zip(rsu_id_list, rsu_id_num_list))
+    for rsu_rating in rsu_rating_list:
+        rsu_id_dict[rsu_rating[0]].append(rsu_rating)
+
+    # npd: not update
+    npd_transaction_by_rsu_list = []
+    rsu_id_list_v2 = []
+    rsu_transaction_len = 0
+    rsu_transaction_max_id = 0
+    for key, value in rsu_id_dict.items():
+        rsu_transaction[key].append(offset(value))
+        rsu_rating_for_count[key].append(value)
+
+        if len(offset(value)) > rsu_transaction_len:
+            rsu_transaction_len = len(offset(value))
+            rsu_transaction_max_id = key
+    rsu_max_id_list.append(rsu_transaction_max_id)
+        # rsu_id_list_v2.append(key)
+        # npd_transaction_by_rsu_list.append(offset(value))
+    pass
         # npd_transaction_by_rsu_dict = dict(zip(rsu_id_list_v2, npd_transaction_by_rsu_list))
     # --------------------------------------------------------------------------------------
     rsu_active_list = []
@@ -622,16 +687,15 @@ def statistic_fun(rsu_rating_res, ids, accident_dict):
     accident_dict_key = [k for k in accident_dict.keys()]
     accident_dict_empty = [[] for j in range(len(accident_dict))]
     accident_iter = dict(zip(accident_dict_key, accident_dict_empty))
-    veh_list = [accident_iter for i in range(len(ids))]
+    veh_list = [copy.deepcopy(accident_iter) for i in range(len(ids))]
     veh_dict = dict(zip(ids, veh_list))
 
     # 反转accident，索引其地址，返回其序号
     accident_dict = {v[0][0]: [k, v[1]] for k, v in accident_dict.items()}
 
-    # ------------------------------------------------------------
+    #  --------------------------------------------------------
     # | 接收msg的车号 | accident序号1 | ...... | accident序号n |
-    #
-    # ------------------------------------------------------------
+    #  --------------------------------------------------------
     for rsu_rating in rsu_rating_res:
         for msg in rsu_rating:
             # msg[2]发出msg的车号，msg[4]该msg的rating(可能作废)， msg[5]fake标记
