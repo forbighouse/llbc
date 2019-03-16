@@ -126,6 +126,16 @@ def veh_trajectory():
         return veh_id_list, dict(zip(veh_id_list, locationss))
 
 
+def veh_id_fun():
+    veh_id_list = []
+    print()
+    with open('veh_list.txt', 'r') as handler:
+        for x in handler:
+            x = x.strip('\n').split(';')
+            veh_id_list.append(x[0])
+    return veh_id_list
+
+
 # 返回离veh最近的rsu
 def rsu_search(veh_location_s, rsu_list):
     """
@@ -305,22 +315,55 @@ def message_collect(veh_id, veh_locations, veh_send_location, msg0, msg1, fake_t
     """
     # 还应该判断消息的时效性，应该在哪判断？
     if abs(veh_locations - veh_send_location) < THRESHOLD_COMMUNICATION:
-        # [汇报message的id, ,accident的位置， accident的类型, 是否为假消息]
-        return [veh_id, msg1[0][0], msg0[0], msg0[1], fake_tag]
+        # [收到message的id, 汇报message的id, accident的位置， accident的类型, accident的距离, 是否为假消息]
+        return [veh_id, msg1[0][0], msg0[0], msg0[1], msg1[0][1], fake_tag]
     else:
         # 如果小于通信距离，当前车辆无法接收到message，所以msg_list在该车辆位置置0
         return 0
 
 
-def message_fake_tag(veh_id, _neg_veh_list):
-    if len(_neg_veh_list):
-        for i in _neg_veh_list:
-            if i[0] == veh_id:
-                return 1
-            else:
-                return 0
-    else:
-        return 0
+# 应该在这里添加false消息的控制
+def accident_probability(veh_dict, veh_ids):
+    accidents_list = []
+    for vehs, msgs in veh_dict.items():
+        accident_case_list = []
+        for msg in msgs:
+            accident_case_list.append(msg[2])
+        accident_case_list = list(set(accident_case_list))
+        acciden_empty_list = [[] for i in range(len(accident_case_list))]
+        accident_dict = dict(zip(accident_case_list, acciden_empty_list))
+        accidents_list.append(accident_dict)
+    veh_accident_dict = dict(zip(veh_ids, accidents_list))
+
+    for vehs_v2, msgs_v2 in veh_dict.items():
+        for msg_v2 in msgs_v2:
+            accident_num = msg_v2[2]
+            veh_accident_dict[vehs_v2][accident_num].append(msg_v2)
+
+    accident_veh_list = []
+    for vehs_v3, msg_v3 in veh_accident_dict.items():
+        veh_ids_v1 = []
+        veh_accident_list = []
+        for accident_index, accident_msg in msg_v3.items():
+            acci_prob = accident_pro(accident_msg)
+            veh_ids_v1.append(accident_index)
+            veh_accident_list.append(acci_prob)
+        veh_accident_dict_pro = dict(zip(veh_ids_v1, veh_accident_list))
+        accident_veh_list.append(veh_accident_dict_pro)
+
+    veh_accident_dict = dict(zip(veh_ids, accident_veh_list))
+
+
+    return veh_accident_dict
+
+
+    # 每一个veh对每一个它见过的accident的可能性评估，
+    return accident_probability_one_veh, veh_accident_dict
+
+
+def accident_pro(accident_msg):
+
+    return
 
 
 # 一个基站开始计算offset
@@ -421,15 +464,6 @@ def rate_rating(distance, rate_correct=RATE_CORRECT, b=0.5, gamma=0.014):
     ck = b + pow(math.e, ((-gamma)*distance))
     assert ck < 1
     return ck
-
-
-def rate_condition_report(location1, location2):
-    """
-    :param location1: 发出此rate的veh的位置
-    :param location2: accident的位置
-    :return:
-    """
-    return abs(location1 - location2) < VEHICLE_PERCEPTION_DISTANCE
 
 
 # 每一辆车给出得到的message的评分
@@ -542,6 +576,9 @@ def traditional_version(round_num, false_ratio):
 
     # 反转accident，索引其地址，返回其序号
     accident_dict_reverse = {v[0][0]: [k, v[1]] for k, v in accident_dict.items()}
+    veh_empty_ids = veh_id_fun()
+    veh_empty_list = [[] for u in range(len(veh_empty_ids))]
+    veh_dict = dict(zip(veh_empty_ids, veh_empty_list))
 
 
     for epoch in range(round_num):
@@ -589,21 +626,28 @@ def traditional_version(round_num, false_ratio):
                            report_cycle)
 
         for one_epoch in messages:
-            accid_num = accident_dict_reverse[one_epoch[0][0]][0]
-            message_dict[accid_num].append(one_epoch[1])
+            for veh_id, veh_locations in veh_location.items():
+                for msg in one_epoch[1]:
+                    if veh_id != msg[0][0]:  # 他自己也报
+                        veh_for_one_msg = message_collect(veh_id,
+                                                          veh_locations,
+                                                          veh_location[msg[0][0]],
+                                                          one_epoch[0],
+                                                          msg,
+                                                          msg[1])
+                        if veh_for_one_msg:
+                            veh_dict[veh_id].append(veh_for_one_msg)
+            # accid_num = accident_dict_reverse[one_epoch[0][0]][0]
+            # message_dict[accid_num].append(one_epoch[1])
 
-        message_list = message_merge(messages, veh_location)
+    #     message_list = message_merge(messages, veh_location)
+    #
+    # for key_x, accident_x in message_dict.items():
+    #     messages_list.append([accident_dict[key_x], accident_x])
 
-    for key_x, accident_x in message_dict.items():
-        messages_list.append([accident_dict[key_x], accident_x])
-
+    accident_probability_one_veh = accident_probability(veh_dict, copy.deepcopy(veh_empty_ids))
 
     rating_list = rate(messages_list[1], veh_location)
-
-    # veh的id列表
-    # veh_id_list = []
-    # for key, values in veh_location.items():
-    #     veh_id_list.append(key)
 
     # 每辆车统计评分
     len_accident = len(merge_veh_list)  # 算上假的msg总共有多少种
@@ -712,7 +756,7 @@ if __name__ == '__main__':
     rounds = np.arange(0, 1, 0.05)
     for x in rounds:
         print(x)
-        res, rsu_rating_res, veh_ids, accident_list = traditional_version(SIMULATION_ROUND, x)
+        res, rsu_rating_res, veh_ids, accident_list = traditional_version(SIMULATION_ROUND, 0)
 
         # trust_offset_sum = 0  # 共有多少个评分
         # false_offset_sum = 0
