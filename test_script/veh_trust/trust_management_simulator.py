@@ -27,7 +27,7 @@ TIME_TOLERANCE = 1
 # 事件发生的阈值
 THRESHOLD = 0.5
 # 事件发生的概率
-PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测试
+PE = 0.1  # 应该用动态的每个事件用一个，这里先用相同的测试
 # 测试模式
 DEBUG = 0
 # 更新所有的txt文件
@@ -42,33 +42,13 @@ def rsu_location():
     # rsu_id_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(RSU_NUM)]
     rsu_id_list = [str(i) for i in range(RSU_NUM)]
     rsu_list = [location for location in range(250, (RSU_DISTANCE*RSU_NUM), RSU_DISTANCE)]
-    return rsu_id_list, dict(zip(rsu_id_list, rsu_list))
+    rsu_dict = dict(zip(rsu_id_list, rsu_list))
+    # p1 = {key: value for key, value in rsu_dict.items() if value > 300}
+    return rsu_id_list, rsu_dict
 
 
 # RSU收集评分
 def rsu_rating_collection(send_id, recv_msg, rsu_location_list, veh_location):
-    rsu_for_send = rsu_search(veh_location[send_id], rsu_location_list)
-    tag_for_no_msg = 0
-    upload_msg = []
-    for accident in recv_msg:
-        if accident == 0 or accident == -1:
-            tag_for_no_msg += 1
-        else:
-            assert type(accident) is list
-            for msg in accident:
-                upload_msg.append([rsu_for_send[0],  # 接收的transaction的RSU
-                                   send_id,  # 发送这个transaction的veh
-                                   msg[0],   # 报告message的veh
-                                   msg[1],   # 报告的事件类型
-                                   msg[3],  # 该message的评分
-                                   msg[4]])
-    if tag_for_no_msg == 5:
-        pass
-    else:
-        return upload_msg
-
-
-def rsu_rating_collection_v2(send_id, recv_msg, rsu_location_list, veh_location):
     rsu_for_send = rsu_search(veh_location[send_id], rsu_location_list)
     tag_for_no_msg = 0
     upload_msg = []
@@ -126,7 +106,6 @@ def accident_factory(accident_fast_mode=0):
 def veh_trajectory():
     veh_id_list = []
     locationss = []
-    print()
     with open('veh_list.txt', 'r') as handler:
         for x in handler:
             x = x.strip('\n').split(';')
@@ -140,9 +119,10 @@ def veh_trajectory():
         veh_locations = []
         d_location = 0
         for i in distance_veh:
-            d_location += start_point[0] + i
+            d_location += i + start_point[0]
             veh_locations.append(d_location)
         random.shuffle(veh_locations)
+        random.shuffle(veh_id_list)
         return veh_id_list, dict(zip(veh_id_list, veh_locations))
     # 测试模式：每次都从txt文件中读取位置
     else:
@@ -151,7 +131,6 @@ def veh_trajectory():
 
 def veh_id_fun():
     veh_id_list = []
-    print()
     with open('veh_list.txt', 'r') as handler:
         for x in handler:
             x = x.strip('\n').split(';')
@@ -166,7 +145,6 @@ def rsu_search(veh_location_s, rsu_list):
     :param rsu_list: 所有的rsu的地址列表
     :return: 离veh_location_s最近的一个rsu
     """
-
     if not veh_location_s:
         print("No vehcile closed to accident")
         return
@@ -182,6 +160,7 @@ def rsu_search(veh_location_s, rsu_list):
     if len(belong_rsu_optional) == 2:
         belong_rsu_optional.sort(key=distance)
     # [rsu的id, rsu的位置, rsu和veh的距离
+    # print(belong_rsu_optional)
     return belong_rsu_optional[0]
 
 
@@ -426,29 +405,11 @@ def accident_pro(accident_msg, false_ratio):
 
 def rsu_statistic(rsu_meet_num):
     sorted_res = sorted(rsu_meet_num.items(), key=lambda item: item[1])
-    return sorted_res[-1][0]
 
-
-# 一个基站开始计算offset
-def offset(value_list):
-    veh_count = [veh[2] for veh in value_list]
-    veh_rate_count = [[] for count in range(len(value_list))]
-    veh_count_dict = dict(zip(veh_count, veh_rate_count))
-    for rate_line in value_list:
-        veh_count_dict[rate_line[2]].append(rate_line[-2])
-        if rate_line[5] == 1:
-            veh_count_dict[rate_line[2]].append(-2)
-
-    rating_count = []
-    for veh_id, rating in veh_count_dict.items():
-        p_num, n_num, fake_num = rate_count(rating)
-        rating_count.append([veh_id, p_num, n_num, fake_num])
-
-    offset_result = []
-    for each_count in rating_count:
-        offset_result.append([each_count[0], offset_count(each_count), each_count[3]])
-
-    return offset_result
+    if sorted_res[-1][1] == sorted_res[-2][1] and  sorted_res[-1][0] == '0':
+        return sorted_res[-2][0]
+    else:
+        return sorted_res[-1][0]
 
 
 # 计算正负rating的数量
@@ -598,6 +559,25 @@ def rate_get(msg_list, accident_probability):
     return rate_result_for_one_veh
 
 
+# 一个基站开始计算offset
+def offset(rsu_ratings_list):
+    veh_count_dict = defaultdict(list)
+    for rate_line in rsu_ratings_list:
+        veh_count_dict[rate_line[1]].append(rate_line[2:])
+
+    # rating_count = []
+    # for veh_id, rating in veh_count_dict.items():
+    #     p_num, n_num, fake_num = rate_count(rating)
+    #     rating_count.append([veh_id, p_num, n_num, fake_num])
+    #
+    # offset_result = []
+    # for each_count in rating_count:
+    #     offset_result.append([each_count[0], offset_count(each_count), each_count[3]])
+
+    # return offset_result, veh_count_dict
+    return veh_count_dict
+
+
 # offset的统计计算
 def offset_count(rating_count):
     m = rating_count[1]  # 正
@@ -732,74 +712,102 @@ def traditional_version(round_num, false_ratio):
     #         msg_rate_list.append(veh_rate(rating_list[msg_index]))
 
     # 评分发送给RSU
-    # 一轮下来RSUs得到的所有评分
-    rsu_rating_list = []
-    for veh_index, msg_list in veh_rating_dict:
-        rsu_rating = rsu_rating_collection_v2(veh_index,
-                                              msg_list,
-                                              rsu_location_list,
-                                              veh_location)
-        if rsu_rating:
-            if len(rsu_rating) > 1:
-                for i in rsu_rating:
-                    rsu_rating_list.append(i)
-            else:
-                rsu_rating_list.append(rsu_rating[0])
+    # RSUs得到的所有评分
+    rsu_rating_dic = defaultdict(list)
+    for veh_index, msg_list in veh_rating_dict.items():
+        for msgs in msg_list:
+            rsu_id = veh_meet_rsu[veh_index]
+            rsu_rating_dic[rsu_id].append(msgs)
 
     # 每一个RSU用收到的rate计算对应车辆的offset，使用区块链的来竞争记账权
-    rsu_id_list = [rsu_rating[0] for rsu_rating in rsu_rating_list]
-    rsu_id_num_list = [[] for i in range(len(rsu_id_list))]
-    rsu_id_dict = dict(zip(rsu_id_list, rsu_id_num_list))
-    for rsu_rating in rsu_rating_list:
-        rsu_id_dict[rsu_rating[0]].append(rsu_rating)
+    rsu_offset_dict = defaultdict(list)
+    rsu_pre_offset_dict = defaultdict(list)
+    for rsu_offset_id, rsu_ratings in rsu_rating_dic.items():
+        pre_offset = offset(rsu_ratings)
+        rsu_pre_offset_dict[rsu_offset_id] = pre_offset
+        # rsu_offset_dict[rsu_offset_id].append()
 
     # npd: not update
-    npd_transaction_by_rsu_list = []
-    rsu_id_list_v2 = []
-    rsu_transaction_len = 0
-    rsu_transaction_max_id = 0
-    for key, value in rsu_id_dict.items():
-        rsu_transaction[key].append(offset(value))
-        rsu_rating_for_count[key].append(value)
+    # npd_transaction_by_rsu_list = []
+    # rsu_id_list_v2 = []
+    # rsu_transaction_len = 0
+    # rsu_transaction_max_id = 0
+    # for key, value in rsu_id_dict.items():
+    #     rsu_transaction[key].append(offset(value))
+    #     rsu_rating_for_count[key].append(value)
+    #
+    #     if len(offset(value)) > rsu_transaction_len:
+    #         rsu_transaction_len = len(offset(value))
+    #         rsu_transaction_max_id = key
+    # rsu_max_id_list.append(rsu_transaction_max_id)
+    #     # rsu_id_list_v2.append(key)
+    #     # npd_transaction_by_rsu_list.append(offset(value))
+    # pass
+    #     # npd_transaction_by_rsu_dict = dict(zip(rsu_id_list_v2, npd_transaction_by_rsu_list))
+    # # --------------------------------------------------------------------------------------
+    # rsu_active_list = []
+    # trans = []
+    # for key, rsus in rsu_transaction.items():
+    #     if len(rsus) > 0:
+    #         rsu_active_list.append(key)
+    #         trans.append(rsus)
+    #
+    # count = [None, 0]
+    # for i in range(len(trans)):
+    #     count_veh_trans = 0
+    #     for j in trans[i]:
+    #         count_veh_trans += len(j)
+    #     if count_veh_trans > count[1]:
+    #         count[1] = count_veh_trans
+    #         count[0] = rsu_active_list[i]
+    #
+    # consensus_node = count[0]
+    #
+    # veh_offset_list = [[] for i in range(len(veh_ids))]
+    # veh_offset_dict = dict(zip(veh_ids, veh_offset_list))
+    # veh_offset_result_dict = veh_offset_dict
+    # for ep in rsu_transaction[consensus_node]:
+    #     for eps in ep:
+    #         veh_offset_dict[eps[0]].append([eps[1], eps[2]])
+    #
+    # for key, value in veh_offset_dict.items():
+    #     veh_offset_result_dict[key] = simulator_count(value)
 
-        if len(offset(value)) > rsu_transaction_len:
-            rsu_transaction_len = len(offset(value))
-            rsu_transaction_max_id = key
-    rsu_max_id_list.append(rsu_transaction_max_id)
-        # rsu_id_list_v2.append(key)
-        # npd_transaction_by_rsu_list.append(offset(value))
-    pass
-        # npd_transaction_by_rsu_dict = dict(zip(rsu_id_list_v2, npd_transaction_by_rsu_list))
-    # --------------------------------------------------------------------------------------
-    rsu_active_list = []
-    trans = []
-    for key, rsus in rsu_transaction.items():
-        if len(rsus) > 0:
-            rsu_active_list.append(key)
-            trans.append(rsus)
+    # return veh_offset_result_dict, rsu_rating_for_count[consensus_node], veh_ids, accident_dict，rsu_rating_dic
+    return rsu_rating_dic, rsu_pre_offset_dict
 
-    count = [None, 0]
-    for i in range(len(trans)):
-        count_veh_trans = 0
-        for j in trans[i]:
-            count_veh_trans += len(j)
-        if count_veh_trans > count[1]:
-            count[1] = count_veh_trans
-            count[0] = rsu_active_list[i]
 
-    consensus_node = count[0]
+def statistic_msg(rsu_rating_dic):
+    key_tag  = 0
+    num_tag = 0
+    for rsu_id, rsu_msg in rsu_rating_dic.items():
+        if len(rsu_msg) > num_tag:
+            key_tag = rsu_id
+            num_tag = len(rsu_msg)
+    return statistic_msg_count(rsu_rating_dic[key_tag])
 
-    veh_offset_list = [[] for i in range(len(veh_ids))]
-    veh_offset_dict = dict(zip(veh_ids, veh_offset_list))
-    veh_offset_result_dict = veh_offset_dict
-    for ep in rsu_transaction[consensus_node]:
-        for eps in ep:
-            veh_offset_dict[eps[0]].append([eps[1], eps[2]])
 
-    for key, value in veh_offset_dict.items():
-        veh_offset_result_dict[key] = simulator_count(value)
+def statistic_offset(pre_offset_dict):
+    veh_offset_dict = defaultdict(dict)
+    for rsu, msgs in pre_offset_dict.items():
 
-    return veh_offset_result_dict, rsu_rating_for_count[consensus_node], veh_ids, accident_dict
+        for
+    return trust_num, false_num
+
+
+def statistic_msg_count(msg_list):
+    pos_num1 = 0
+    neg_num1 = 0
+    for msg in msg_list:
+        if msg[3] == 0 and msg[5] == 0 and msg[6] == 1:
+            pos_num1 += 1
+        elif msg[3] == 1 and msg[5] == 1 and msg[6] == -1:
+            pos_num1 += 1
+        elif msg[3] == 0 and msg[5] == 0 and msg[6] == -1:
+            neg_num1 += 1
+        elif msg[3] == 1 and msg[5] == 1 and msg[6] == 1:
+            neg_num1 += 1
+    return pos_num1, neg_num1
 
 
 def statistic_fun(rsu_rating_res, ids, accident_dict):
@@ -828,10 +836,11 @@ def statistic_fun(rsu_rating_res, ids, accident_dict):
 if __name__ == '__main__':
 
     unfair_offset_ratio = []
+    trust_offset = []
     rounds = np.arange(0, 1, 0.05)
     for x in rounds:
-        print(x)
-        res, rsu_rating_res, veh_ids, accident_list = traditional_version(SIMULATION_ROUND, 0.6)
+        # res, rsu_rating_res, veh_ids, accident_list = traditional_version(SIMULATION_ROUND, 0.6)
+        rsu_rating_dic, pre_offset_dict = traditional_version(SIMULATION_ROUND, x)
 
         # trust_offset_sum = 0  # 共有多少个评分
         # false_offset_sum = 0
@@ -847,20 +856,26 @@ if __name__ == '__main__':
         rating_num = 0
         false_msg_num = 0
 
-        res_list = statistic_fun(rsu_rating_res, veh_ids, accident_list)
+        # res_list = statistic_fun(rsu_rating_res, veh_ids, accident_list)
+        pos_num, neg_num = statistic_msg(rsu_rating_dic)
+        trust_num, false_num = statistic_offset(pre_offset_dict)
+        trust_ratio = trust_num / (trust_num + false_num)
+        trust_offset.append(trust_ratio)
+        # for rsuss, msgs in rsu_rating_dic.items():
+        #     for i in rsuss:
+        #         rating_num += i[4]
+        #         false_msg_num += i[5]
 
-        for rsuss in rsu_rating_res:
-            for i in rsuss:
-                rating_num += i[4]
-                false_msg_num += i[5]
-        false_ratio = false_msg_num / rating_num
+        # false_ratio = false_msg_num / rating_num
+        false_ratio = neg_num / (neg_num + pos_num)
         unfair_offset_ratio.append(false_ratio)
-        c_dict = dict(zip(rounds, unfair_offset_ratio))
+    c_dict = dict(zip(rounds, unfair_offset_ratio))
 
-        c_list = json.dumps(c_dict)
-        a = open(r"data_source_list.txt", "w", encoding='UTF-8')
-        a.write(c_list)
-        a.close()
+    c_list = json.dumps(c_dict)
+    a = open(r"data_source_list1.txt", "w", encoding='UTF-8')
+    a.write(c_list)
+
+    a.close()
 
 
 
