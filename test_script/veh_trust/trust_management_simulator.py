@@ -790,8 +790,14 @@ def statistic_msg(rsu_rating_dic):
 def statistic_offset(pre_offset_dict):
     veh_offset_dict = defaultdict(dict)
     for rsu, msgs in pre_offset_dict.items():
-
-        for
+        veh_offset_sub_dict = defaultdict(dict)
+        for veh, ms in msgs.items():
+            acci_dict = defaultdict(list)
+            for i in ms:
+                acci_dict[i[0]].append(i[4])
+            veh_offset_sub_dict[veh] = acci_dict
+        veh_offset_dict[rsu] = veh_offset_sub_dict
+    pass
     return trust_num, false_num
 
 
@@ -858,17 +864,20 @@ if __name__ == '__main__':
 
         # res_list = statistic_fun(rsu_rating_res, veh_ids, accident_list)
         pos_num, neg_num = statistic_msg(rsu_rating_dic)
+        false_ratio = neg_num / (neg_num + pos_num)
+        unfair_offset_ratio.append(false_ratio)
+
         trust_num, false_num = statistic_offset(pre_offset_dict)
         trust_ratio = trust_num / (trust_num + false_num)
         trust_offset.append(trust_ratio)
+
         # for rsuss, msgs in rsu_rating_dic.items():
         #     for i in rsuss:
         #         rating_num += i[4]
         #         false_msg_num += i[5]
 
         # false_ratio = false_msg_num / rating_num
-        false_ratio = neg_num / (neg_num + pos_num)
-        unfair_offset_ratio.append(false_ratio)
+
     c_dict = dict(zip(rounds, unfair_offset_ratio))
 
     c_list = json.dumps(c_dict)
