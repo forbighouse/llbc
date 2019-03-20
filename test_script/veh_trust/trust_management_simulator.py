@@ -564,8 +564,19 @@ def rate_get(msg_list, accident_probability):
 # 一个基站开始计算offset
 def offset(rsu_ratings_list):
     veh_count_dict = defaultdict(list)
+    false_offset_tag = 0
     for rate_line in rsu_ratings_list:
-        veh_count_dict[rate_line[1]].append(rate_line[2:])
+        append_list = rate_line[2:]
+        if rate_line[3] == 0 and rate_line[5] == 0:
+            false_offset_tag = 1
+        elif rate_line[3] == 0 and rate_line[5] == 1:
+            false_offset_tag = -1
+        elif rate_line[3] == 0 and rate_line[5] == -1:
+            false_offset_tag = -1
+        elif rate_line[3] == 1 and rate_line[5] == 1:
+            false_offset_tag = 1
+        append_list.append(false_offset_tag)
+        veh_count_dict[rate_line[1]].append(append_list)
 
     # rating_count = []
     # for veh_id, rating in veh_count_dict.items():
@@ -817,8 +828,12 @@ def statistic_offset(pre_offset_dict):
         veh_offset_sub_dict = defaultdict(dict)
         for veh, ms in msgs.items():
             acci_dict = defaultdict(list)
-            for i in ms:
-                acci_dict[i[0]].append(i[4])
+            # 如果这是一个false的message，那么这不应该作为+1算在是trust的offset计算里
+            for xi in ms:
+                if xi[3] == 1:
+                    acci_dict[xi[0]].append(-1)
+                else:
+                    acci_dict[xi[0]].append(xi[4])
             veh_offset_sub_dict[veh] = acci_dict
         veh_offset_dict[rsu] = veh_offset_sub_dict
 
@@ -921,7 +936,7 @@ if __name__ == '__main__':
     # a.write(unfair_msg_ratio_json)
     # a.close()
 
-    trust_offset_dict = dict(zip(trust_offset_list, unfair_offset_ratio_list))
+    trust_offset_dict = dict(zip(unfair_offset_ratio_list, trust_offset_list))
     trust_offset_json = json.dumps(trust_offset_dict)
     b = open(r"trust_offset3.txt", "+w", encoding='UTF-8')
     b.write(trust_offset_json)

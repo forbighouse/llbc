@@ -44,10 +44,10 @@ if __name__ == "__main__":
         x4.append(round(float(key), 2))
         y4.append(values)
 
-    # plt.plot(x, y, color='k', linestyle='-', marker='s', label='x²')
-    plt.plot(x, y2, color='r', linestyle='-', marker='o', label='x')
-    # plt.plot(x, y3, color='b', linestyle='-', marker='v', label='x³')
-    # plt.plot(x, y4, color='g', linestyle='-', marker='^', label='eˣ')
+    plt.plot(x, y, color='k', linestyle='-', marker='s', label='x²')
+    plt.plot(x2, y2, color='r', linestyle='-', marker='o', label='x')
+    plt.plot(x3, y3, color='b', linestyle='-', marker='v', label='x³')
+    plt.plot(x4, y4, color='g', linestyle='-', marker='^', label='eˣ')
 
     plt.legend(loc='upper right')
     plt.show()
