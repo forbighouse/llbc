@@ -412,24 +412,7 @@ def rsu_statistic(rsu_meet_num):
         return sorted_res[-1][0]
 
 
-# 计算正负rating的数量
-def rate_count(rating_each_list):
-    """
-    :param rating_each_list:
-    :return: 正面rating的数量，负面rating的数量
-    """
-    positive_num = 0
-    negative_num = 0
-    fake_msg_num = 0
-    for num in rating_each_list:
-        if num == 1:
-            positive_num += 1
-        elif num == -1:
-            negative_num += 1
-        elif num == -2:
-            fake_msg_num += 1
 
-    return positive_num, negative_num, fake_msg_num
 
 
 def rate(message_list, veh_location):
@@ -531,6 +514,25 @@ def occur_probability(pe, pos_veh_list, neg_veh_list):
     return part1 / (part1 + part2)
 
 
+def rate_count(rating_each_list):
+    """
+    :param rating_each_list:
+    :return: 正面rating的数量，负面rating的数量
+    """
+    positive_num = 0
+    negative_num = 0
+    fake_msg_num = 0
+    for num in rating_each_list:
+        if num == 1:
+            positive_num += 1
+        elif num == -1:
+            negative_num += 1
+        elif num == -2:
+            fake_msg_num += 1
+
+    return positive_num, negative_num, fake_msg_num
+
+
 # 每一辆车计算message的评分
 def rate_get(msg_list, accident_probability):
     assert type(msg_list) is list
@@ -573,9 +575,26 @@ def offset(rsu_ratings_list):
     # offset_result = []
     # for each_count in rating_count:
     #     offset_result.append([each_count[0], offset_count(each_count), each_count[3]])
-
+    #
     # return offset_result, veh_count_dict
     return veh_count_dict
+
+
+# 计算正负rating的数量
+def offset_rate_count(rating_each_list):
+    """
+    :param rating_each_list:
+    :return: 正面rating的数量，负面rating的数量
+    """
+    positive_num = 0
+    negative_num = 0
+    for num in rating_each_list:
+        if num == 1:
+            positive_num += 1
+        elif num == -1:
+            negative_num += 1
+
+    return [positive_num, negative_num]
 
 
 # offset的统计计算
@@ -583,7 +602,10 @@ def offset_count(rating_count):
     m = rating_count[1]  # 正
     n = rating_count[2]  # 负
 
-    def sensitivity_fun(xx): return xx*xx
+    # def sensitivity_fun(xx): return xx*xx
+    # def sensitivity_fun(xx): return xx
+    # def sensitivity_fun(xx): return xx*xx*xx
+    def sensitivity_fun(xx): return pow(math.e, xx)
 
     sita1 = sensitivity_fun(m) / (sensitivity_fun(m) + sensitivity_fun(n))
     sita2 = sensitivity_fun(n) / (sensitivity_fun(m) + sensitivity_fun(n))
@@ -719,6 +741,8 @@ def traditional_version(round_num, false_ratio):
             rsu_id = veh_meet_rsu[veh_index]
             rsu_rating_dic[rsu_id].append(msgs)
 
+
+    # todo
     # 每一个RSU用收到的rate计算对应车辆的offset，使用区块链的来竞争记账权
     rsu_offset_dict = defaultdict(list)
     rsu_pre_offset_dict = defaultdict(list)
@@ -797,8 +821,35 @@ def statistic_offset(pre_offset_dict):
                 acci_dict[i[0]].append(i[4])
             veh_offset_sub_dict[veh] = acci_dict
         veh_offset_dict[rsu] = veh_offset_sub_dict
-    pass
-    return trust_num, false_num
+
+    veh_offset_all_list = []
+    pos_num_all_veh = 0
+    neg_num_all_veh = 0
+    for vehs, offset in veh_offset_dict['0'].items():
+        # 一辆车的所有评分
+        pos_num_one_veh, neg_num_one_veh = statistic_offset_count(offset)
+        veh_offset_all_list.append(offset_count([None, pos_num_one_veh, neg_num_one_veh]))
+        pos_num_all_veh += pos_num_one_veh
+        neg_num_all_veh += neg_num_one_veh
+    trust_num = 0
+    for i in veh_offset_all_list:
+        trust_num += i
+
+    # 应该只是给出最后的一个trust offset
+    trust_offset_num = round((trust_num/len(veh_offset_all_list)), 2)
+    unfair_offset_ratio_res = round(neg_num_all_veh/(pos_num_all_veh+neg_num_all_veh), 2)
+    return trust_offset_num, unfair_offset_ratio_res
+
+
+# 统计一辆车的不同的accident下的所有评分
+def statistic_offset_count(accident_rating_dict):
+    pos_num_all = 0
+    neg_num_all = 0
+    for accident, rating_list in accident_rating_dict.items():
+        p_num, n_num = offset_rate_count(rating_list)
+        pos_num_all += p_num
+        neg_num_all += n_num
+    return pos_num_all, neg_num_all
 
 
 def statistic_msg_count(msg_list):
@@ -841,52 +892,40 @@ def statistic_fun(rsu_rating_res, ids, accident_dict):
 
 if __name__ == '__main__':
 
-    unfair_offset_ratio = []
-    trust_offset = []
+    unfair_msg_ratio_list = []
+    unfair_offset_ratio_list = []
+    trust_offset_list = []
     rounds = np.arange(0, 1, 0.05)
     for x in rounds:
         # res, rsu_rating_res, veh_ids, accident_list = traditional_version(SIMULATION_ROUND, 0.6)
         rsu_rating_dic, pre_offset_dict = traditional_version(SIMULATION_ROUND, x)
 
-        # trust_offset_sum = 0  # 共有多少个评分
-        # false_offset_sum = 0
-        # false_msg_sum = 0
-        # for i in res.values():
-        #     trust_offset_sum += i[0]
-        #     false_offset_sum += i[1]
-        #     false_msg_sum += i[2]
-        #
-        # false_ratio = false_msg_sum / (trust_offset_sum + false_offset_sum)
-        # unfair_offset_ratio.append(false_ratio)
-
         rating_num = 0
         false_msg_num = 0
 
-        # res_list = statistic_fun(rsu_rating_res, veh_ids, accident_list)
+        # 第一张图，求假消息与评分的关系
         pos_num, neg_num = statistic_msg(rsu_rating_dic)
         false_ratio = neg_num / (neg_num + pos_num)
-        unfair_offset_ratio.append(false_ratio)
+        unfair_msg_ratio_list.append(false_ratio)
 
-        trust_num, false_num = statistic_offset(pre_offset_dict)
-        trust_ratio = trust_num / (trust_num + false_num)
-        trust_offset.append(trust_ratio)
-
-        # for rsuss, msgs in rsu_rating_dic.items():
-        #     for i in rsuss:
-        #         rating_num += i[4]
-        #         false_msg_num += i[5]
-
-        # false_ratio = false_msg_num / rating_num
-
-    c_dict = dict(zip(rounds, unfair_offset_ratio))
-
-    c_list = json.dumps(c_dict)
-    a = open(r"data_source_list1.txt", "w", encoding='UTF-8')
-    a.write(c_list)
-
-    a.close()
+        #  第二张图，求不公平的评分与真实值得图
+        trust_offset_res, unfair_offset_ratio = statistic_offset(pre_offset_dict)
+        trust_offset_list.append(trust_offset_res)
+        unfair_offset_ratio_list.append(unfair_offset_ratio)
 
 
+
+    # unfair_msg_ratio_dict = dict(zip(rounds, unfair_msg_ratio_list))
+    # unfair_msg_ratio_json = json.dumps(unfair_msg_ratio_dict)
+    # a = open(r"unfair_msg1.txt", "w", encoding='UTF-8')
+    # a.write(unfair_msg_ratio_json)
+    # a.close()
+
+    trust_offset_dict = dict(zip(trust_offset_list, unfair_offset_ratio_list))
+    trust_offset_json = json.dumps(trust_offset_dict)
+    b = open(r"trust_offset3.txt", "+w", encoding='UTF-8')
+    b.write(trust_offset_json)
+    b.close()
 
 
 
