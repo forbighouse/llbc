@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import random
 import time
 import math
@@ -27,7 +28,7 @@ TIME_TOLERANCE = 1
 # 事件发生的阈值
 THRESHOLD = 0.5
 # 事件发生的概率
-PE = 0.1  # 应该用动态的每个事件用一个，这里先用相同的测试
+PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测试
 # 测试模式
 DEBUG = 0
 # 更新所有的txt文件
@@ -410,9 +411,6 @@ def rsu_statistic(rsu_meet_num):
         return sorted_res[-2][0]
     else:
         return sorted_res[-1][0]
-
-
-
 
 
 def rate(message_list, veh_location):
@@ -930,17 +928,17 @@ if __name__ == '__main__':
 
 
 
-    # unfair_msg_ratio_dict = dict(zip(rounds, unfair_msg_ratio_list))
-    # unfair_msg_ratio_json = json.dumps(unfair_msg_ratio_dict)
-    # a = open(r"unfair_msg1.txt", "w", encoding='UTF-8')
-    # a.write(unfair_msg_ratio_json)
-    # a.close()
+    unfair_msg_ratio_dict = dict(zip(rounds, unfair_msg_ratio_list))
+    unfair_msg_ratio_json = json.dumps(unfair_msg_ratio_dict)
+    a = open(r"unfair_msg2.txt", "w", encoding='UTF-8')
+    a.write(unfair_msg_ratio_json)
+    a.close()
 
-    trust_offset_dict = dict(zip(unfair_offset_ratio_list, trust_offset_list))
-    trust_offset_json = json.dumps(trust_offset_dict)
-    b = open(r"trust_offset3.txt", "+w", encoding='UTF-8')
-    b.write(trust_offset_json)
-    b.close()
+    # trust_offset_dict = dict(zip(unfair_offset_ratio_list, trust_offset_list))
+    # trust_offset_json = json.dumps(trust_offset_dict)
+    # b = open(r"trust_offset3.txt", "+w", encoding='UTF-8')
+    # b.write(trust_offset_json)
+    # b.close()
 
 
 

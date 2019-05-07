@@ -7,6 +7,10 @@ VEH_NUM = 50
 VEH_LOCATION_FILE = 'veh_list.txt'
 # accident的文件名称
 ACCIDENT_LOCATION_FILE = 'accident_list.txt'
+# 区块链钱包地址的文件名称
+BLOCKCHAIN_ADDRESS_FILE = 'bl_address_ids.txt'
+# 区块链网络的地址数量
+BLOCKCHAIN_ADDRESS_TOTAL_NUM = round((1+2)*VEH_NUM)
 # 事件的类型，例如车祸、红绿灯、限行、拥堵等
 ACCIDENT_TYPE = 0
 # 仿真的事件数量
@@ -45,6 +49,18 @@ def accident_test_location(accident_num, accident_type, road_len):
             w.write('\n')
 
 
+def bl_address(bl_address_num=BLOCKCHAIN_ADDRESS_TOTAL_NUM , bl_address_file=BLOCKCHAIN_ADDRESS_FILE):
+    bl_address_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(bl_address_num)]
+    with open(bl_address_file, 'w')as w:
+        for address in bl_address_list:
+            address = address.split('-')
+            stra = ''
+            address = stra.join(address)
+            w.write(address)
+            w.write('\n')
+
+
 if __name__ == "__main__":
-    veh_test_location(VEH_NUM)
-    accident_test_location(ACCIDENT_NUM, ACCIDENT_TYPE, ROAD_LEN)
+    # veh_test_location(VEH_NUM)
+    # accident_test_location(ACCIDENT_NUM, ACCIDENT_TYPE, ROAD_LEN)
+    bl_address()
