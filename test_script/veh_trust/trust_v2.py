@@ -2,6 +2,12 @@ from test_script.veh_trust.trust_management_simulator import *
 from test_script.veh_trust.base_veh_location import *
 
 NUM_REQUEST_VEH = 5
+# 车辆请求的内容
+REQ_DATA_CONTENT = 0
+# 车辆请求的距离要求
+REQ_DISTENCE_REQ = 0
+# 车辆请求的时间要求
+REQ_TIME_REQ = 0
 
 
 def bl_address_read(file_address=BLOCKCHAIN_ADDRESS_FILE):
@@ -13,11 +19,33 @@ def bl_address_read(file_address=BLOCKCHAIN_ADDRESS_FILE):
     return bl_address_id_list
 
 
+def veh_address_allocation(veh_init_ids, bl_address_ids):
+    address_veh_dict = defaultdict(str)
+    for veh_id, address_ids in zip(veh_init_ids, bl_address_ids):
+        for address_id in address_ids:
+            address_veh_dict[address_id] = veh_id
+    bl_address_ids_list = [bl_address_ids[i:i + 3] for i in range(0, len(bl_address_ids), 3)]
+    veh_address_dict = dict(zip(veh_init_ids, bl_address_ids_list))
+    return veh_address_dict, address_veh_dict
+
+
+def count_valid_veh(temp_list, veh_location):
+    re_valid_veh_dict = defaultdict(list)
+    for msg in temp_list:
+        tmp_valid_veh = []
+        for tmp_veh_id, tmp_veh_location in veh_location.items():
+            if tmp_veh_id != msg[1]:
+                if int(distance_cal_x(msg[2], tmp_veh_location)) <= THRESHOLD_COMMUNICATION:
+                    tmp_valid_veh.append(tmp_veh_id)
+        re_valid_veh_dict[msg[1]] = tmp_valid_veh
+    return re_valid_veh_dict
+
+
 def traditional_v2(round_num, false_ratio):
     # # //rsu的位置列表，dict, (id, location)
     # rsu_ids, rsu_location_list = rsu_location()
     # //随机产生的事件的位置 dict, location
-    accident_list, accident_dict = accident_factory()
+    event_list, accident_dict = accident_factory()
     #
     # rsu_transaction_list = [[] for ids in range(len(rsu_ids))]
     # rsu_transaction = dict(zip(rsu_ids, rsu_transaction_list))
@@ -39,10 +67,7 @@ def traditional_v2(round_num, false_ratio):
     # //现在有了这么多车了，下一步是往外发消息
     veh_init_ids = veh_id_fun()
     bl_address_ids = bl_address_read()
-    bl_address_ids_list = [bl_address_ids[i:i+3] for i in range(0, len(bl_address_ids), 3)]
-    address_reputaion_record_dict = defaultdict(list)
-    veh_address_dict = dict(zip(veh_init_ids, bl_address_ids_list))
-    name = veh_address_dict[veh_init_ids[0]]
+    veh_address_dict, address_veh_dict = veh_address_allocation(veh_init_ids,bl_address_ids)
 
     # //记录每一辆veh在一轮里面见到的rsu的数量
     veh_seq_for_epoch_dict = defaultdict(list)
@@ -63,7 +88,7 @@ def traditional_v2(round_num, false_ratio):
 
         # 求得vail_veh
         accident_id_list = [m for m in range(ACCIDENT_NUM)]
-        for v1 in accident_list:
+        for v1 in event_list:
             d = []
             for k2, v2 in veh_location.items():
                 d.append((k2, int(distance_cal_x(int(v1[1][0]), v2))))
@@ -81,14 +106,26 @@ def traditional_v2(round_num, false_ratio):
             vail_veh.append(true_msg_veh)  # accident周围的车辆
             false_veh.append(false_msg_veh)  # 远离accideng的车辆
 
-        pull_request_veh_id_list = random.sample(veh_ids, NUM_REQUEST_VEH)
-        veh_req_for_epoch_dict[epoch].append(pull_request_veh_id_list)
+        send_request_veh_id_list = random.sample(veh_ids, NUM_REQUEST_VEH)
+        veh_req_for_epoch_dict[epoch].append(send_request_veh_id_list)
         veh_seq_for_epoch_dict[epoch].append(vail_veh)
+
+        temp_list = []
+        for veh_sending_req in send_request_veh_id_list:
+            event_ready_for_veh = random.choice(event_list)
+            activate_address = random.choice(veh_address_dict[veh_sending_req])
+            temp_list.append([activate_address,
+                              veh_sending_req,
+                              veh_location[veh_sending_req],
+                              random.randint(0, 100),  # 消息时间或者是这则消息的排序
+                              [event_ready_for_veh[0], REQ_DISTENCE_REQ, REQ_TIME_REQ]])
+        valid_veh_dict = count_valid_veh(temp_list, veh_location)
+
 
         # 得到评分列表
         report_cycle = time.clock()
         messages = message(vail_veh,
-                           accident_list,
+                           event_list,
                            veh_location,
                            report_cycle)
 
