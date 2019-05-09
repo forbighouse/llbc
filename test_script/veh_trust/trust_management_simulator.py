@@ -114,7 +114,7 @@ def veh_trajectory():
             locationss.append(int(x[1]))
     # 每一次都更新位置
     if not DEBUG:
-        # 随机veh之间的距离和随机第一辆veh的起始位置
+        # 随机车辆之间的距离和随机第一辆车的起始位置
         distance_veh = random.sample(range(5, 100), len(veh_id_list))
         start_point = random.sample(range(5, 100), 1)
         veh_locations = []
