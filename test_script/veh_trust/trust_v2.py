@@ -8,6 +8,8 @@ REQ_DATA_CONTENT = 0
 REQ_DISTENCE_REQ = 0
 # 车辆请求的时间要求
 REQ_TIME_REQ = 0
+# 观测距离
+OBSERVATION_DISTANCE = 100
 
 
 def veh_trajectory_v2():
@@ -58,6 +60,16 @@ def veh_address_allocation(veh_init_ids, bl_address_ids):
     return veh_address_dict, address_veh_dict
 
 
+def count_valid_veh_around_event(msg_list, accident_dict,veh_location):
+    re_valid_veh_dic = defaultdict(list)
+    for one_msg in msg_list:
+        for tmp_veh_id, tmp_veh_location in veh_location.items():
+            if tmp_veh_id != one_msg[1]:
+                if int(distance_cal_x(accident_dict[one_msg[4][0]][0][0], tmp_veh_location)) <= OBSERVATION_DISTANCE:
+                    re_valid_veh_dic[one_msg[4][0]].append(tmp_veh_id)
+    return re_valid_veh_dic
+
+
 def count_valid_for_req(temp_list, veh_location):
     re_valid_veh_dict = defaultdict(list)
     for msg in temp_list:
@@ -83,8 +95,8 @@ def event_owned(tmp_veh_id, vail_veh):
 
 
 def traditional_v2(round_num, false_ratio):
-    # # //rsu的位置列表，dict, (id, location)
-    # rsu_ids, rsu_location_list = rsu_location()
+    # //rsu的位置列表，dict, (id, location)
+    rsu_ids, rsu_location_list = rsu_location()
     # //随机产生的事件的位置 dict, location
     event_list, accident_dict = accident_factory()
     #
@@ -155,19 +167,23 @@ def traditional_v2(round_num, false_ratio):
         for veh_sending_req in send_request_veh_id_list:
             event_ready_for_veh = random.choice(event_list)
             activate_address = random.choice(veh_address_dict[veh_sending_req])
+            # temp_list包含了所有的请求消息【活跃地址、发布消息的车辆、车辆的位置
+            # 随机产生的消息的次序、[event的编号、距离要求、时间要求]】
             temp_list.append([activate_address,
                               veh_sending_req,
                               veh_location[veh_sending_req],
                               random.randint(0, 100),  # 消息时间或者是这则消息的排序
                               [event_ready_for_veh[0], REQ_DISTENCE_REQ, REQ_TIME_REQ]])
-        veh_valid_for_all_msg_dict = count_valid_for_req(temp_list, veh_location)
+        # veh_valid_for_all_msg_dict = count_valid_for_req(temp_list, veh_location)
+        veh_valid_for_all_msg_dict = count_valid_veh_around_event(temp_list, accident_dict, veh_location)
+
 
         sorted_temp_list = sorted(temp_list, key=lambda x:x[3])
         for req_msg in sorted_temp_list:
             veh_valid_for_one_msg_list = count_valid_part_fun(req_msg, veh_location)
             for tmp_veh in veh_valid_for_one_msg_list:
                 event_for_relay_list = event_owned(tmp_veh, vail_veh)
-                if not len(event_for_relay_list):
+                # if not len(event_for_relay_list):
 
 
         # 得到评分列表
