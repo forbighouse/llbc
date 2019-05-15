@@ -52,11 +52,11 @@ def bl_address_read(file_address=BLOCKCHAIN_ADDRESS_FILE):
 
 def veh_address_allocation(veh_init_ids, bl_address_ids):
     address_veh_dict = defaultdict(str)
-    for veh_id, address_ids in zip(veh_init_ids, bl_address_ids):
-        for address_id in address_ids:
-            address_veh_dict[address_id] = veh_id
     bl_address_ids_list = [bl_address_ids[i:i + 3] for i in range(0, len(bl_address_ids), 3)]
     veh_address_dict = dict(zip(veh_init_ids, bl_address_ids_list))
+    for ids, address_list in veh_address_dict.items():
+        for address in address_list:
+            address_veh_dict[address] = ids
     return veh_address_dict, address_veh_dict
 
 
@@ -94,6 +94,10 @@ def event_owned(tmp_veh_id, vail_veh):
     return event_owned_list
 
 
+def random_address(_list):
+    return random.choice(_list)
+
+
 def traditional_v2(round_num, false_ratio):
     # //rsu的位置列表，dict, (id, location)
     rsu_ids, rsu_location_list = rsu_location()
@@ -120,6 +124,7 @@ def traditional_v2(round_num, false_ratio):
     # //现在有了这么多车了，下一步是往外发消息
     veh_init_ids = veh_id_fun()
     bl_address_ids = bl_address_read()
+    # 每辆车拥有的地址veh_address_dict。
     veh_address_dict, address_veh_dict = veh_address_allocation(veh_init_ids,bl_address_ids)
 
     # //记录每一辆veh在一轮里面见到的rsu的数量
@@ -176,6 +181,19 @@ def traditional_v2(round_num, false_ratio):
                               [event_ready_for_veh[0], REQ_DISTENCE_REQ, REQ_TIME_REQ]])
         # veh_valid_for_all_msg_dict = count_valid_for_req(temp_list, veh_location)
         veh_valid_for_all_msg_dict = count_valid_veh_around_event(temp_list, accident_dict, veh_location)
+        recv_msg_dict = defaultdict(list)
+        for tmp_msg in temp_list:
+            for one_veh in veh_valid_for_all_msg_dict[tmp_msg[4][0]]:
+                recv_msg_dict[tmp_msg[1]].append([
+                    random_address(veh_address_dict[one_veh]),  # 随机选择的地址，发送的
+                    tmp_msg[0],  # 发出req的车辆
+                    tmp_msg[4][0],  # 具体的事件的
+                    1,
+                    veh_location[one_veh]  # 位置
+                    # 时间
+                ])
+
+
 
 
         sorted_temp_list = sorted(temp_list, key=lambda x:x[3])
