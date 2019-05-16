@@ -98,6 +98,11 @@ def random_address(_list):
     return random.choice(_list)
 
 
+NUM_RISE_REQ_FOR_VEH = 0
+def bl_reputation_count(veh_id):
+    return NUM_RISE_REQ_FOR_VEH
+
+
 def traditional_v2(round_num, false_ratio):
     # //rsu的位置列表，dict, (id, location)
     rsu_ids, rsu_location_list = rsu_location()
@@ -172,8 +177,9 @@ def traditional_v2(round_num, false_ratio):
         for veh_sending_req in send_request_veh_id_list:
             event_ready_for_veh = random.choice(event_list)
             activate_address = random.choice(veh_address_dict[veh_sending_req])
-            # temp_list包含了所有的请求消息【活跃地址、发布消息的车辆、车辆的位置
-            # 随机产生的消息的次序、[event的编号、距离要求、时间要求]】
+            # temp_list包含了所有的【请求消息】
+            #     0          1           2            3                       4
+            # |<-地址->|<-请求车辆->|<-车辆位置->|<-消息次序->|<-[event的编号、距离要求、时间要求]->|
             temp_list.append([activate_address,
                               veh_sending_req,
                               veh_location[veh_sending_req],
@@ -182,16 +188,23 @@ def traditional_v2(round_num, false_ratio):
         # veh_valid_for_all_msg_dict = count_valid_for_req(temp_list, veh_location)
         veh_valid_for_all_msg_dict = count_valid_veh_around_event(temp_list, accident_dict, veh_location)
         recv_msg_dict = defaultdict(list)
+        # recv_msg_dict包含【反馈消息】
+        #     0         1            2           3             4         5             6
+        # |<- 地址->|<-反馈车辆->|<-请求地址->|<-事件编号->|<-事件内容->|<-发出位置->|<-发出时间->|
         for tmp_msg in temp_list:
             for one_veh in veh_valid_for_all_msg_dict[tmp_msg[4][0]]:
                 recv_msg_dict[tmp_msg[1]].append([
                     random_address(veh_address_dict[one_veh]),  # 随机选择的地址，发送的
+                    one_veh,  # 发出反馈的车辆
                     tmp_msg[0],  # 发出req的车辆
                     tmp_msg[4][0],  # 具体的事件的
                     1,
-                    veh_location[one_veh]  # 位置
-                    # 时间
+                    veh_location[one_veh],  # 位置
+                    0# 时间
                 ])
+
+        for tmp_veh, tmp_msg in recv_msg_dict.items():
+            veh_history_reputation = bl_reputation_count(tmp_msg[0])
 
 
 
