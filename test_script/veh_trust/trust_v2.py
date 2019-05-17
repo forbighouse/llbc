@@ -1,5 +1,6 @@
 from test_script.veh_trust.trust_management_simulator import *
 from test_script.veh_trust.base_veh_location import *
+from utility.utility import *
 
 NUM_REQUEST_VEH = 5
 # 车辆请求的内容
@@ -10,6 +11,8 @@ REQ_DISTENCE_REQ = 0
 REQ_TIME_REQ = 0
 # 观测距离
 OBSERVATION_DISTANCE = 100
+# 临时参数发起REQ的车辆的数量
+NUM_RISE_REQ_FOR_VEH = 0
 
 
 def veh_trajectory_v2():
@@ -41,6 +44,33 @@ def veh_trajectory_v2():
     return veh_id_list, dict(zip(veh_id_list, veh_locations_start)), dict(zip(veh_id_list, veh_locations_end))
 
 
+def veh_adjacency_fuc(event_list, veh_location):
+    adjacency_dict = defaultdict(list)
+    for event1 in event_list:
+        d = []
+        for k2, v2 in veh_location.items():
+            d.append((k2, int(distance_cal_x(int(event1[1][0]), v2))))
+        adjacency_dict[event1[0]] = d
+    return adjacency_dict
+
+
+def veh_valid_fun(adjacency_dict):
+    # //位置距离小于THRESHOLD_COMMUNICATION的具体距离，list, (veh_id, distance)
+    vail_veh = []
+    false_veh = []
+    for k, v in adjacency_dict.items():
+        true_msg_veh = []
+        false_msg_veh = []
+        for v1 in v:
+            if v1[1] < THRESHOLD_COMMUNICATION:
+                true_msg_veh.append(v1)
+            else:
+                false_msg_veh.append(v1)
+        vail_veh.append(true_msg_veh)  # accident周围的车辆
+        false_veh.append(false_msg_veh)  # 远离accideng的车辆
+    return vail_veh, false_veh
+
+
 def bl_address_read(file_address=BLOCKCHAIN_ADDRESS_FILE):
     bl_address_id_list = []
     with open(file_address, 'r') as handler:
@@ -52,12 +82,14 @@ def bl_address_read(file_address=BLOCKCHAIN_ADDRESS_FILE):
 
 def veh_address_allocation(veh_init_ids, bl_address_ids):
     address_veh_dict = defaultdict(str)
+    init_balance_address = defaultdict(int)
     bl_address_ids_list = [bl_address_ids[i:i + 3] for i in range(0, len(bl_address_ids), 3)]
     veh_address_dict = dict(zip(veh_init_ids, bl_address_ids_list))
     for ids, address_list in veh_address_dict.items():
         for address in address_list:
             address_veh_dict[address] = ids
-    return veh_address_dict, address_veh_dict
+            init_balance_address[address] = random.randint(0,100)
+    return veh_address_dict, address_veh_dict, init_balance_address
 
 
 def count_valid_veh_around_event(msg_list, accident_dict,veh_location):
@@ -94,21 +126,24 @@ def event_owned(tmp_veh_id, vail_veh):
     return event_owned_list
 
 
-def random_address(_list):
-    return random.choice(_list)
+def random_address(_list): return random.choice(_list)
 
 
-NUM_RISE_REQ_FOR_VEH = 0
-def bl_reputation_count(veh_id):
-    return NUM_RISE_REQ_FOR_VEH
+def bl_reputation_count(veh_id=NUM_RISE_REQ_FOR_VEH): return veh_id
 
 
-def traditional_v2(round_num, false_ratio):
-    # //rsu的位置列表，dict, (id, location)
+def traditional_v2(round_time, false_ratio):
+    # //rsu的位置初始化，dict, (id, location)
     rsu_ids, rsu_location_list = rsu_location()
-    # //随机产生的事件的位置 dict, location
+    # //事件位置初始化 dict, location
     event_list, accident_dict = accident_factory()
-    #
+    # //车辆id和位置初始化
+    veh_ids, veh_location = veh_trajectory()
+    # //地址钱包初始化
+    veh_init_ids = veh_id_fun()
+    bl_address_ids = bl_address_read()
+    #     //每辆车拥有的地址veh_address_dict，每个地址对应的车address_veh_dict。
+    veh_address_dict, address_veh_dict, init_balance = veh_address_allocation(veh_init_ids, bl_address_ids)
     # rsu_transaction_list = [[] for ids in range(len(rsu_ids))]
     # rsu_transaction = dict(zip(rsu_ids, rsu_transaction_list))
     # # //记录每一个rsu获得的评分情况，与rsu_transaction区别开
@@ -123,84 +158,52 @@ def traditional_v2(round_num, false_ratio):
     # accident_dict_key = [k for k in accident_dict.keys()]
     # accident_dict_empty = [[] for j in range(len(accident_dict))]
     # message_dict = dict(zip(accident_dict_key, accident_dict_empty))
-    #
-    # # //反转accident，索引其地址，返回其序号
-    # accident_dict_reverse = {v[0][0]: [k, v[1]] for k, v in accident_dict.items()}
-    # //现在有了这么多车了，下一步是往外发消息
-    veh_init_ids = veh_id_fun()
-    bl_address_ids = bl_address_read()
-    # 每辆车拥有的地址veh_address_dict。
-    veh_address_dict, address_veh_dict = veh_address_allocation(veh_init_ids,bl_address_ids)
 
-    # //记录每一辆veh在一轮里面见到的rsu的数量
+    # //记录车辆的历史消息或位置等
     veh_seq_for_epoch_dict = defaultdict(list)
     veh_req_for_epoch_dict = defaultdict(list)
-    # rsu_epoch_dict = defaultdict(dict)
-    # veh_rsu_all_dict = defaultdict(dict)
-    # for veh_ in veh_init_ids:
-    #     veh_rsu_all_dict[veh_] = copy.deepcopy(rsu_epoch_dict)
 
-    for epoch in range(round_num):
-        # //随机产生的车辆位置 dict, (veh_id: location)
-        veh_ids, veh_location = veh_trajectory()
-        # //每一辆车与事件的距离, list, (veh_id, distance)
-        distance_list = []
-        # //位置距离小于THRESHOLD_COMMUNICATION的具体距离，list, (veh_id, distance)
-        vail_veh = []
-        false_veh = []
-
-        # 求得vail_veh
-        accident_id_list = [m for m in range(ACCIDENT_NUM)]
-        for v1 in event_list:
-            d = []
-            for k2, v2 in veh_location.items():
-                d.append((k2, int(distance_cal_x(int(v1[1][0]), v2))))
-            distance_list.append(d)
-        adjacency_list = dict(zip(accident_id_list, distance_list))
-
-        for k, v in adjacency_list.items():
-            true_msg_veh = []
-            false_msg_veh = []
-            for v1 in v:
-                if v1[1] < THRESHOLD_COMMUNICATION:
-                    true_msg_veh.append(v1)
-                else:
-                    false_msg_veh.append(v1)
-            vail_veh.append(true_msg_veh)  # accident周围的车辆
-            false_veh.append(false_msg_veh)  # 远离accideng的车辆
+    for epoch in range(round_time):
+        # //得到所有车辆与每一个事件之间的距离
+        adjacency_dict = veh_adjacency_fuc(event_list, veh_location)
+        #     //每个事件的有效可观测车辆集合vail_veh
+        vail_veh, _ = veh_valid_fun(adjacency_dict)
 
         send_request_veh_id_list = random.sample(veh_ids, NUM_REQUEST_VEH)
         veh_req_for_epoch_dict[epoch].append(send_request_veh_id_list)
         veh_seq_for_epoch_dict[epoch].append(vail_veh)
-
-        temp_list = []
+        # 消息的发送序列，为简化，并不存在同时发布的消息
+        req_msg_order = list(range(len(send_request_veh_id_list)))
+        random.shuffle(req_msg_order)
+        temp_msg_list = []
         for veh_sending_req in send_request_veh_id_list:
             event_ready_for_veh = random.choice(event_list)
             activate_address = random.choice(veh_address_dict[veh_sending_req])
             # temp_list包含了所有的【请求消息】
             #     0          1           2            3                       4
             # |<-地址->|<-请求车辆->|<-车辆位置->|<-消息次序->|<-[event的编号、距离要求、时间要求]->|
-            temp_list.append([activate_address,
-                              veh_sending_req,
-                              veh_location[veh_sending_req],
-                              random.randint(0, 100),  # 消息时间或者是这则消息的排序
-                              [event_ready_for_veh[0], REQ_DISTENCE_REQ, REQ_TIME_REQ]])
-        # veh_valid_for_all_msg_dict = count_valid_for_req(temp_list, veh_location)
-        veh_valid_for_all_msg_dict = count_valid_veh_around_event(temp_list, accident_dict, veh_location)
+            temp_msg_list.append([
+                activate_address,                              # 0请求车辆随机钱包地址
+                veh_sending_req,                               # 1请求车辆
+                veh_location[veh_sending_req],                 # 2请求位置
+                req_msg_order[send_request_veh_id_list.index(veh_sending_req)],   # 3消息时间或排序
+                [event_ready_for_veh[0], REQ_DISTENCE_REQ, REQ_TIME_REQ]])        # [event的编号、距离要求、时间要求]
+        # veh_valid_for_all_msg_dict = count_valid_for_req(temp_msg_list, veh_location)
+        veh_valid_for_all_msg_dict = count_valid_veh_around_event(temp_msg_list, accident_dict, veh_location)
         recv_msg_dict = defaultdict(list)
         # recv_msg_dict包含【反馈消息】
         #     0         1            2           3             4         5             6
         # |<- 地址->|<-反馈车辆->|<-请求地址->|<-事件编号->|<-事件内容->|<-发出位置->|<-发出时间->|
-        for tmp_msg in temp_list:
+        for tmp_msg in temp_msg_list:
             for one_veh in veh_valid_for_all_msg_dict[tmp_msg[4][0]]:
                 recv_msg_dict[tmp_msg[1]].append([
-                    random_address(veh_address_dict[one_veh]),  # 随机选择的地址，发送的
-                    one_veh,  # 发出反馈的车辆
-                    tmp_msg[0],  # 发出req的车辆
-                    tmp_msg[4][0],  # 具体的事件的
-                    1,
-                    veh_location[one_veh],  # 位置
-                    0# 时间
+                    random_address(veh_address_dict[one_veh]),  # 0随机钱包地址
+                    one_veh,                                    # 1反馈车辆
+                    tmp_msg[0],                                 # 2请求车辆
+                    tmp_msg[4][0],                              # 3请求时间
+                    1,                                          # 4事件内容，magic word
+                    veh_location[one_veh],                      # 5反馈位置
+                    0                                           # 6反馈时间
                 ])
 
         for tmp_veh, tmp_msg in recv_msg_dict.items():
@@ -209,7 +212,7 @@ def traditional_v2(round_num, false_ratio):
 
 
 
-        sorted_temp_list = sorted(temp_list, key=lambda x:x[3])
+        sorted_temp_list = sorted(temp_msg_list, key=lambda x:x[3])
         for req_msg in sorted_temp_list:
             veh_valid_for_one_msg_list = count_valid_part_fun(req_msg, veh_location)
             for tmp_veh in veh_valid_for_one_msg_list:
