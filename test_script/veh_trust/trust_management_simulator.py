@@ -30,7 +30,7 @@ THRESHOLD = 0.5
 # 事件发生的概率
 PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测试
 # 测试模式
-DEBUG = 1
+DEBUG = 0
 # 更新所有的txt文件
 UPDATE_TXT = 0
 # veh和accident的距离值修正，根据accident的可能性判定公式，太近了超出1
@@ -939,8 +939,3 @@ if __name__ == '__main__':
     # b = open(r"trust_offset3.txt", "+w", encoding='UTF-8')
     # b.write(trust_offset_json)
     # b.close()
-
-
-
-
-

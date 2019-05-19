@@ -6,69 +6,86 @@ NUM_REQUEST_VEH = 5
 # 车辆请求的内容
 REQ_DATA_CONTENT = 0
 # 车辆请求的距离要求
-REQ_DISTENCE_REQ = 0
+REQ_DISTANCE_REQ = 0
 # 车辆请求的时间要求
 REQ_TIME_REQ = 0
 # 观测距离
 OBSERVATION_DISTANCE = 100
 # 临时参数发起REQ的车辆的数量
 NUM_RISE_REQ_FOR_VEH = 0
+# 最高速度m/s
+MIN_SPEED = 0
+MAX_SPEED = 14
+# 一轮round_time抵多少秒
+SECOND_FOR_ONE_ROUND = 5
 
 
-def veh_trajectory_v2():
+def veh_location_init():
     veh_id_list = []
+    locaiotn_reading_list = []
     with open('veh_list.txt', 'r') as handler:
         for x in handler:
             x = x.strip('\n').split(';')
             veh_id_list.append(x[0])
+            locaiotn_reading_list.append(int(x[1]))
+    if DEBUG:
+        return veh_id_list, dict(zip(veh_id_list, locaiotn_reading_list))
+    else:
+        start_point = random.choice(range(5, 20))
+        tmp_accumulation_spacing = start_point
+        veh_location = defaultdict(int)
 
-    # 随机车辆之间的距离和随机第一辆车的起始位置
-    distance_veh_start = random.sample(range(5, 100), len(veh_id_list))
-    start_point = random.sample(range(5, 20), 1)
-    veh_locations_start = []
-    veh_locations_end = []
-    d_location_start = 0
-    d_location_end = 0
-    for i in distance_veh_start:
-        d_location_start += i + start_point[0]
-        veh_locations_start.append(d_location_start)
-
-    distance_veh_end = random.sample(range(5, 100), len(veh_id_list))
-    for j in distance_veh_end:
-        d_location_end += j + start_point[0]
-        veh_locations_end.append(d_location_end)
-
-    random.shuffle(veh_locations_start)
-    random.shuffle(veh_locations_end)
-    random.shuffle(veh_id_list)
-    return veh_id_list, dict(zip(veh_id_list, veh_locations_start)), dict(zip(veh_id_list, veh_locations_end))
+        for tmp_veh1 in veh_id_list:
+            spacing = random.choice(range(5, 100))
+            tmp_accumulation_spacing += spacing
+            veh_location[tmp_veh1] = tmp_accumulation_spacing
+        return veh_id_list, veh_location
 
 
-def veh_adjacency_fuc(event_list, veh_location):
-    adjacency_dict = defaultdict(list)
+def veh_adjacency_fuc(event_list, veh_location, speed_init_veh_dict, round_time):
+    adjacency_dict = defaultdict(dict)
+    trajectory_dict = defaultdict(dict)
+    # 找到车辆在这一轮的时间和位置
+    for tmp_veh_id, tmp_veh_location in veh_location.items():
+        tmp_time_location_dict = defaultdict(int)
+        time_trajectory = 0
+        while time_trajectory < SECOND_FOR_ONE_ROUND:
+            tmp_time = round_time*5 + time_trajectory
+            moving_distance = time_trajectory * speed_init_veh_dict[tmp_veh_id]
+            tmp_location = veh_location[tmp_veh_id] + moving_distance
+            tmp_time_location_dict[tmp_time] = tmp_location
+            time_trajectory += 1
+        trajectory_dict[tmp_veh_id] = tmp_time_location_dict
+    # 计算车辆与事件之间的相对距离
     for event1 in event_list:
-        d = []
-        for k2, v2 in veh_location.items():
-            d.append((k2, int(distance_cal_x(int(event1[1][0]), v2))))
-        adjacency_dict[event1[0]] = d
-    return adjacency_dict
+        adjacency_one_event_dict = defaultdict(dict)
+        for tmp_veh, tmp_time_location in trajectory_dict.items():
+            tmp_adjacency_dict = defaultdict(int)
+            for tmp_time2, tmp_location2 in tmp_time_location.items():
+                tmp_adjacency_dict[tmp_time2] = int(distance_cal_x(int(event1[1][0]), tmp_location2))
+            adjacency_one_event_dict[tmp_veh] = tmp_adjacency_dict
+        adjacency_dict[event1[0]] = adjacency_one_event_dict
+
+    return adjacency_dict, trajectory_dict
+
+
+def veh_speed_init(veh_ids):
+    veh_speed_init_dict = defaultdict(int)
+    for tmp_veh1 in veh_ids:
+        veh_speed_init_dict[tmp_veh1] = random.choice(range(-MAX_SPEED, MAX_SPEED))
+    return veh_speed_init_dict
 
 
 def veh_valid_fun(adjacency_dict):
-    # //位置距离小于THRESHOLD_COMMUNICATION的具体距离，list, (veh_id, distance)
-    vail_veh = []
-    false_veh = []
-    for k, v in adjacency_dict.items():
-        true_msg_veh = []
-        false_msg_veh = []
-        for v1 in v:
-            if v1[1] < THRESHOLD_COMMUNICATION:
-                true_msg_veh.append(v1)
-            else:
-                false_msg_veh.append(v1)
-        vail_veh.append(true_msg_veh)  # accident周围的车辆
-        false_veh.append(false_msg_veh)  # 远离accideng的车辆
-    return vail_veh, false_veh
+    #
+    vail_veh = defaultdict(list)
+    for event_tag, tmp_id_veh_time_loc in adjacency_dict.items():
+        for tmp_id, tmp_veh_time_loc in tmp_id_veh_time_loc.items():
+            for tmp_time, tmp_veh_loc in tmp_veh_time_loc.items():
+                if tmp_veh_loc < OBSERVATION_DISTANCE:
+                    vail_veh[event_tag].append([tmp_id, tmp_time, tmp_veh_loc])
+                    # break
+    return vail_veh
 
 
 def bl_address_read(file_address=BLOCKCHAIN_ADDRESS_FILE):
@@ -92,7 +109,7 @@ def veh_address_allocation(veh_init_ids, bl_address_ids):
     return veh_address_dict, address_veh_dict, init_balance_address
 
 
-def count_valid_veh_around_event(msg_list, accident_dict,veh_location):
+def count_valid_veh_around_event(msg_list, accident_dict, veh_location):
     re_valid_veh_dic = defaultdict(list)
     for one_msg in msg_list:
         for tmp_veh_id, tmp_veh_location in veh_location.items():
@@ -138,7 +155,9 @@ def traditional_v2(round_time, false_ratio):
     # //事件位置初始化 dict, location
     event_list, accident_dict = accident_factory()
     # //车辆id和位置初始化
-    veh_ids, veh_location = veh_trajectory()
+    veh_ids, veh_location = veh_location_init()
+    # //车辆速度及方向初始化
+    speed_init_veh_dict = veh_speed_init(veh_ids)
     # //地址钱包初始化
     veh_init_ids = veh_id_fun()
     bl_address_ids = bl_address_read()
@@ -165,9 +184,9 @@ def traditional_v2(round_time, false_ratio):
 
     for epoch in range(round_time):
         # //得到所有车辆与每一个事件之间的距离
-        adjacency_dict = veh_adjacency_fuc(event_list, veh_location)
+        adjacency_dict, _ = veh_adjacency_fuc(event_list, veh_location, speed_init_veh_dict, epoch)
         #     //每个事件的有效可观测车辆集合vail_veh
-        vail_veh, _ = veh_valid_fun(adjacency_dict)
+        vail_veh = veh_valid_fun(adjacency_dict)
 
         send_request_veh_id_list = random.sample(veh_ids, NUM_REQUEST_VEH)
         veh_req_for_epoch_dict[epoch].append(send_request_veh_id_list)
@@ -187,7 +206,7 @@ def traditional_v2(round_time, false_ratio):
                 veh_sending_req,                               # 1请求车辆
                 veh_location[veh_sending_req],                 # 2请求位置
                 req_msg_order[send_request_veh_id_list.index(veh_sending_req)],   # 3消息时间或排序
-                [event_ready_for_veh[0], REQ_DISTENCE_REQ, REQ_TIME_REQ]])        # [event的编号、距离要求、时间要求]
+                [event_ready_for_veh[0], REQ_DISTANCE_REQ, REQ_TIME_REQ]])        # [event的编号、距离要求、时间要求]
         # veh_valid_for_all_msg_dict = count_valid_for_req(temp_msg_list, veh_location)
         veh_valid_for_all_msg_dict = count_valid_veh_around_event(temp_msg_list, accident_dict, veh_location)
         recv_msg_dict = defaultdict(list)

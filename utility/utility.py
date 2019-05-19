@@ -1,5 +1,5 @@
 import random
-
+from collections import defaultdict
 
 def random_int_list(start, stop, length):
     start, stop = (int(start), int(stop)) if start <= stop else (int(stop), int(start))
@@ -8,3 +8,11 @@ def random_int_list(start, stop, length):
     for i in range(length):
         random_list.append(random.randint(start, stop))
     return random_list
+
+
+# 轨迹的升级版，修改成更贴近论文要求的版本
+
+
+
+if __name__ == '__main__':
+    x, y = veh_trajectory_v2()
