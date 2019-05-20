@@ -18,6 +18,8 @@ MIN_SPEED = 0
 MAX_SPEED = 14
 # 一轮round_time抵多少秒
 SECOND_FOR_ONE_ROUND = 5
+# 总共多少轮
+ROUNDS = 12
 
 
 def veh_location_init():
@@ -42,20 +44,28 @@ def veh_location_init():
         return veh_id_list, veh_location
 
 
-def veh_adjacency_fuc(event_list, veh_location, speed_init_veh_dict, round_time):
-    adjacency_dict = defaultdict(dict)
+def veh_trajectory_fuc1(veh_location, speed_init_veh_dict, all_rounds):
     trajectory_dict = defaultdict(dict)
     # 找到车辆在这一轮的时间和位置
+
+    tmp_time_location_dict = defaultdict(int)
     for tmp_veh_id, tmp_veh_location in veh_location.items():
-        tmp_time_location_dict = defaultdict(int)
-        time_trajectory = 0
-        while time_trajectory < SECOND_FOR_ONE_ROUND:
-            tmp_time = round_time*5 + time_trajectory
-            moving_distance = time_trajectory * speed_init_veh_dict[tmp_veh_id]
-            tmp_location = veh_location[tmp_veh_id] + moving_distance
-            tmp_time_location_dict[tmp_time] = tmp_location
-            time_trajectory += 1
-        trajectory_dict[tmp_veh_id] = tmp_time_location_dict
+
+        for round_time in range(all_rounds):
+            time_trajectory = 0
+            while time_trajectory < SECOND_FOR_ONE_ROUND:
+                tmp_time = round_time*5 + time_trajectory
+                moving_distance = tmp_time * speed_init_veh_dict[tmp_veh_id]
+                tmp_location = tmp_veh_location + moving_distance
+                tmp_time_location_dict[tmp_time] = tmp_location
+                time_trajectory += 1
+                trajectory_dict[tmp_veh_id] = copy.deepcopy(tmp_time_location_dict)
+    return trajectory_dict
+
+
+def veh_adjacency_fuc(event_list, veh_trajectory_fuc):
+    adjacency_dict = defaultdict(dict)
+    trajectory_dict = veh_trajectory_fuc
     # 计算车辆与事件之间的相对距离
     for event1 in event_list:
         adjacency_one_event_dict = defaultdict(dict)
@@ -65,8 +75,7 @@ def veh_adjacency_fuc(event_list, veh_location, speed_init_veh_dict, round_time)
                 tmp_adjacency_dict[tmp_time2] = int(distance_cal_x(int(event1[1][0]), tmp_location2))
             adjacency_one_event_dict[tmp_veh] = tmp_adjacency_dict
         adjacency_dict[event1[0]] = adjacency_one_event_dict
-
-    return adjacency_dict, trajectory_dict
+    return adjacency_dict
 
 
 def veh_speed_init(veh_ids):
@@ -77,7 +86,6 @@ def veh_speed_init(veh_ids):
 
 
 def veh_valid_fun(adjacency_dict):
-    #
     vail_veh = defaultdict(list)
     for event_tag, tmp_id_veh_time_loc in adjacency_dict.items():
         for tmp_id, tmp_veh_time_loc in tmp_id_veh_time_loc.items():
@@ -165,7 +173,8 @@ def traditional_v2(round_time, false_ratio):
     veh_address_dict, address_veh_dict, init_balance = veh_address_allocation(veh_init_ids, bl_address_ids)
 
     # //得到所有车辆与每一个事件之间的距离
-    adjacency_dict, _ = veh_adjacency_fuc(event_list, veh_location, speed_init_veh_dict, epoch)
+    veh_trajectory_dict = veh_trajectory_fuc1(veh_location, speed_init_veh_dict, ROUNDS)
+    adjacency_dict = veh_adjacency_fuc(event_list, veh_trajectory_dict)
     #     //每个事件的有效可观测车辆集合vail_veh
     vail_veh = veh_valid_fun(adjacency_dict)
 
@@ -205,26 +214,26 @@ def traditional_v2(round_time, false_ratio):
                 one_veh[1]                                     # 6反馈时间
             ])
 
-        for tmp_veh, tmp_msg in recv_msg_dict.items():
-            veh_history_reputation = bl_reputation_count(tmp_msg[0])
+    for tmp_veh, tmp_msg in recv_msg_dict.items():
+        veh_history_reputation = bl_reputation_count(tmp_msg[0])
 
 
 
 
-        sorted_temp_list = sorted(temp_msg_list, key=lambda x:x[3])
-        for req_msg in sorted_temp_list:
-            veh_valid_for_one_msg_list = count_valid_part_fun(req_msg, veh_location)
-            for tmp_veh in veh_valid_for_one_msg_list:
-                event_for_relay_list = event_owned(tmp_veh, vail_veh)
-                # if not len(event_for_relay_list):
+    sorted_temp_list = sorted(temp_msg_list, key=lambda x:x[3])
+    for req_msg in sorted_temp_list:
+        veh_valid_for_one_msg_list = count_valid_part_fun(req_msg, veh_location)
+        for tmp_veh in veh_valid_for_one_msg_list:
+            event_for_relay_list = event_owned(tmp_veh, vail_veh)
+            # if not len(event_for_relay_list):
 
 
-        # 得到评分列表
-        report_cycle = time.clock()
-        messages = message(vail_veh,
-                           event_list,
-                           veh_location,
-                           report_cycle)
+    # 得到评分列表
+    report_cycle = time.clock()
+    messages = message(vail_veh,
+                       event_list,
+                       veh_location,
+                       report_cycle)
 
     return rsu_rating_dic, rsu_pre_offset_dict
 
