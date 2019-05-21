@@ -105,6 +105,13 @@ def bl_address_read(file_address=BLOCKCHAIN_ADDRESS_FILE):
     return bl_address_id_list
 
 
+def bl_balance_init(bl_address_init):
+    bl_balance_init_dict = defaultdict(int)
+    for address1 in bl_address_init:
+        bl_balance_init_dict[address1] = random.choice(range(-100, 100))
+    return bl_balance_init_dict
+
+
 def veh_address_allocation(veh_init_ids, bl_address_ids):
     address_veh_dict = defaultdict(str)
     init_balance_address = defaultdict(int)
@@ -157,9 +164,17 @@ def random_address(_list): return random.choice(_list)
 def bl_reputation_count(veh_id=NUM_RISE_REQ_FOR_VEH): return veh_id
 
 
+def message_cleaning(recv_msg_dict):
+    tmp_msg_dict = defaultdict(dict)
+    for recv_address, msg_list in recv_msg_dict.items():
+        tmp_msg_collection_dict = defaultdict(list)
+        for msg1 in msg_list:
+            tmp_msg_collection_dict[msg1[0]].append(msg1)
+            tmp_msg_dict[recv_address] = copy.deepcopy(tmp_msg_collection_dict)
+    return tmp_msg_dict
+
+
 def traditional_v2(round_time, false_ratio):
-    # //rsu的位置初始化，dict, (id, location)
-    rsu_ids, rsu_location_list = rsu_location()
     # //事件位置初始化 dict, location
     event_list, accident_dict = accident_factory()
     # //车辆id和位置初始化
@@ -169,6 +184,8 @@ def traditional_v2(round_time, false_ratio):
     # //地址钱包初始化
     veh_init_ids = veh_id_fun()
     bl_address_ids = bl_address_read()
+    # //钱包金额初始化
+    bl_balance = bl_balance_init(bl_address_ids)
     #     //每辆车拥有的地址veh_address_dict，每个地址对应的车address_veh_dict。
     veh_address_dict, address_veh_dict, init_balance = veh_address_allocation(veh_init_ids, bl_address_ids)
 
@@ -203,17 +220,35 @@ def traditional_v2(round_time, false_ratio):
     #     0         1            2           3             4         5             6
     # |<- 地址->|<-反馈车辆->|<-请求地址->|<-事件编号->|<-事件内容->|<-发出位置->|<-发出时间->|
     for tmp_msg in temp_msg_list:
+        veh_id_name = None
+        rd_address = None
         for one_veh in vail_veh[tmp_msg[4][0]]:
-            recv_msg_dict[tmp_msg[1]].append([
-                random_address(veh_address_dict[one_veh[0]]),  # 0随机钱包地址
-                one_veh[0],                                    # 1反馈车辆
-                tmp_msg[0],                                    # 2请求车辆
-                tmp_msg[4][0],                                 # 3请求时间
-                1,                                             # 4事件内容，magic word
-                one_veh[2],                                    # 5反馈位置
-                one_veh[1]                                     # 6反馈时间
-            ])
+            if veh_id_name != one_veh[0]:
+                veh_id_name = one_veh[0]
+                rd_address = random_address(veh_address_dict[one_veh[0]])
+                recv_msg_dict[tmp_msg[1]].append([
+                    rd_address,     # 0随机钱包地址
+                    one_veh[0],     # 1反馈车辆
+                    tmp_msg[0],     # 2请求地址
+                    tmp_msg[4][0],  # 3请求时间
+                    1,              # 4事件内容，magic word
+                    one_veh[2],     # 5反馈相对位置
+                    one_veh[1]      # 6反馈时间
+                ])
+            else:
+                recv_msg_dict[tmp_msg[1]].append([
+                    rd_address,     # 0随机钱包地址
+                    one_veh[0],     # 1反馈车辆
+                    tmp_msg[0],     # 2请求地址
+                    tmp_msg[4][0],  # 3请求时间
+                    1,              # 4事件内容，magic word
+                    one_veh[2],     # 5反馈相对位置
+                    one_veh[1]      # 6反馈时间
+                ])
 
+
+
+    clean_msg_v1 = message_cleaning(recv_msg_dict)
     for tmp_veh, tmp_msg in recv_msg_dict.items():
         veh_history_reputation = bl_reputation_count(tmp_msg[0])
 
