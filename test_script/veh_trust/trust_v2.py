@@ -174,6 +174,13 @@ def message_cleaning(recv_msg_dict):
     return tmp_msg_dict
 
 
+def func_1(msg):
+
+    for items in msg:
+        r1 = math.exp(items[6])
+        r2 = math.log(items[5])
+
+
 def traditional_v2(round_time, false_ratio):
     # //事件位置初始化 dict, location
     event_list, accident_dict = accident_factory()
@@ -245,8 +252,6 @@ def traditional_v2(round_time, false_ratio):
                     one_veh[2],     # 5反馈相对位置
                     one_veh[1]      # 6反馈时间
                 ])
-
-
 
     clean_msg_v1 = message_cleaning(recv_msg_dict)
     for tmp_veh, tmp_msg in recv_msg_dict.items():
