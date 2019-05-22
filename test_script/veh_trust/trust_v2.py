@@ -166,22 +166,41 @@ def bl_reputation_count(veh_id=NUM_RISE_REQ_FOR_VEH): return veh_id
 
 def message_cleaning(recv_msg_dict):
     tmp_msg_dict = defaultdict(dict)
+    tmp_valid_msg_dict = defaultdict(dict)
     for recv_address, msg_list in recv_msg_dict.items():
         tmp_msg_collection_dict = defaultdict(list)
+        tmp_valid_msg_collection_dict = defaultdict(list)
         for msg1 in msg_list:
             tmp_msg_collection_dict[msg1[0]].append(msg1)
             tmp_msg_dict[recv_address] = copy.deepcopy(tmp_msg_collection_dict)
-    return tmp_msg_dict
+            # 针对请求时间，筛选可用的消息
+            little_num = msg1[7] - msg1[4]
+            if msg1[7] > msg1[4] and little_num < 20:
+                tmp_valid_msg_collection_dict[msg1[0]].append(copy.deepcopy(msg1))
+                tmp_valid_msg_dict[recv_address] = copy.deepcopy(tmp_valid_msg_collection_dict)
+    return tmp_msg_dict, tmp_valid_msg_dict
+
+
+def message_filter(clean_msg_dict):
+    msg_valid_dict = defaultdict(list)
+    for recv_address1, msg_list1 in clean_msg_dict.items():
+        for recv_address2, tmp_msg2_list in msg_list1.items():
+            if len(tmp_msg2_list) > 1:
+                # random.choice(tmp_msg2_list)
+                # tmp_msg_valid_collection_dict[recv_address1].append(random.choice(tmp_msg2_list))
+                msg_valid_dict[recv_address1].append(random.choice(tmp_msg2_list))
+            else:
+                msg_valid_dict[recv_address1].append(copy.deepcopy(tmp_msg2_list))
+    return msg_valid_dict
 
 
 def func_1(msg):
-
     for items in msg:
         r1 = math.exp(items[6])
         r2 = math.log(items[5])
 
 
-def traditional_v2(round_time, false_ratio):
+def traditional_v2(round_time=ROUNDS):
     # //事件位置初始化 dict, location
     event_list, accident_dict = accident_factory()
     # //车辆id和位置初始化
@@ -197,7 +216,7 @@ def traditional_v2(round_time, false_ratio):
     veh_address_dict, address_veh_dict, init_balance = veh_address_allocation(veh_init_ids, bl_address_ids)
 
     # //得到所有车辆与每一个事件之间的距离
-    veh_trajectory_dict = veh_trajectory_fuc1(veh_location, speed_init_veh_dict, ROUNDS)
+    veh_trajectory_dict = veh_trajectory_fuc1(veh_location, speed_init_veh_dict, round_time)
     adjacency_dict = veh_adjacency_fuc(event_list, veh_trajectory_dict)
     #     //每个事件的有效可观测车辆集合vail_veh
     vail_veh = veh_valid_fun(adjacency_dict)
@@ -205,7 +224,7 @@ def traditional_v2(round_time, false_ratio):
     # // 设置请求车辆
     send_request_veh_id_list = random.sample(veh_ids, NUM_REQUEST_VEH)
     # 消息的发送序列，为简化，并不存在同时发布的消息
-    req_msg_order = list(range(len(send_request_veh_id_list)))
+    req_msg_order = random.sample(range(round_time*5), len(send_request_veh_id_list))
     random.shuffle(req_msg_order)
     temp_msg_list = []
     for veh_sending_req in send_request_veh_id_list:
@@ -224,8 +243,8 @@ def traditional_v2(round_time, false_ratio):
     # veh_valid_for_all_msg_dict = count_valid_veh_around_event(temp_msg_list, accident_dict, veh_location)
     recv_msg_dict = defaultdict(list)
     # recv_msg_dict包含【反馈消息】
-    #     0         1            2           3             4         5             6
-    # |<- 地址->|<-反馈车辆->|<-请求地址->|<-事件编号->|<-事件内容->|<-发出位置->|<-发出时间->|
+    #     0         1            2           3             4             5          6             7
+    # |<- 地址->|<-反馈车辆->|<-请求地址->|<-请求事件->||<-请求时间->|<-事件内容->|<-反馈位置->|<-反馈时间->|
     for tmp_msg in temp_msg_list:
         veh_id_name = None
         rd_address = None
@@ -237,23 +256,26 @@ def traditional_v2(round_time, false_ratio):
                     rd_address,     # 0随机钱包地址
                     one_veh[0],     # 1反馈车辆
                     tmp_msg[0],     # 2请求地址
-                    tmp_msg[4][0],  # 3请求时间
-                    1,              # 4事件内容，magic word
-                    one_veh[2],     # 5反馈相对位置
-                    one_veh[1]      # 6反馈时间
+                    tmp_msg[4][0],  # 3请求事件
+                    tmp_msg[3],     # 4请求时间
+                    1,              # 5事件内容，magic word
+                    one_veh[2],     # 6反馈相对位置
+                    one_veh[1]      # 7反馈时间
                 ])
             else:
                 recv_msg_dict[tmp_msg[1]].append([
                     rd_address,     # 0随机钱包地址
                     one_veh[0],     # 1反馈车辆
                     tmp_msg[0],     # 2请求地址
-                    tmp_msg[4][0],  # 3请求时间
-                    1,              # 4事件内容，magic word
-                    one_veh[2],     # 5反馈相对位置
-                    one_veh[1]      # 6反馈时间
+                    tmp_msg[4][0],  # 3请求事件
+                    tmp_msg[3],     # 4请求时间
+                    1,              # 5事件内容，magic word
+                    one_veh[2],     # 6反馈相对位置
+                    one_veh[1]      # 7反馈时间
                 ])
 
-    clean_msg_v1 = message_cleaning(recv_msg_dict)
+    clean_msg_v1_dict, clean_valid_msg_v1_dict = message_cleaning(recv_msg_dict)
+    res_valid_list_for_req = message_filter(clean_valid_msg_v1_dict)
     for tmp_veh, tmp_msg in recv_msg_dict.items():
         veh_history_reputation = bl_reputation_count(tmp_msg[0])
 
@@ -275,40 +297,11 @@ def traditional_v2(round_time, false_ratio):
                        veh_location,
                        report_cycle)
 
-    return rsu_rating_dic, rsu_pre_offset_dict
+    return rsu_rating_dic
 
 
 if __name__ == '__main__':
-    unfair_msg_ratio_list = []
-    unfair_offset_ratio_list = []
-    trust_offset_list = []
-    rounds = np.arange(0, 1, 0.05)
-    for x in rounds:
-        # res, rsu_rating_res, veh_ids, accident_list = traditional_version(SIMULATION_ROUND, 0.6)
-        rsu_rating_dic, pre_offset_dict = traditional_v2(SIMULATION_ROUND, x)
 
-        rating_num = 0
-        false_msg_num = 0
+    rsu_rating_dic = traditional_v2(ROUNDS)
 
-        # 第一张图，求假消息与评分的关系
-        pos_num, neg_num = statistic_msg(rsu_rating_dic)
-        false_ratio = neg_num / (neg_num + pos_num)
-        unfair_msg_ratio_list.append(false_ratio)
-
-        #  第二张图，求不公平的评分与真实值得图
-        trust_offset_res, unfair_offset_ratio = statistic_offset(pre_offset_dict)
-        trust_offset_list.append(trust_offset_res)
-        unfair_offset_ratio_list.append(unfair_offset_ratio)
-
-    unfair_msg_ratio_dict = dict(zip(rounds, unfair_msg_ratio_list))
-    unfair_msg_ratio_json = json.dumps(unfair_msg_ratio_dict)
-    a = open(r"unfair_msg2.txt", "w", encoding='UTF-8')
-    a.write(unfair_msg_ratio_json)
-    a.close()
-
-    # trust_offset_dict = dict(zip(unfair_offset_ratio_list, trust_offset_list))
-    # trust_offset_json = json.dumps(trust_offset_dict)
-    # b = open(r"trust_offset3.txt", "+w", encoding='UTF-8')
-    # b.write(trust_offset_json)
-    # b.close()
 
