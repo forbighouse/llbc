@@ -28,7 +28,7 @@ TIME_TOLERANCE = 1
 # 事件发生的阈值
 THRESHOLD = 0.5
 # 事件发生的概率
-PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测试
+PE = 0.1  # 应该用动态的每个事件用一个，这里先用相同的测试
 # 测试模式
 DEBUG = 0
 # 更新所有的txt文件
@@ -812,7 +812,7 @@ def traditional_version(round_num, false_ratio):
 
 
 def statistic_msg(rsu_rating_dic):
-    key_tag  = 0
+    key_tag = 0
     num_tag = 0
     for rsu_id, rsu_msg in rsu_rating_dic.items():
         if len(rsu_msg) > num_tag:

@@ -2,7 +2,7 @@ from test_script.veh_trust.trust_management_simulator import *
 from test_script.veh_trust.base_veh_location import *
 from utility.utility import *
 
-NUM_REQUEST_VEH = 5
+NUM_REQUEST_VEH = 20
 # 车辆请求的内容
 REQ_DATA_CONTENT = 0
 # 车辆请求的距离要求
@@ -339,28 +339,43 @@ def traditional_v2(false_ratio, round_time=ROUNDS):
     for veh_req_id, msg_list_pby in probability_req_dict.items():
         res_event_deter_dict[veh_req_id] = Bayes_infer(msg_list_pby)
 
-    veh_history_reputation = bl_reputation_count(tmp_msg[0])
-
-    sorted_temp_list = sorted(temp_msg_list, key=lambda x:x[3])
-    for req_msg in sorted_temp_list:
-        veh_valid_for_one_msg_list = count_valid_part_fun(req_msg, veh_location)
-        for tmp_veh in veh_valid_for_one_msg_list:
-            event_for_relay_list = event_owned(tmp_veh, vail_veh)
-            # if not len(event_for_relay_list):
+    return res_event_deter_dict
 
 
-    # 得到评分列表
-    report_cycle = time.clock()
-    messages = message(vail_veh,
-                       event_list,
-                       veh_location,
-                       report_cycle)
-
-    return rsu_rating_dic
+def first_picture(pro_msg_dict):
+    false0 = 0
+    false1 = 0
+    for veh_req_id, pro_tru in pro_msg_dict.items():
+        if len(pro_tru) > 1:
+            if pro_tru[0] > pro_tru[1]:
+                false0 += 1
+            else:
+                false1 += 1
+        else:
+            if list(pro_tru.keys())[0] == 0:
+                false0 += 1
+            else:
+                false1 += 1
+            false1 += list(pro_tru.keys())[0]
+    return false0 / (false0 + false1)
 
 
 if __name__ == '__main__':
+    # false_list = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+    false_list = np.arange(0, 1, 0.01)
+    res_first_picture_dict = defaultdict(float)
+    for _false_ratio in false_list:
+        pro_event_deter_dict = traditional_v2(_false_ratio, ROUNDS)
+        ratio = first_picture(pro_event_deter_dict)
+        res_first_picture_dict[_false_ratio] = ratio
 
-    rsu_rating_dic = traditional_v2(0.2, ROUNDS)
+    false_msg_ratio_json = json.dumps(res_first_picture_dict)
+    a = open(r"first_picture.txt", "w", encoding='UTF-8')
+    a.write(false_msg_ratio_json)
+    a.close()
+
+
+
+
 
 
