@@ -120,7 +120,7 @@ def veh_address_allocation(veh_init_ids, bl_address_ids):
     for ids, address_list in veh_address_dict.items():
         for address in address_list:
             address_veh_dict[address] = ids
-            init_balance_address[address] = random.randint(0,100)
+            init_balance_address[address] = random.randint(0, 100)
     return veh_address_dict, address_veh_dict, init_balance_address
 
 
@@ -175,7 +175,8 @@ def message_cleaning(recv_msg_dict):
             tmp_msg_dict[recv_address] = copy.deepcopy(tmp_msg_collection_dict)
             # 针对请求时间，筛选可用的消息
             little_num = msg1[7] - msg1[4]
-            if msg1[7] > msg1[4] and little_num < 20:
+            # //可能按时间清洗后出现却req的问题
+            if msg1[7] > msg1[4] and little_num < 10:
                 tmp_valid_msg_collection_dict[msg1[0]].append(copy.deepcopy(msg1))
                 tmp_valid_msg_dict[recv_address] = copy.deepcopy(tmp_valid_msg_collection_dict)
     return tmp_msg_dict, tmp_valid_msg_dict
@@ -190,17 +191,67 @@ def message_filter(clean_msg_dict):
                 # tmp_msg_valid_collection_dict[recv_address1].append(random.choice(tmp_msg2_list))
                 msg_valid_dict[recv_address1].append(random.choice(tmp_msg2_list))
             else:
-                msg_valid_dict[recv_address1].append(copy.deepcopy(tmp_msg2_list))
+                msg_valid_dict[recv_address1].append(copy.deepcopy(tmp_msg2_list[0]))
     return msg_valid_dict
 
 
-def func_1(msg):
+def message_disturb(res_valid_for_req_dict, fal_rat):
+    tmp_dict = copy.deepcopy(res_valid_for_req_dict)
+    num_resq_init = 0
+    msg_total_msg_list = []
+    for veh_req_id, msg_resq_list in tmp_dict.items():
+        num_resq_init += len(msg_resq_list)
+        for msg3 in msg_resq_list:
+            msg_total_msg_list.append([veh_req_id, msg3])
+    num_false_msg = int(fal_rat*num_resq_init)
+    false_msg_dict = defaultdict(list)
+    list_sample = random.sample(msg_total_msg_list, num_false_msg)
+    for msg4 in list_sample:
+        msg4[1][5] = 0
+
+    return tmp_dict
+
+
+def probability_count_fuc1(msg):
+    probability_true_resp_dict = defaultdict(list)
     for items in msg:
-        r1 = math.exp(items[6])
-        r2 = math.log(items[5])
+        r1 = 1 - math.pow(0.01*items[6], 3)
+        r2 = math.exp(-0.084*(items[7]-items[4]))
+        pby_resq = ((r1 + r2) / 2)
+        probability_true_resp_dict[items[5]].append(pby_resq)
+    return probability_true_resp_dict
 
 
-def traditional_v2(round_time=ROUNDS):
+def Bayes_infer(msg_dict, pe=PE):
+    res_msg_dict = defaultdict(float)
+    event_dict = defaultdict(list)
+    pos1_list = []
+    neg1_list = []
+    pos0_list = []
+    neg0_list = []
+    # //1和2表示事件1的正和负概率，-1和-2表示事件0的整和负概率
+    for event_id, pby_list in msg_dict.items():
+        if event_id == 1:
+            for i in pby_list:
+                event_dict[event_id].append(i)
+                event_dict[event_id-1].append(1-i)
+        elif event_id == 0:
+            for i in pby_list:
+                event_dict[event_id].append(i)
+                event_dict[event_id+1].append(1 - i)
+    for event_id in msg_dict.keys():
+        if event_id == 1:
+            part1 = pe * multi_plicator(event_dict[event_id])
+            part2 = (1-pe) * multi_plicator(event_dict[0])
+            res_msg_dict[event_id] = part1 / (part1 + part2)
+        elif event_id == 0:
+            part1 = pe * multi_plicator(event_dict[event_id])
+            part2 = (1-pe) * multi_plicator(event_dict[1])
+            res_msg_dict[event_id] = part1 / (part1 + part2)
+    return res_msg_dict
+
+
+def traditional_v2(false_ratio, round_time=ROUNDS):
     # //事件位置初始化 dict, location
     event_list, accident_dict = accident_factory()
     # //车辆id和位置初始化
@@ -223,7 +274,7 @@ def traditional_v2(round_time=ROUNDS):
 
     # // 设置请求车辆
     send_request_veh_id_list = random.sample(veh_ids, NUM_REQUEST_VEH)
-    # 消息的发送序列，为简化，并不存在同时发布的消息
+    # 设置请求消息时间
     req_msg_order = random.sample(range(round_time*5), len(send_request_veh_id_list))
     random.shuffle(req_msg_order)
     temp_msg_list = []
@@ -273,14 +324,22 @@ def traditional_v2(round_time=ROUNDS):
                     one_veh[2],     # 6反馈相对位置
                     one_veh[1]      # 7反馈时间
                 ])
-
+    # //以反馈地址将反馈信息进行整理，第二个返回值根据请求的时间要求筛选出可用的反馈消息
     clean_msg_v1_dict, clean_valid_msg_v1_dict = message_cleaning(recv_msg_dict)
-    res_valid_list_for_req = message_filter(clean_valid_msg_v1_dict)
-    for tmp_veh, tmp_msg in recv_msg_dict.items():
-        veh_history_reputation = bl_reputation_count(tmp_msg[0])
+    # //从筛选后的反馈消息中只随机挑出来一条
+    res_valid_for_req_dict = message_filter(clean_valid_msg_v1_dict)
+    # //加随机的干扰
+    res_disturb_for_req_dict = message_disturb(res_valid_for_req_dict, false_ratio)
+    # //将反馈消息按照反馈的事件内容进行分类
+    probability_req_dict = defaultdict(dict)
+    for tmp_req_id, tmp_valid_msg_list in res_disturb_for_req_dict.items():
+        probability_req_dict[tmp_req_id] = probability_count_fuc1(tmp_valid_msg_list)
+    # //从反馈消息得到
+    res_event_deter_dict = defaultdict(dict)
+    for veh_req_id, msg_list_pby in probability_req_dict.items():
+        res_event_deter_dict[veh_req_id] = Bayes_infer(msg_list_pby)
 
-
-
+    veh_history_reputation = bl_reputation_count(tmp_msg[0])
 
     sorted_temp_list = sorted(temp_msg_list, key=lambda x:x[3])
     for req_msg in sorted_temp_list:
@@ -302,6 +361,6 @@ def traditional_v2(round_time=ROUNDS):
 
 if __name__ == '__main__':
 
-    rsu_rating_dic = traditional_v2(ROUNDS)
+    rsu_rating_dic = traditional_v2(0.2, ROUNDS)
 
 

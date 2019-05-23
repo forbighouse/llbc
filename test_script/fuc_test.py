@@ -11,8 +11,8 @@ if __name__ == "__main__":
     y4 = []
     y5 = []
     for i in x1:
-        y1.append(math.exp(-0.064*i))
-        y2.append(1 - math.pow(0.0128*i, 3))
+        y1.append(math.exp(-0.084*i))
+        y2.append(1 - math.pow(0.01*i, 3))
         y3.append(1 - math.pow(0.010*i, 3) + math.exp(-0.014*i))
         y4.append(math.pow(2*i, 2))
         y5.append(math.pow(0.2*i, 2))

@@ -500,16 +500,17 @@ def occur_probability(pe, pos_veh_list, neg_veh_list):
         neg_list.append(rate_rating(y[4]))
         _neg_list.append(1-rate_rating(y[4]))
 
-    def multi_plicator(num_list):
-        result = 1
-        for num in num_list:
-            result = result * num
-        assert 0 < result < 1
-        return result
-
     part1 = pe * multi_plicator((pos_list+_neg_list))
     part2 = (1-pe) * multi_plicator((neg_list+_pos_list))
     return part1 / (part1 + part2)
+
+
+def multi_plicator(num_list):
+    result = 1
+    for num in num_list:
+        result = result * num
+    assert 0 < result < 1
+    return result
 
 
 def rate_count(rating_each_list):
