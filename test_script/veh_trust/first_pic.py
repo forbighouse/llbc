@@ -1,5 +1,7 @@
 import json
 import matplotlib.pyplot as plt
+from scipy import interpolate
+import numpy as np
 
 
 if __name__ == "__main__":
@@ -26,6 +28,11 @@ if __name__ == "__main__":
         x.append(round(float(key), 2))
         y.append(values)
 
+    xnew = np.arange(0, 1, 0.01)
+    func = interpolate.interp1d(x, y, kind='slinear')
+
+    ynew = func(xnew)
+
     # x2 = []
     # y2 = []
     # for key, values in c2_dict.items():
@@ -44,8 +51,8 @@ if __name__ == "__main__":
     #     x4.append(round(float(key), 2))
     #     y4.append(values)
 
-    plt.plot(x, y, color='k', linestyle='-', marker='s', label='x²')
-    # plt.plot(x2, y2, color='r', linestyle='-', marker='o', label='x')
+    plt.plot(x, y, color='k', linestyle='-', marker='s', label='ori')
+    # plt.plot(xnew, ynew, color='r', linestyle='-', marker='o', label='cha')
     # plt.plot(x3, y3, color='b', linestyle='-', marker='v', label='x³')
     # plt.plot(x4, y4, color='g', linestyle='-', marker='^', label='eˣ')
 

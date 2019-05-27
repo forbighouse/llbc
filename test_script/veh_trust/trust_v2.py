@@ -2,7 +2,7 @@ from test_script.veh_trust.trust_management_simulator import *
 from test_script.veh_trust.base_veh_location import *
 from utility.utility import *
 
-NUM_REQUEST_VEH = 20
+NUM_REQUEST_VEH = 50
 # 车辆请求的内容
 REQ_DATA_CONTENT = 0
 # 车辆请求的距离要求
@@ -223,32 +223,38 @@ def probability_count_fuc1(msg):
 
 
 def Bayes_infer(msg_dict, pe=PE):
-    res_msg_dict = defaultdict(float)
-    event_dict = defaultdict(list)
-    pos1_list = []
-    neg1_list = []
-    pos0_list = []
-    neg0_list = []
-    # //1和2表示事件1的正和负概率，-1和-2表示事件0的整和负概率
-    for event_id, pby_list in msg_dict.items():
-        if event_id == 1:
-            for i in pby_list:
-                event_dict[event_id].append(i)
-                event_dict[event_id-1].append(1-i)
-        elif event_id == 0:
-            for i in pby_list:
-                event_dict[event_id].append(i)
-                event_dict[event_id+1].append(1 - i)
-    for event_id in msg_dict.keys():
-        if event_id == 1:
-            part1 = pe * multi_plicator(event_dict[event_id])
-            part2 = (1-pe) * multi_plicator(event_dict[0])
-            res_msg_dict[event_id] = part1 / (part1 + part2)
-        elif event_id == 0:
-            part1 = pe * multi_plicator(event_dict[event_id])
-            part2 = (1-pe) * multi_plicator(event_dict[1])
-            res_msg_dict[event_id] = part1 / (part1 + part2)
-    return res_msg_dict
+    if len(msg_dict) > 1:
+        tmp_pro_dict = defaultdict(list)
+        for event_id, pby_list in msg_dict.items():
+            if event_id == 1:
+                for i in pby_list:
+                    tmp_pro_dict[event_id].append(i)
+                    tmp_pro_dict[event_id-1].append(1-i)
+            elif event_id == 0:
+                for i in pby_list:
+                    tmp_pro_dict[event_id].append(i)
+                    tmp_pro_dict[event_id+1].append(1-i)
+        tmp_res_dict = defaultdict(float)
+        for event_id in tmp_pro_dict.keys():
+            if event_id == 1:
+                part1 = pe * multi_plicator(tmp_pro_dict[event_id])
+                part2 = (1-pe) * multi_plicator(tmp_pro_dict[0])
+                tmp_res_dict[event_id] = part1 / (part1 + part2)
+            elif event_id == 0:
+                part1 = pe * multi_plicator(tmp_pro_dict[event_id])
+                part2 = (1-pe) * multi_plicator(tmp_pro_dict[1])
+                tmp_res_dict[event_id] = part1 / (part1 + part2)
+
+        return event_pro_compare(tmp_res_dict)
+    elif len(msg_dict) == 1:
+        return list(msg_dict.keys())[0]
+
+
+def event_pro_compare(_dict):
+    if _dict[0] > _dict[1]:
+        return 0
+    else:
+        return 1
 
 
 def traditional_v2(false_ratio, round_time=ROUNDS):
@@ -346,17 +352,10 @@ def first_picture(pro_msg_dict):
     false0 = 0
     false1 = 0
     for veh_req_id, pro_tru in pro_msg_dict.items():
-        if len(pro_tru) > 1:
-            if pro_tru[0] > pro_tru[1]:
-                false0 += 1
-            else:
-                false1 += 1
+        if pro_tru == 0:
+            false0 += 1
         else:
-            if list(pro_tru.keys())[0] == 0:
-                false0 += 1
-            else:
-                false1 += 1
-            false1 += list(pro_tru.keys())[0]
+            false1 += 1
     return false0 / (false0 + false1)
 
 
@@ -365,6 +364,7 @@ if __name__ == '__main__':
     false_list = np.arange(0, 1, 0.01)
     res_first_picture_dict = defaultdict(float)
     for _false_ratio in false_list:
+        print("false_ratio = ", _false_ratio)
         pro_event_deter_dict = traditional_v2(_false_ratio, ROUNDS)
         ratio = first_picture(pro_event_deter_dict)
         res_first_picture_dict[_false_ratio] = ratio
