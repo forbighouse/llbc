@@ -1,8 +1,8 @@
 from test_script.veh_trust.trust_management_simulator import *
-from test_script.veh_trust.base_veh_location import *
+from test_script.veh_trust.config import *
 from utility.utility import *
 
-NUM_REQUEST_VEH = 50
+NUM_REQUEST_VEH = 5
 # 车辆请求的内容
 REQ_DATA_CONTENT = 0
 # 车辆请求的距离要求
@@ -78,11 +78,21 @@ def veh_adjacency_fuc(event_list, veh_trajectory_fuc):
     return adjacency_dict
 
 
-def veh_speed_init(veh_ids):
-    veh_speed_init_dict = defaultdict(int)
-    for tmp_veh1 in veh_ids:
-        veh_speed_init_dict[tmp_veh1] = random.choice(range(-MAX_SPEED, MAX_SPEED))
-    return veh_speed_init_dict
+def veh_speed_init():
+    veh_id_list = []
+    speed_reading_list = []
+    with open(VEH_SPEED_FILE, 'r') as handler:
+        for x in handler:
+            x = x.strip('\n').split(';')
+            veh_id_list.append(x[0])
+            speed_reading_list.append(int(x[1]))
+    if DEBUG:
+        return dict(zip(veh_id_list, speed_reading_list))
+    else:
+        veh_speed_init_dict = defaultdict(int)
+        for tmp_veh1 in veh_id_list:
+            veh_speed_init_dict[tmp_veh1] = random.choice(range(-MAX_SPEED, MAX_SPEED))
+        return veh_speed_init_dict
 
 
 def veh_valid_fun(adjacency_dict):
@@ -176,7 +186,7 @@ def message_cleaning(recv_msg_dict):
             # 针对请求时间，筛选可用的消息
             little_num = msg1[7] - msg1[4]
             # //可能按时间清洗后出现却req的问题
-            if msg1[7] > msg1[4] and little_num < 10:
+            if msg1[7] > msg1[4] and little_num < 15:
                 tmp_valid_msg_collection_dict[msg1[0]].append(copy.deepcopy(msg1))
                 tmp_valid_msg_dict[recv_address] = copy.deepcopy(tmp_valid_msg_collection_dict)
     return tmp_msg_dict, tmp_valid_msg_dict
@@ -263,7 +273,7 @@ def traditional_v2(false_ratio, round_time=ROUNDS):
     # //车辆id和位置初始化
     veh_ids, veh_location = veh_location_init()
     # //车辆速度及方向初始化
-    speed_init_veh_dict = veh_speed_init(veh_ids)
+    speed_init_veh_dict = veh_speed_init()
     # //地址钱包初始化
     veh_init_ids = veh_id_fun()
     bl_address_ids = bl_address_read()

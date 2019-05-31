@@ -1,22 +1,8 @@
 import uuid
 import random
-
-# 仿真车辆的数量
-VEH_NUM = 50
-# veh位置的文件名称
-VEH_LOCATION_FILE = 'veh_list.txt'
-# accident的文件名称
-ACCIDENT_LOCATION_FILE = 'accident_list.txt'
-# 区块链钱包地址的文件名称
-BLOCKCHAIN_ADDRESS_FILE = 'bl_address_ids.txt'
-# 区块链网络的地址数量
-BLOCKCHAIN_ADDRESS_TOTAL_NUM = round((1+2)*VEH_NUM)
-# 事件的类型，例如车祸、红绿灯、限行、拥堵等
-ACCIDENT_TYPE = 0
-# 仿真的事件数量
-ACCIDENT_NUM = 5
-# 道路长度，目前只有一条直路
-ROAD_LEN = 5000
+from collections import defaultdict
+from test_script.veh_trust.trust_v2 import MAX_SPEED
+from test_script.veh_trust.config import *
 
 
 def veh_test_location(veh_num):
@@ -60,7 +46,25 @@ def bl_address(bl_address_num=BLOCKCHAIN_ADDRESS_TOTAL_NUM , bl_address_file=BLO
             w.write('\n')
 
 
+def veh_speed_test():
+    veh_ids = []
+    with open('veh_list.txt', 'r') as handler:
+        for x in handler:
+            x = x.strip('\n').split(';')
+            veh_ids.append(x[0])
+
+    veh_speed_init_dict = defaultdict(int)
+    for tmp_veh1 in veh_ids:
+        veh_speed_init_dict[tmp_veh1] = random.choice(range(-MAX_SPEED, MAX_SPEED))
+    with open(VEH_SPEED_FILE, 'w')as w:
+        for veh_id, veh_spped in veh_speed_init_dict.items():
+            strw = '{};{}'.format(str(veh_id), str(veh_spped))
+            w.write(strw)
+            w.write('\n')
+
+
 if __name__ == "__main__":
     # veh_test_location(VEH_NUM)
     # accident_test_location(ACCIDENT_NUM, ACCIDENT_TYPE, ROAD_LEN)
-    bl_address()
+    # bl_address()
+    veh_speed_test()

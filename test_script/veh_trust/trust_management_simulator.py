@@ -7,34 +7,7 @@ import numpy as np
 import json
 from collections import defaultdict
 from score.IoV_state import distance_cal_x
-from test_script.veh_trust.base_veh_location import ACCIDENT_TYPE, ACCIDENT_NUM, ROAD_LEN
-
-# 仿真轮数
-SIMULATION_ROUND = 50
-# RSU的设定数量
-RSU_NUM = 35
-# 通信距离设定
-THRESHOLD_COMMUNICATION = 300
-# RSU的间距
-RSU_DISTANCE = 250
-# 仿真车辆的数量
-VEH_NUM = 50
-# 仿真时间
-time_len = 200000
-# 车辆感知范围，设定车辆在多近的距离才可以汇报事件
-VEHICLE_PERCEPTION_DISTANCE = 150
-# 一个消息的时效性
-TIME_TOLERANCE = 1
-# 事件发生的阈值
-THRESHOLD = 0.5
-# 事件发生的概率
-PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测试
-# 测试模式
-DEBUG = 0
-# 更新所有的txt文件
-UPDATE_TXT = 0
-# veh和accident的距离值修正，根据accident的可能性判定公式，太近了超出1
-RATE_CORRECT = 50
+from test_script.veh_trust.config import *
 
 
 # 生成rsu的位置
@@ -90,7 +63,7 @@ def accident_factory(accident_fast_mode=0):
         accidents2 = []
         ids_2 = []
         contents_2 = []
-        with open('accident_list.txt', 'r') as handler:
+        with open(ACCIDENT_LOCATION_FILE, 'r') as handler:
             for x in handler:
                 x = x.strip('\n').split(';')
                 y = x[1].split(',')
@@ -107,7 +80,7 @@ def accident_factory(accident_fast_mode=0):
 def veh_trajectory():
     veh_id_list = []
     locationss = []
-    with open('veh_list.txt', 'r') as handler:
+    with open(VEH_LOCATION_FILE, 'r') as handler:
         for x in handler:
             x = x.strip('\n').split(';')
             veh_id_list.append(x[0])
