@@ -1,5 +1,24 @@
 from test_script.veh_trust.trust_v2 import *
 
+# 时间节点前的请求权重
+TIME1 = 0.5
+# 时间节点后的请求权重
+TIME2 =0.5
+# 累计消费信誉权重
+CUSUME = 0.5
+# 累计响应次数权重
+RESPONCE = 0.5
+
+
+def bl_operation_init(bl_address_ids):
+    bl_operation_init_dict = defaultdict(list)
+    for address1 in bl_address_ids:
+        # [时间节点之前的请求+响应，时间节点之后的请求+响应]
+        bl_operation_init_dict[address1].append([random.choice(range(0, 50)), random.choice(range(0, 50))])
+        # [时间节点之前的响应，时间节点之后的响应]
+        bl_operation_init_dict[address1].append([random.choice(range(0, 50)), random.choice(range(0, 50))])
+    return bl_operation_init_dict
+
 
 def veh_location_every_round(veh_location, speed_init_veh_dict, round_time):
     veh_location_all_dict = defaultdict(dict)
@@ -11,13 +30,81 @@ def veh_location_every_round(veh_location, speed_init_veh_dict, round_time):
     return veh_location_all_dict
 
 
+# 针对每一个响应消息，找出它的相关车辆集
 def veh_reference_set(res_disturb_for_req_dict, veh_location_all_dict):
-
+    veh_reference_set_dict = defaultdict(dict)
     for tmp_veh_id1, tmp_msg_list in res_disturb_for_req_dict.items():
+        veh_for_disturb_msg_v1_dict = defaultdict(list)
         for tmp_msg in tmp_msg_list:
-            for tmp_veh_location in veh_location_all_dict[tmp_msg[7]]:
-                tmp_msg[1]
+            veh_persific_round = veh_location_all_dict[tmp_msg[7]]
+            for tmp_veh_id2, tmp_veh_location in veh_persific_round.items():
+                if distance_cal_x(veh_persific_round[tmp_msg[1]], tmp_veh_location) < 300:
+                    if tmp_veh_id2 != tmp_msg[1]:
+                        veh_for_disturb_msg_v1_dict[tmp_veh_id2].append(tmp_msg)
+        veh_reference_set_dict[tmp_veh_id1] = copy.deepcopy(veh_for_disturb_msg_v1_dict)
+    return veh_reference_set_dict
 
+
+def rating_for_address(veh_reference_set_dict, bl_blance_set, bl_operation_set):
+    veh_rating_dict = defaultdict(dict)
+
+    # vertify是一个请求下，返回的若干个响应
+    for req_id, vertify_msg in veh_reference_set_dict.items():
+        pro_event_dict = defaultdict(dict)
+        # response_list是一个
+        for vertify_veh_id, response_list in vertify_msg.items():
+            credits_list = probability_count_fuc2(response_list, bl_operation_set)
+            infer_result = bayes_infer_v2(credits_list)
+            for response_veh in response_list:
+                if response_veh[5] == infer_result:
+
+        # for req_id2, resp_list in pro_event_dict.items():
+        #     infer_result = bayes_infer_v2(resp_list)
+
+    return veh_rating_dict
+
+
+def probability_count_fuc2(msg, bl_op):
+    probability_true_resp_dict = defaultdict(list)
+    tmp_weight_recent_dict = defaultdict(list)
+    tmp_weight_past_dict = defaultdict(list)
+
+    for items in msg:
+        r1 = 1 - math.pow(0.01*items[6], 3)
+        r2 = math.exp(-0.084*(items[7]-items[4]))
+        pby_resq = ((r1 + r2) / 2)
+        probability_true_resp_dict[items[5]].append(pby_resq)
+
+        # 历史消费信誉，2天或2周时间间隔，例如 近2天/总4天，算出总的活跃度
+        tmp_weight_recent_dict[items[5]].append(bl_op[items[0]][0][1])
+        tmp_weight_past_dict[items[5]].append(bl_op[items[0]][0][0])
+
+    return probability_true_resp_dict
+
+
+def bayes_infer_v2(pro_list_dict, pe=PE):
+    tmp_pro_dict = defaultdict(list)
+    for event_id, pby_list in pro_list_dict.items():
+        if event_id == 1:
+            for i in pby_list:
+                tmp_pro_dict[event_id].append(i)
+                tmp_pro_dict[event_id-1].append(1-i)
+        elif event_id == 0:
+            for i in pby_list:
+                tmp_pro_dict[event_id].append(i)
+                tmp_pro_dict[event_id+1].append(1-i)
+    tmp_res_dict = defaultdict(float)
+    for event_id in tmp_pro_dict.keys():
+        if event_id == 1:
+            part1 = pe * multi_plicator(tmp_pro_dict[event_id])
+            part2 = (1-pe) * multi_plicator(tmp_pro_dict[event_id-1])
+            tmp_res_dict[event_id] = part1 / (part1 + part2)
+        elif event_id == 0:
+            part1 = pe * multi_plicator(tmp_pro_dict[event_id])
+            part2 = (1-pe) * multi_plicator(tmp_pro_dict[1])
+            tmp_res_dict[event_id] = part1 / (part1 + part2)
+    tmp_res = sorted(tmp_res_dict.items(), key=lambda tmp_res_dict: tmp_res_dict[1], reverse=True)
+    return tmp_res[0][0]
 
 
 def traditional_v3(false_ratio, round_time=ROUNDS):
@@ -32,6 +119,8 @@ def traditional_v3(false_ratio, round_time=ROUNDS):
     bl_address_ids = bl_address_read()
     # //钱包金额初始化
     bl_balance = bl_balance_init(bl_address_ids)
+    # //钱包网络参与初始化（仿真）
+    bl_operation = bl_operation_init(bl_address_ids)
     #     //每辆车拥有的地址veh_address_dict，每个地址对应的车address_veh_dict。
     veh_address_dict, address_veh_dict, init_balance = veh_address_allocation(veh_init_ids, bl_address_ids)
 
@@ -103,6 +192,11 @@ def traditional_v3(false_ratio, round_time=ROUNDS):
     veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
     # //每一个响应对应的相关车辆集
     veh_reference_set_dict = veh_reference_set(res_disturb_for_req_dict, veh_location_all_dict)
+    # //计算针对响应车辆的评分
+    #      0            1
+    # |<-响应钱包->|<-评分列表->|
+    rating_result_dict = rating_for_address(veh_reference_set_dict, bl_balance, bl_operation)
+    # prob_event_dict = prob_event(veh_reference_set_dict)
 
     # //将反馈消息按照反馈的事件内容进行分类
     probability_req_dict = defaultdict(dict)
