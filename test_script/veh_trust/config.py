@@ -15,7 +15,7 @@ BLOCKCHAIN_ADDRESS_TOTAL_NUM = round((1+2)*VEH_NUM)
 # 事件的类型，例如车祸、红绿灯、限行、拥堵等
 ACCIDENT_TYPE = 0
 # 仿真的事件数量
-ACCIDENT_NUM = 5
+ACCIDENT_NUM = 50
 # 道路长度，目前只有一条直路
 ROAD_LEN = 5000
 
@@ -41,7 +41,7 @@ THRESHOLD = 0.5
 # 事件发生的概率
 PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测试
 # 测试模式
-DEBUG = 1
+DEBUG = 0
 # 更新所有的txt文件
 UPDATE_TXT = 0
 # veh和accident的距离值修正，根据accident的可能性判定公式，太近了超出1
