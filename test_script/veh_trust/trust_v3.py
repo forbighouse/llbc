@@ -75,11 +75,14 @@ def veh_reference_set(res_disturb_for_req_dict, veh_location_all_dict):
 
 def rating_for_address(veh_reference_set_dict, bl_blance_set, bl_operation_set):
     rating_list_event_dict = defaultdict(dict)
+    test_result_list = []
     # vertify是一个请求下，返回的若干个响应
     for req_id, vertify_msg in veh_reference_set_dict.items():
         for vertify_veh_id, response_list in vertify_msg.items():
             credits_list = probability_count_fuc2(response_list, bl_operation_set)
-            infer_result = bayes_infer_v2(credits_list)
+            # 加入测试代码test_result，
+            infer_result, test_result = bayes_infer_v2(credits_list)
+            test_result_list.append(test_result)
             tmp_rating_list = []
             for response_msg in response_list:
                 tmp_rating_tag = 0
@@ -105,8 +108,8 @@ def probability_count_fuc2(msg, bl_op):
     tmp_weight_past_dict = defaultdict(list)
 
     for items in msg:
-        r1 = 1 - math.pow(0.01*items[6], 3)
-        r2 = math.exp(-0.084*(items[7]-items[4]))
+        r1 = 1 - math.pow(0.08*(items[7]-items[4]), 3)
+        r2 = math.exp(-0.007*items[6])
         pby_resq = ((r1 + r2) / 2)
         probability_true_resp_dict[items[5]].append(pby_resq)
 
@@ -119,6 +122,7 @@ def probability_count_fuc2(msg, bl_op):
 
 def bayes_infer_v2(pro_list_dict, pe=PE):
     tmp_pro_dict = defaultdict(list)
+    test_result = []
     for event_id, pby_list in pro_list_dict.items():
         if event_id == 1:
             for i in pby_list:
@@ -139,7 +143,8 @@ def bayes_infer_v2(pro_list_dict, pe=PE):
             part2 = (1-pe) * multi_plicator(tmp_pro_dict[1])
             tmp_res_dict[event_id] = part1 / (part1 + part2)
     tmp_res = sorted(tmp_res_dict.items(), key=lambda tmp_res_dict: tmp_res_dict[1], reverse=True)
-    return tmp_res[0][0]
+    test_result.append([tmp_res, pro_list_dict])
+    return tmp_res[0][0], test_result
 
 
 def traditional_v3(false_ratio, round_time=ROUNDS):
