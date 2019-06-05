@@ -4,7 +4,7 @@ import time
 import math
 import copy
 import numpy as np
-import json
+
 from collections import defaultdict
 from score.IoV_state import distance_cal_x
 from test_script.veh_trust.config import *
@@ -103,7 +103,7 @@ def veh_trajectory():
         return veh_id_list, dict(zip(veh_id_list, locationss))
 
 
-def veh_id_fun():
+def veh_id_init():
     veh_id_list = []
     with open('veh_list.txt', 'r') as handler:
         for x in handler:

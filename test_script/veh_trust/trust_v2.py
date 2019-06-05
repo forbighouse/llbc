@@ -193,33 +193,31 @@ def message_cleaning(recv_msg_dict):
 
 
 def message_filter(clean_msg_dict):
-    msg_valid_dict = defaultdict(list)
+    msg_valid_list = []
     for recv_address1, msg_list1 in clean_msg_dict.items():
         for recv_address2, tmp_msg2_list in msg_list1.items():
             if len(tmp_msg2_list) > 1:
                 # random.choice(tmp_msg2_list)
                 # tmp_msg_valid_collection_dict[recv_address1].append(random.choice(tmp_msg2_list))
-                msg_valid_dict[recv_address1].append(random.choice(tmp_msg2_list))
+                msg_valid_list.append(random.choice(tmp_msg2_list))
             else:
-                msg_valid_dict[recv_address1].append(copy.deepcopy(tmp_msg2_list[0]))
-    return msg_valid_dict
+                msg_valid_list.append(copy.deepcopy(tmp_msg2_list[0]))
+    return msg_valid_list
 
 
-def message_disturb(res_valid_for_req_dict, fal_rat):
-    tmp_dict = copy.deepcopy(res_valid_for_req_dict)
-    num_resq_init = 0
-    msg_total_msg_list = []
-    for veh_req_id, msg_resq_list in tmp_dict.items():
-        num_resq_init += len(msg_resq_list)
-        for msg3 in msg_resq_list:
-            msg_total_msg_list.append([veh_req_id, msg3])
-    num_false_msg = int(fal_rat*num_resq_init)
-    false_msg_dict = defaultdict(list)
-    list_sample = random.sample(msg_total_msg_list, num_false_msg)
+def message_disturb(res_valid_for_req_list, fal_rat, answer_dict):
+    tmp_list = copy.deepcopy(res_valid_for_req_list)
+    num_answer_init = len(tmp_list)
+
+    num_false_msg = int(fal_rat*num_answer_init)
+
+    list_sample = random.sample(tmp_list, num_false_msg)
     for msg4 in list_sample:
-        msg4[1][5] = 0
+        msg4[5] = 0
+    for veh_answer in tmp_list:
+        answer_dict[hash_str(veh_answer, "answer")] = veh_answer
 
-    return tmp_dict
+    return tmp_list
 
 
 def probability_count_fuc1(msg):

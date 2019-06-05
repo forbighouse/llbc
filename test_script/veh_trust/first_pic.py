@@ -28,10 +28,10 @@ if __name__ == "__main__":
         x.append(round(float(key), 2))
         y.append(values)
 
-    xnew = np.arange(0, 1, 0.01)
-    func = interpolate.interp1d(x, y, kind='slinear')
-
-    ynew = func(xnew)
+    # xnew = np.arange(0, 1, 0.01)
+    # func = interpolate.interp1d(x, y, kind='slinear')
+    #
+    # ynew = func(xnew)
 
     # x2 = []
     # y2 = []

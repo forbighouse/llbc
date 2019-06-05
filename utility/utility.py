@@ -1,4 +1,6 @@
 import random
+import sha3
+import json
 from collections import defaultdict
 
 
@@ -10,6 +12,20 @@ def random_int_list(start, stop, length):
         random_list.append(random.randint(start, stop))
     return random_list
 
+
+def hash_str(address, msg_type):
+    x = sha3.shake_128()
+    output1 = json.dumps(address)
+    output = output1.encode('utf-8')
+    x.update(output)
+    if msg_type == "request":
+        return x.hexdigest(4)
+    elif msg_type == "answer":
+        return x.hexdigest(8)
+    elif msg_type == "rate":
+        return x.hexdigest(8)
+    else:
+        raise TypeError
 
 if __name__ == '__main__':
     pass

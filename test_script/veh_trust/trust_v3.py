@@ -1,5 +1,6 @@
 from test_script.veh_trust.trust_v2 import *
 
+
 # 时间节点前的请求权重
 TIME1 = 0.5
 # 时间节点后的请求权重
@@ -28,8 +29,21 @@ def cache_all_veh_init(veh_ids):
     return cache_request_veh_dict, cache_answer_veh_dict, cache_rating_veh_dict
 
 
-def status_request_cache(cache_request_veh_dict, tmp_msg_list):
+def hash_request_msg_init():
+    return defaultdict(list)
+
+
+def hash_answer_msg_init():
+    return defaultdict(list)
+
+
+def hash_rate_msg_init():
+    return defaultdict(list)
+
+
+def status_request_cache(cache_request_veh_dict, tmp_msg_list, hash_request):
     for msgs in tmp_msg_list:
+        hash_request[hash_str(msgs, "request")] = msgs
         cache_request_veh_dict[msgs[3]].append(msgs)
     return cache_request_veh_dict
 
@@ -59,16 +73,16 @@ def veh_location_every_round(veh_location, speed_init_veh_dict, round_time):
 
 
 # 针对每一个响应消息，找出它的相关车辆集
-def veh_reference_set(res_disturb_for_req_dict, veh_location_all_dict):
+def veh_reference_set(res_disturb_for_req_list, veh_location_all_dict):
     veh_reference_set_dict = defaultdict(dict)
-    for tmp_veh_id1, tmp_msg_list in res_disturb_for_req_dict.items():
-        veh_for_disturb_msg_v1_dict = defaultdict(list)
-        for tmp_msg in tmp_msg_list:
-            veh_persific_round = veh_location_all_dict[tmp_msg[7]]
-            for tmp_veh_id2, tmp_veh_location in veh_persific_round.items():
-                if distance_cal_x(veh_persific_round[tmp_msg[1]], tmp_veh_location) < 300:
-                    if tmp_veh_id2 != tmp_msg[1]:
-                        veh_for_disturb_msg_v1_dict[tmp_veh_id2].append(tmp_msg)
+    veh_for_disturb_msg_v1_dict = defaultdict(list)
+    for tmp_msg_ in res_disturb_for_req_list:
+        veh_persific_round = veh_location_all_dict[tmp_msg_[7]]
+        for tmp_veh_id2, tmp_veh_location in veh_persific_round.items():
+            if distance_cal_x(veh_persific_round[tmp_msg_[1]], tmp_veh_location) < 300:
+                if tmp_veh_id2 != tmp_msg_[1]:
+                    veh_for_disturb_msg_v1_dict[tmp_msg_[1]].append(tmp_veh_id2)
+
         veh_reference_set_dict[tmp_veh_id1] = copy.deepcopy(veh_for_disturb_msg_v1_dict)
     return veh_reference_set_dict
 
@@ -78,25 +92,27 @@ def rating_for_address(veh_reference_set_dict, bl_blance_set, bl_operation_set):
     test_result_list = []
     # vertify是一个请求下，返回的若干个响应
     for req_id, vertify_msg in veh_reference_set_dict.items():
-        for vertify_veh_id, response_list in vertify_msg.items():
-            credits_list = probability_count_fuc2(response_list, bl_operation_set)
+        for vertify_veh_id, answer_list in vertify_msg.items():
+            # credits_list = probability_count_fuc2(answer_list, bl_operation_set)
+            credits_list = probability_count_fuc3(answer_list, bl_operation_set)
             # 加入测试代码test_result，
             infer_result, test_result = bayes_infer_v2(credits_list)
             test_result_list.append(test_result)
             tmp_rating_list = []
-            for response_msg in response_list:
+            for answer1 in answer_list:
                 tmp_rating_tag = 0
-                if response_msg[5] == infer_result:
+                if answer1[5] == infer_result:
                     tmp_rating_tag = 1  # 评分
                 else:
                     tmp_rating_tag = -1  # 评分
                 tmp_rating_list.append([
-                    response_msg[2],  # 0请求哈希（地址）
-                    response_msg[4],  # 1请求时间
-                    response_msg[0],  # 2响应哈希（地址）
-                    response_msg[7],  # 3响应时间
-                    vertify_veh_id,   # 4评分地址
-                    tmp_rating_tag    # 5评分
+                    answer1[2],                   # 0请求哈希（地址）
+                    answer1[4],                   # 1请求时间
+                    answer1[0],                   # 2响应哈希（地址）
+                    answer1[7],                   # 3响应时间
+                    vertify_veh_id,               # 4评分地址
+                    tmp_rating_tag,               # 5评分
+                    hash_str(answer1, "answer")   # -1响应的hash
                 ])
                 rating_list_event_dict[vertify_veh_id] = copy.deepcopy(tmp_rating_list)
     return rating_list_event_dict
@@ -112,6 +128,22 @@ def probability_count_fuc2(msg, bl_op):
         r2 = math.exp(-0.007*items[6])
         pby_resq = ((r1 + r2) / 2)
         probability_true_resp_dict[items[5]].append(pby_resq)
+
+        # 历史消费信誉，2天或2周时间间隔，例如 近2天/总4天，算出总的活跃度
+        tmp_weight_recent_dict[items[5]].append(bl_op[items[0]][0][1])
+        tmp_weight_past_dict[items[5]].append(bl_op[items[0]][0][0])
+
+    return probability_true_resp_dict
+
+
+def probability_count_fuc3(msg, bl_op):
+    probability_true_resp_dict = defaultdict(list)
+    tmp_weight_recent_dict = defaultdict(list)
+    tmp_weight_past_dict = defaultdict(list)
+
+    for items in msg:
+        r2 = 0.5 + math.exp(-0.014*(items[6]+50))
+        probability_true_resp_dict[items[5]].append(r2)
 
         # 历史消费信誉，2天或2周时间间隔，例如 近2天/总4天，算出总的活跃度
         tmp_weight_recent_dict[items[5]].append(bl_op[items[0]][0][1])
@@ -147,7 +179,29 @@ def bayes_infer_v2(pro_list_dict, pe=PE):
     return tmp_res[0][0], test_result
 
 
-def traditional_v3(false_ratio, round_time=ROUNDS):
+def comparison_rating_answer(rating_result_dict, hash_answer_msg):
+    hash_rate_answer_dict = defaultdict(list)
+    ratio_dict = defaultdict(list)
+    for _, rate_list in rating_result_dict.items():
+        for answer2 in rate_list:
+            hash_rate_answer_dict[answer2[-1]].append(answer2)
+    for hash_id, rating_list in hash_rate_answer_dict.items():
+        if hash_answer_msg[hash_id][5] == 1:
+            for rates in rating_list:
+                if rates[5] == 1:
+                    ratio_dict[1].append(rates)
+                elif rates[5] == -1:
+                    ratio_dict[-1].append(rates)
+        elif hash_answer_msg[hash_id][5] == 0:
+            for rates in rating_list:
+                if rates[5] == 1:
+                    ratio_dict[-1].append(rates)
+                elif rates[5] == -1:
+                    ratio_dict[1].append(rates)
+    return ratio_dict
+
+
+def traditional_v3(false_list, round_time=ROUNDS):
     # //事件位置初始化 dict, location
     event_list, accident_dict = accident_factory()
     # //车辆id和位置初始化
@@ -155,7 +209,7 @@ def traditional_v3(false_ratio, round_time=ROUNDS):
     # //车辆速度及方向初始化
     speed_init_veh_dict = veh_speed_init()
     # //地址钱包初始化
-    veh_init_ids = veh_id_fun()
+    veh_init_ids = veh_id_init()
     bl_address_ids = bl_address_read()
     # //每辆车拥有的地址veh_address_dict，每个地址对应的车address_veh_dict。
     veh_address_dict, address_veh_dict, init_balance = veh_address_allocation(veh_init_ids, bl_address_ids)
@@ -165,6 +219,8 @@ def traditional_v3(false_ratio, round_time=ROUNDS):
     bl_operation = bl_operation_init(bl_address_ids)
     # //所有车辆节点的请求和响应缓存区初始化（仿真）
     cache_request_veh_dict, cache_answer_veh_dict, cache_rating_veh_dict = cache_all_veh_init(veh_ids)
+    # //初始化全局请求字典，键是请求消息的hash值，值是消息本身
+    hash_request_msg = hash_request_msg_init()
 
     # //得到所有车辆与每一个事件之间的距离
     veh_trajectory_dict = veh_trajectory_fuc1(veh_location, speed_init_veh_dict, round_time)
@@ -191,7 +247,7 @@ def traditional_v3(false_ratio, round_time=ROUNDS):
             req_msg_order[send_request_veh_id_list.index(veh_sending_req)],   # 3请求时间
             [event_ready_for_veh[0], REQ_DISTANCE_REQ, REQ_TIME_REQ]])        # 4[event的编号、距离要求、时间要求]
     # //向仿真参数里写入请求消息
-    cache_request_status = status_request_cache(cache_request_veh_dict, tmp_msg_list)
+    cache_request_status = status_request_cache(cache_request_veh_dict, tmp_msg_list, hash_request_msg)
 
     # veh_valid_for_all_msg_dict = count_valid_for_req(tmp_msg_list, veh_location)
     # veh_valid_for_all_msg_dict = count_valid_veh_around_event(tmp_msg_list, accident_dict, veh_location)
@@ -230,46 +286,69 @@ def traditional_v3(false_ratio, round_time=ROUNDS):
     # //以反馈地址将反馈信息进行整理，第二个返回值根据请求的时间要求筛选出可用的反馈消息
     clean_msg_v1_dict, clean_valid_msg_v1_dict = message_cleaning(recv_msg_dict)
     # //从筛选后的反馈消息中只随机挑出来一条
-    res_valid_for_req_dict = message_filter(clean_valid_msg_v1_dict)
-    # //根据false_ratio改变其中一些消息的内容，组成假消息
-    res_disturb_for_req_dict = message_disturb(res_valid_for_req_dict, false_ratio)
+    res_valid_for_req_list = message_filter(clean_valid_msg_v1_dict)
+    # //存储仿真结果
+    res_dict = defaultdict(float)
+    for _false_ratio in false_list:
+        # //初始化响应、评分字典
+        hash_answer_msg = hash_answer_msg_init()
+        hash_rate_msg = hash_rate_msg_init()
+        # //根据false_ratio改变其中一些消息的内容，组成假消息
+        res_disturb_for_req_list = message_disturb(res_valid_for_req_list, 0.7, hash_answer_msg)
+        # //每一秒车辆的位置
+        veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
+        # //每一个响应对应的相关车辆集
+        veh_reference_set_dict = veh_reference_set(res_disturb_for_req_list, veh_location_all_dict)
+        # //计算针对响应车辆的评分列表，列表项为：
+        #      0            1           2          3
+        # |<-请求哈希->|<-响应哈希->|<-评分哈希->|<-响应评分->|
+        rating_result_dict = rating_for_address(veh_reference_set_dict, bl_balance, bl_operation)
+        result_dict = comparison_rating_answer(rating_result_dict, hash_answer_msg)
+        ratio = rate_ratio(result_dict)
+        print("{} {} {} {}".format("false_ratio = ", _false_ratio, "ratio = ", ratio))
+        res_dict[_false_ratio] = ratio
+
     # //向仿真参数里写入响应消息
-    cache_answer_status = status_answer_cache(cache_answer_veh_dict, res_disturb_for_req_dict)
-    # //每一秒，车辆的位置
-    veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
-    # //每一个响应对应的相关车辆集
-    veh_reference_set_dict = veh_reference_set(res_disturb_for_req_dict, veh_location_all_dict)
-    # //计算针对响应车辆的评分列表，列表项为：
-    #      0            1           2          3
-    # |<-请求哈希->|<-响应哈希->|<-评分哈希->|<-响应评分->|
-    rating_result_dict = rating_for_address(veh_reference_set_dict, bl_balance, bl_operation)
-    # //向仿真参数理写入评分
-    cache_rating_status = status_rating_cache(cache_rating_veh_dict, rating_result_dict)
+    # cache_answer_status = status_answer_cache(cache_answer_veh_dict, res_disturb_for_req_dict)
+    # # //向仿真参数理写入评分
+    # cache_rating_status = status_rating_cache(cache_rating_veh_dict, rating_result_dict)
 
-    return rating_result_dict
+    return res_dict
 
 
-def rate_ratio(rating_result_dict):
-    pos_neg_dict = defaultdict(list)
-    for rate_veh_id, rate_list in rating_result_dict.items():
-        for rates1 in rate_list:
-            pos_neg_dict[rates1[5]].append(rates1)
-    return len(pos_neg_dict[-1]) / (len(pos_neg_dict[1]) + len(pos_neg_dict[-1]))
+def rate_ratio(ratio_dict):
+    num_pos_rate = len(ratio_dict[1])
+    num_neg_rate = len(ratio_dict[-1])
+    print("{} {} {} {}".format("*1:", num_pos_rate, "*-1:", num_neg_rate))
+    return num_neg_rate / (num_pos_rate + num_neg_rate)
+
+
+def mean_for_list(input_list):
+    sum_num = 0
+    for nums in input_list:
+        sum_num += nums
+    return sum_num / len(input_list)
 
 
 if __name__ == '__main__':
     # 事务广播出去，然后不论谁在发起事务的时候需要将这些结果打包确认
     # 需要一个随机游走角色，负责检查各个
-    false_list = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-    # false_list = np.arange(0, 1, 0.01)
-    res_dict = defaultdict(float)
-    for _false_ratio in false_list:
-        print("false_ratio = ", _false_ratio)
-        rating_result_dict = traditional_v3(_false_ratio, ROUNDS)
-        ratio = rate_ratio(rating_result_dict)
-        res_dict[_false_ratio] = ratio
-
-    false_msg_ratio_json = json.dumps(res_dict)
+    # false_list = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+    false_list = np.arange(0, 1.05, 0.05)
+    # ==================================================================
+    # out_dict = traditional_v3(false_list, ROUNDS)
+    # ==================================================================
+    average_dict = defaultdict(list)
+    for i in range(100):
+        print("round: ", i)
+        res_dict = traditional_v3(false_list, ROUNDS)
+        for ratios, num in res_dict.items():
+            average_dict[ratios].append(num)
+    out_dict = defaultdict(int)
+    for ratios1, num_list in average_dict.items():
+        out_dict[ratios1] = mean_for_list(num_list)
+    # ================================================================
+    false_msg_ratio_json = json.dumps(out_dict)
     a = open(r"first_picture.txt", "w", encoding='UTF-8')
     a.write(false_msg_ratio_json)
     a.close()
