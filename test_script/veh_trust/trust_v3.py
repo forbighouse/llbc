@@ -74,7 +74,6 @@ def veh_location_every_round(veh_location, speed_init_veh_dict, round_time):
 
 # 针对每一个响应消息，找出它的相关车辆集
 def veh_reference_set(res_disturb_for_req_list, veh_location_all_dict):
-    veh_reference_set_dict = defaultdict(dict)
     veh_for_disturb_msg_v1_dict = defaultdict(list)
     for tmp_msg_ in res_disturb_for_req_list:
         veh_persific_round = veh_location_all_dict[tmp_msg_[7]]
@@ -82,9 +81,17 @@ def veh_reference_set(res_disturb_for_req_list, veh_location_all_dict):
             if distance_cal_x(veh_persific_round[tmp_msg_[1]], tmp_veh_location) < 300:
                 if tmp_veh_id2 != tmp_msg_[1]:
                     veh_for_disturb_msg_v1_dict[tmp_msg_[1]].append(tmp_veh_id2)
+    return veh_for_disturb_msg_v1_dict
 
-        veh_reference_set_dict[tmp_veh_id1] = copy.deepcopy(veh_for_disturb_msg_v1_dict)
-    return veh_reference_set_dict
+
+def answer_reference_veh(veh_reference_set_dict, res_disturb_for_req_list):
+    for answer_msg in res_disturb_for_req_list:
+        if len(veh_reference_set_dict[answer_msg[1]]) > 10:
+            num_set = random.choice(range(0, 10, 1))
+            tmp_set_reference = random.sample(veh_reference_set_dict[answer_msg[1]], num_set)
+        else:
+            tmp_set_reference = veh_reference_set_dict[answer_msg[1]]
+        tmp_set_reference
 
 
 def rating_for_address(veh_reference_set_dict, bl_blance_set, bl_operation_set):
@@ -249,8 +256,6 @@ def traditional_v3(false_list, round_time=ROUNDS):
     # //向仿真参数里写入请求消息
     cache_request_status = status_request_cache(cache_request_veh_dict, tmp_msg_list, hash_request_msg)
 
-    # veh_valid_for_all_msg_dict = count_valid_for_req(tmp_msg_list, veh_location)
-    # veh_valid_for_all_msg_dict = count_valid_veh_around_event(tmp_msg_list, accident_dict, veh_location)
     recv_msg_dict = defaultdict(list)
     # recv_msg_dict包含【反馈消息】
     #     0         1            2           3             4             5          6             7
@@ -299,10 +304,13 @@ def traditional_v3(false_list, round_time=ROUNDS):
         veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
         # //每一个响应对应的相关车辆集
         veh_reference_set_dict = veh_reference_set(res_disturb_for_req_list, veh_location_all_dict)
+        # //为相关车辆集分配响应消息
+        rating_reference_set_list = answer_reference_veh(veh_reference_set_dict, res_disturb_for_req_list)
         # //计算针对响应车辆的评分列表，列表项为：
         #      0            1           2          3
         # |<-请求哈希->|<-响应哈希->|<-评分哈希->|<-响应评分->|
-        rating_result_dict = rating_for_address(veh_reference_set_dict, bl_balance, bl_operation)
+        veh_reference_set_list = rating_for_address(veh_reference_set_dict, bl_balance, bl_operation)
+
         result_dict = comparison_rating_answer(rating_result_dict, hash_answer_msg)
         ratio = rate_ratio(result_dict)
         print("{} {} {} {}".format("false_ratio = ", _false_ratio, "ratio = ", ratio))
