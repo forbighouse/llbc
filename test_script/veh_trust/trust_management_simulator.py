@@ -481,7 +481,7 @@ def occur_probability(pe, pos_veh_list, neg_veh_list):
 def multi_plicator(num_list):
     result = 1
     for num in num_list:
-        result = result * num
+        result *= num
     assert 0 < result < 1
     return result
 

@@ -216,7 +216,6 @@ def message_disturb(res_valid_for_req_list, fal_rat, answer_dict):
         msg4[5] = 0
     for veh_answer in tmp_list:
         answer_dict[hash_str(veh_answer, "answer")] = veh_answer
-
     return tmp_list
 
 

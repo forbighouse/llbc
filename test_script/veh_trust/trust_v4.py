@@ -1,14 +1,4 @@
-from test_script.veh_trust.trust_v2 import *
-
-
-# 时间节点前的请求权重
-TIME1 = 0.5
-# 时间节点后的请求权重
-TIME2 =0.5
-# 累计消费信誉权重
-CUSUME = 0.5
-# 累计响应次数权重
-RESPONCE = 0.5
+from test_script.veh_trust.trust_v3 import *
 
 
 def bl_operation_init(bl_address_ids):
@@ -103,7 +93,7 @@ def answer_collect(veh_reference_set_valid_dict, bl_operation_set):
         for answer2 in answer_list:
             answer_classify[answer2[2]].append(answer2)
         for sending_veh, answer_list_classified in answer_classify.items():
-            if len(answer_list_classified) > 1:
+            if len(answer_list_classified) > 4:
                 credits_list = probability_count_fuc3(answer_list_classified, bl_operation_set)
                 infer_result, test_result = bayes_infer_v2(credits_list)
                 tmp_rating_list = []
@@ -342,7 +332,7 @@ if __name__ == '__main__':
     # out_dict = traditional_v3(false_list, ROUNDS)
     # ==================================================================
     average_dict = defaultdict(list)
-    for i in range(50):
+    for i in range(100):
         print("round: ", i)
         res_dict = traditional_v3(false_list, ROUNDS)
         for ratios, num in res_dict.items():
