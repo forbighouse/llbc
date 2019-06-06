@@ -1,24 +1,24 @@
 import json
 import matplotlib.pyplot as plt
-from scipy import interpolate
+# from scipy import interpolate
 import numpy as np
 
 
 if __name__ == "__main__":
-    b = open("first_picture.txt", "r", encoding='UTF-8')
-    # b2 = open("trust_offset1.txt", "r", encoding='UTF-8')
+    b = open("first_picture 0.5.txt", "r", encoding='UTF-8')
+    b2 = open("first_picture 0.1.txt", "r", encoding='UTF-8')
     # b3 = open("trust_offset2.txt", "r", encoding='UTF-8')
     # b4 = open("trust_offset3.txt", "r", encoding='UTF-8')
     out = b.read()
-    # out2 = b2.read()
+    out2 = b2.read()
     # out3 = b3.read()
     # out4 = b4.read()
     out = json.loads(out)
-    # out2 = json.loads(out2)
+    out2 = json.loads(out2)
     # out3 = json.loads(out3)
     # out4 = json.loads(out4)
     c_dict = dict(out)
-    # c2_dict = dict(out2)
+    c2_dict = dict(out2)
     # c3_dict = dict(out3)
     # c4_dict = dict(out4)
 
@@ -33,11 +33,11 @@ if __name__ == "__main__":
     #
     # ynew = func(xnew)
 
-    # x2 = []
-    # y2 = []
-    # for key, values in c2_dict.items():
-    #     x2.append(round(float(key), 2))
-    #     y2.append(values)
+    x2 = []
+    y2 = []
+    for key, values in c2_dict.items():
+        x2.append(round(float(key), 2))
+        y2.append(values)
     #
     # x3 = []
     # y3 = []
@@ -51,8 +51,8 @@ if __name__ == "__main__":
     #     x4.append(round(float(key), 2))
     #     y4.append(values)
 
-    plt.plot(x, y, color='k', linestyle='-', marker='s', label='ori')
-    # plt.plot(xnew, ynew, color='r', linestyle='-', marker='o', label='cha')
+    plt.plot(x2, y2, color='k', linestyle='-', marker='s', label='PE = 0.1')
+    plt.plot(x, y, color='r', linestyle='-', marker='o', label='PE = 0.5')
     # plt.plot(x3, y3, color='b', linestyle='-', marker='v', label='x³')
     # plt.plot(x4, y4, color='g', linestyle='-', marker='^', label='eˣ')
 

@@ -2,7 +2,7 @@ from test_script.veh_trust.trust_management_simulator import *
 from test_script.veh_trust.config import *
 from utility.utility import *
 
-NUM_REQUEST_VEH = 5
+NUM_REQUEST_VEH = 50
 # 车辆请求的内容
 REQ_DATA_CONTENT = 0
 # 车辆请求的距离要求
