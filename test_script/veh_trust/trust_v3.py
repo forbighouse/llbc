@@ -1,5 +1,6 @@
+# 完全随机选取false message的脚本
 from test_script.veh_trust.trust_v2 import *
-
+from test_script.veh_trust.trust_v4 import *
 
 # 时间节点前的请求权重
 TIME1 = 0.5
@@ -296,7 +297,7 @@ def traditional_v3(false_list, round_time=ROUNDS):
         hash_answer_msg = hash_answer_msg_init()
         hash_rate_msg = hash_rate_msg_init()
         # //根据false_ratio改变其中一些消息的内容，组成假消息,并向缓存写入响应消息
-        res_disturb_for_req_list = message_disturb(res_valid_for_req_list, _false_ratio, hash_answer_msg)
+        res_disturb_for_req_list = message_disturb1(res_valid_for_req_list, _false_ratio, hash_answer_msg)
         # //每一秒车辆的位置
         veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
         # //每一个响应对应的相关车辆集
@@ -352,6 +353,6 @@ if __name__ == '__main__':
         out_dict[ratios1] = mean_for_list(num_list)
     # ================================================================
     false_msg_ratio_json = json.dumps(out_dict)
-    a = open(r"first_picture.txt", "w", encoding='UTF-8')
+    a = open(r"first_picture_v3_0.1.txt", "w", encoding='UTF-8')
     a.write(false_msg_ratio_json)
     a.close()

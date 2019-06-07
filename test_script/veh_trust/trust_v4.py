@@ -19,7 +19,7 @@ def message_disturb1(res_valid_for_req_list, fal_rat, answer_dict):
 
 
 # 给每一个响应分配一个相关车辆集合，将多余的车辆剔除，使得相关车辆集内的车辆数量在[0,10]范围内
-def answer_filter( res_disturb_for_req_list):
+def answer_filter(res_disturb_for_req_list):
     tmp_answer_dict = defaultdict(list)
     for answer_msg in res_disturb_for_req_list:
         tmp_answer_dict[answer_msg[2]].append(answer_msg)
@@ -48,76 +48,40 @@ def rating_collect(filter_answer_set_dict, bl_operation_set):
     return rating_list_event_dict
 
 
-def probability_count_fuc3(msg, bl_op):
-    probability_true_resp_dict = defaultdict(list)
-    tmp_weight_recent_dict = defaultdict(list)
-    tmp_weight_past_dict = defaultdict(list)
+def collect_offset(false_list):
+    offset_ratio_dict = defaultdict(list)
+    for _false_ratio in false_list:
+        neg_rate_num = int(_false_ratio * 100)
+        pos_rate_num = 100 - neg_rate_num
 
-    for items in msg:
-        r2 = 0.5 + math.exp(-0.014*(items[6]+50))
-        probability_true_resp_dict[items[5]].append(r2)
-
-        # 历史消费信誉，2天或2周时间间隔，例如 近2天/总4天，算出总的活跃度
-        tmp_weight_recent_dict[items[5]].append(bl_op[items[0]][0][1])
-        tmp_weight_past_dict[items[5]].append(bl_op[items[0]][0][0])
-
-    return probability_true_resp_dict
+        or1 = offset_count_v2(pos_rate_num, neg_rate_num, 'linear')
+        or2 = offset_count_v2(pos_rate_num, neg_rate_num, 'square')
+        or3 = offset_count_v2(pos_rate_num, neg_rate_num, 'cube')
+        or4 = offset_count_v2(pos_rate_num, neg_rate_num, 'e')
+        offset_ratio_dict[_false_ratio] = [or1, or2, or3, or4]
+    return offset_ratio_dict
 
 
-def bayes_infer_v2(pro_list_dict, pe=PE):
-    tmp_pro_dict = defaultdict(list)
-    test_result = []
-    for event_id, pby_list in pro_list_dict.items():
-        if event_id == 1:
-            for i in pby_list:
-                tmp_pro_dict[event_id].append(i)
-                tmp_pro_dict[event_id-1].append(1-i)
-        elif event_id == 0:
-            for i in pby_list:
-                tmp_pro_dict[event_id].append(i)
-                tmp_pro_dict[event_id+1].append(1-i)
-    tmp_res_dict = defaultdict(float)
-    for event_id in tmp_pro_dict.keys():
-        if event_id == 1:
-            part1 = pe * multi_plicator(tmp_pro_dict[event_id])
-            part2 = (1-pe) * multi_plicator(tmp_pro_dict[event_id-1])
-            tmp_res_dict[event_id] = part1 / (part1 + part2)
-        elif event_id == 0:
-            part1 = pe * multi_plicator(tmp_pro_dict[event_id])
-            part2 = (1-pe) * multi_plicator(tmp_pro_dict[1])
-            tmp_res_dict[event_id] = part1 / (part1 + part2)
-    tmp_res = sorted(tmp_res_dict.items(), key=lambda tmp_res_dict: tmp_res_dict[1], reverse=True)
-    test_result.append([tmp_res, pro_list_dict])
-    return tmp_res[0][0], test_result
+def offset_count_v2(m, n, func_name):
+    if func_name == 'linear':
+        def sensitivity_fun(xx): return xx
+    elif func_name == 'square':
+        def sensitivity_fun(xx): return xx * xx
+    elif func_name == 'cube':
+        def sensitivity_fun(xx): return xx*xx*xx
+    elif func_name == 'e':
+        def sensitivity_fun(xx): return pow(math.e, xx)
+    else:
+        raise TypeError
+
+    sita1 = sensitivity_fun(m) / (sensitivity_fun(m) + sensitivity_fun(n))
+    sita2 = sensitivity_fun(n) / (sensitivity_fun(m) + sensitivity_fun(n))
+    return (sita1*m - sita2*n) / (m + n)
 
 
-def comparison_rating_answer(rating_result_dict, hash_answer_msg):
-    hash_rate_answer_dict = defaultdict(list)
-    ratio_dict = defaultdict(list)
-    for _, rate_list in rating_result_dict.items():
-        for answer2 in rate_list:
-            hash_rate_answer_dict[answer2[1]].append(answer2)
-    for hash_id, rating_list in hash_rate_answer_dict.items():
-        if hash_answer_msg[hash_id][5] == 1:
-            for rates in rating_list:
-                if rates[2] == 1:
-                    ratio_dict[1].append(rates)
-                elif rates[2] == -1:
-                    ratio_dict[-1].append(rates)
-        elif hash_answer_msg[hash_id][5] == 0:
-            for rates in rating_list:
-                if rates[2] == 1:
-                    ratio_dict[-1].append(rates)
-                elif rates[2] == -1:
-                    ratio_dict[1].append(rates)
-    if len(ratio_dict) == 0:
-        for _, rate_list in rating_result_dict.items():
-            for i in rate_list:
-                print("{} {}".format("[error dict]", rate_list))
-    return ratio_dict
 
 
-def traditional_v3(false_list, round_time=ROUNDS):
+def traditional_v4(false_list, round_time=ROUNDS):
     # //事件位置初始化 dict, location
     event_list, accident_dict = accident_factory()
     # //车辆id和位置初始化
@@ -202,7 +166,7 @@ def traditional_v3(false_list, round_time=ROUNDS):
     # //从筛选后的反馈消息中只随机挑出来一条
     res_valid_for_req_list = message_filter(clean_valid_msg_v1_dict)
     # //存储仿真结果
-    res_dict = defaultdict(float)
+    res_rate_dict = defaultdict(float)
     for _false_ratio in false_list:
         # //初始化响应、评分字典
         hash_answer_msg = hash_answer_msg_init()
@@ -213,22 +177,21 @@ def traditional_v3(false_list, round_time=ROUNDS):
         veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
         # //每一个响应对应的相关车辆集
         veh_reference_set_all_dict = veh_reference_collect(res_disturb_for_req_list, veh_location_all_dict)
-        # //将相关集维持在[0,10]范围内
+        # //将相关集维持在[0,10]范围内，键是请求车辆，值是得到的响应列表
         filter_answer_set_dict = answer_filter(res_disturb_for_req_list)
-        # //给相关集内的车辆分配响应
+        # //给相关集内的车辆分配响应，键是请求车辆，值是对响应的评分
         rating_veh_dict = rating_collect(filter_answer_set_dict, bl_operation)
-        # //【仿真】比对评分的公平性
-        result_dict = comparison_rating_answer(rating_veh_dict, hash_answer_msg)
+        # //【仿真1】比对错误消息评分的影响
+        rate_dict = comparison_rating_answer(rating_veh_dict, hash_answer_msg)
 
-        ratio = rate_ratio(result_dict)
+        ratio = rate_ratio(rate_dict)
         print("{} {} {} {}".format("false_ratio = ", _false_ratio, "ratio = ", ratio))
-        res_dict[_false_ratio] = ratio
-
+        res_rate_dict[_false_ratio] = ratio
 
     # # //向仿真参数理写入评分
     # cache_rating_status = status_rating_cache(cache_rating_veh_dict, rating_result_dict)
 
-    return res_dict
+    return res_rate_dict
 
 
 def rate_ratio(ratio_dict):
@@ -253,17 +216,27 @@ if __name__ == '__main__':
     # ==================================================================
     # out_dict = traditional_v3(false_list, ROUNDS)
     # ==================================================================
+    '''
     average_dict = defaultdict(list)
     for i in range(50):
         print("[round:] ", i)
-        res_dict = traditional_v3(false_list, ROUNDS)
+        res_dict = traditional_v4(false_list, ROUNDS)
         for ratios, num in res_dict.items():
             average_dict[ratios].append(num)
     out_dict = defaultdict(int)
     for ratios1, num_list in average_dict.items():
         out_dict[ratios1] = mean_for_list(num_list)
     # ================================================================
+    
+    # //【仿真2】不公平评分对信誉偏置的影响,单独设置吧//////
+
     false_msg_ratio_json = json.dumps(out_dict)
-    a = open(r"first_picture 0.5.txt", "w", encoding='UTF-8')
+    a = open(r"output/first_picture 0.1.txt", "w", encoding='UTF-8')
     a.write(false_msg_ratio_json)
     a.close()
+    '''
+    res_offset_dict = collect_offset(false_list)
+    res_offset_dict_json = json.dumps(res_offset_dict)
+    b = open(r"output/second_picture.txt", "w", encoding='UTF-8')
+    b.write(res_offset_dict_json)
+    b.close()

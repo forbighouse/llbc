@@ -550,16 +550,6 @@ def offset(rsu_ratings_list):
         append_list.append(false_offset_tag)
         veh_count_dict[rate_line[1]].append(append_list)
 
-    # rating_count = []
-    # for veh_id, rating in veh_count_dict.items():
-    #     p_num, n_num, fake_num = rate_count(rating)
-    #     rating_count.append([veh_id, p_num, n_num, fake_num])
-    #
-    # offset_result = []
-    # for each_count in rating_count:
-    #     offset_result.append([each_count[0], offset_count(each_count), each_count[3]])
-    #
-    # return offset_result, veh_count_dict
     return veh_count_dict
 
 

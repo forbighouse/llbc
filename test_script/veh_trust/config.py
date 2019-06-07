@@ -48,4 +48,4 @@ UPDATE_TXT = 0
 RATE_CORRECT = 50
 
 # =================== trust_v4 ================
-TRICKER = 20
+TRICKER = 50
