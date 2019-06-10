@@ -55,13 +55,7 @@ def distance_cal(loc1, loc2):
     return np.linalg.norm(np.array(loc1) - np.array(loc2))
 
 
-def distance_cal_x(loc1, loc2):
-    assert isinstance(loc1, int)
-    assert isinstance(loc2, int)
-    if loc1 < loc2:
-        return int(loc2 - loc1)
-    else:
-        return int(loc1 - loc2)
+
 
 
 def dis_list(msg1, msg_set):

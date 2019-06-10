@@ -48,7 +48,7 @@ def bl_address(bl_address_num=BLOCKCHAIN_ADDRESS_TOTAL_NUM , bl_address_file=BLO
 
 def veh_speed_test():
     veh_ids = []
-    with open('veh_list.txt', 'r') as handler:
+    with open('init_file/veh_list.txt', 'r') as handler:
         for x in handler:
             x = x.strip('\n').split(';')
             veh_ids.append(x[0])

@@ -1,47 +1,7 @@
 from test_script.veh_trust.trust_management_simulator import *
 from test_script.veh_trust.config import *
+
 from utility.utility import *
-
-NUM_REQUEST_VEH = 50
-# 车辆请求的内容
-REQ_DATA_CONTENT = 0
-# 车辆请求的距离要求
-REQ_DISTANCE_REQ = 0
-# 车辆请求的时间要求
-REQ_TIME_REQ = 0
-# 观测距离
-OBSERVATION_DISTANCE = 100
-# 临时参数发起REQ的车辆的数量
-NUM_RISE_REQ_FOR_VEH = 0
-# 最高速度m/s
-MIN_SPEED = 0
-MAX_SPEED = 14
-# 一轮round_time抵多少秒
-SECOND_FOR_ONE_ROUND = 5
-# 总共多少轮
-ROUNDS = 12
-
-
-def veh_location_init():
-    veh_id_list = []
-    locaiotn_reading_list = []
-    with open('veh_list.txt', 'r') as handler:
-        for x in handler:
-            x = x.strip('\n').split(';')
-            veh_id_list.append(x[0])
-            locaiotn_reading_list.append(int(x[1]))
-    if DEBUG:
-        return veh_id_list, dict(zip(veh_id_list, locaiotn_reading_list))
-    else:
-        start_point = random.choice(range(5, 20))
-        tmp_accumulation_spacing = start_point
-        veh_location = defaultdict(int)
-
-        for tmp_veh1 in veh_id_list:
-            spacing = random.choice(range(5, 100))
-            tmp_accumulation_spacing += spacing
-            veh_location[tmp_veh1] = tmp_accumulation_spacing
-        return veh_id_list, veh_location
 
 
 def veh_trajectory_fuc1(veh_location, speed_init_veh_dict, all_rounds):
@@ -78,23 +38,6 @@ def veh_adjacency_fuc(event_list, veh_trajectory_fuc):
     return adjacency_dict
 
 
-def veh_speed_init():
-    veh_id_list = []
-    speed_reading_list = []
-    with open(VEH_SPEED_FILE, 'r') as handler:
-        for x in handler:
-            x = x.strip('\n').split(';')
-            veh_id_list.append(x[0])
-            speed_reading_list.append(int(x[1]))
-    if DEBUG:
-        return dict(zip(veh_id_list, speed_reading_list))
-    else:
-        veh_speed_init_dict = defaultdict(int)
-        for tmp_veh1 in veh_id_list:
-            veh_speed_init_dict[tmp_veh1] = random.choice(range(-MAX_SPEED, MAX_SPEED))
-        return veh_speed_init_dict
-
-
 def veh_valid_fun(adjacency_dict):
     vail_veh = defaultdict(list)
     for event_tag, tmp_id_veh_time_loc in adjacency_dict.items():
@@ -104,34 +47,6 @@ def veh_valid_fun(adjacency_dict):
                     vail_veh[event_tag].append([tmp_id, tmp_time, tmp_veh_loc])
                     # break
     return vail_veh
-
-
-def bl_address_read(file_address=BLOCKCHAIN_ADDRESS_FILE):
-    bl_address_id_list = []
-    with open(file_address, 'r') as handler:
-        for line in handler:
-            line = line.strip('\n').split(';')
-            bl_address_id_list.append(line[0])
-    return bl_address_id_list
-
-
-def bl_balance_init(bl_address_init):
-    bl_balance_init_dict = defaultdict(int)
-    for address1 in bl_address_init:
-        bl_balance_init_dict[address1] = random.choice(range(-100, 100))
-    return bl_balance_init_dict
-
-
-def veh_address_allocation(veh_init_ids, bl_address_ids):
-    address_veh_dict = defaultdict(str)
-    init_balance_address = defaultdict(int)
-    bl_address_ids_list = [bl_address_ids[i:i + 3] for i in range(0, len(bl_address_ids), 3)]
-    veh_address_dict = dict(zip(veh_init_ids, bl_address_ids_list))
-    for ids, address_list in veh_address_dict.items():
-        for address in address_list:
-            address_veh_dict[address] = ids
-            init_balance_address[address] = random.randint(0, 100)
-    return veh_address_dict, address_veh_dict, init_balance_address
 
 
 def count_valid_veh_around_event(msg_list, accident_dict, veh_location):
@@ -229,7 +144,7 @@ def probability_count_fuc1(msg):
     return probability_true_resp_dict
 
 
-def Bayes_infer(msg_dict, pe=PE):
+def bayes_infer(msg_dict, pe=PE):
     if len(msg_dict) > 1:
         tmp_pro_dict = defaultdict(list)
         for event_id, pby_list in msg_dict.items():
@@ -272,7 +187,7 @@ def traditional_v2(false_ratio, round_time=ROUNDS):
     # //车辆速度及方向初始化
     speed_init_veh_dict = veh_speed_init()
     # //地址钱包初始化
-    veh_init_ids = veh_id_fun()
+    veh_init_ids = veh_id_init()
     bl_address_ids = bl_address_read()
     # //钱包金额初始化
     bl_balance = bl_balance_init(bl_address_ids)
@@ -350,7 +265,7 @@ def traditional_v2(false_ratio, round_time=ROUNDS):
     # //从反馈消息得到
     res_event_deter_dict = defaultdict(dict)
     for veh_req_id, msg_list_pby in probability_req_dict.items():
-        res_event_deter_dict[veh_req_id] = Bayes_infer(msg_list_pby)
+        res_event_deter_dict[veh_req_id] = bayes_infer(msg_list_pby)
 
     return res_event_deter_dict
 

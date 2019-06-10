@@ -1,14 +1,7 @@
 # -*- coding: UTF-8 -*-
-import random
-import time
-import math
-import copy
-import numpy as np
-
-from collections import defaultdict
-from score.IoV_state import distance_cal_x
-from test_script.veh_trust.config import *
-
+from utility.utility import *
+from test_script.veh_trust.init_fun import *
+from test_script.veh_trust.probability_count import *
 
 # 生成rsu的位置
 def rsu_location():
@@ -45,35 +38,6 @@ def rsu_rating_collection(send_id, recv_msg, rsu_location_list, veh_location):
 
 
 # 生成accident
-def accident_factory(accident_fast_mode=0):
-    accident_type = ACCIDENT_TYPE
-    accidents = []
-    ids = []
-    contents = []
-    for i in range(ACCIDENT_NUM):
-        x = random.randint(0, ROAD_LEN)
-        accidents.append([str(i), (x, 0), accident_type])
-        ids.append(str(i))
-        contents.append([(x, 0), accident_type])
-
-    if accident_fast_mode:
-        accident_dict = dict(zip(ids, contents))
-        return accidents, accident_dict
-    else:
-        accidents2 = []
-        ids_2 = []
-        contents_2 = []
-        with open(ACCIDENT_LOCATION_FILE, 'r') as handler:
-            for x in handler:
-                x = x.strip('\n').split(';')
-                y = x[1].split(',')
-                int1 = int(y[0][1:])
-                int2 = int(y[1][1:-1])
-                accidents2.append([x[0], (int1, int2), int(x[2])])
-                ids_2.append(x[0])
-                contents_2.append([(int1, int2), int(x[2])])
-        accident_dict_2 = dict(zip(ids_2, contents_2))
-        return accidents2, accident_dict_2
 
 
 # 生成veh的位置
@@ -103,13 +67,7 @@ def veh_trajectory():
         return veh_id_list, dict(zip(veh_id_list, locationss))
 
 
-def veh_id_init():
-    veh_id_list = []
-    with open('veh_list.txt', 'r') as handler:
-        for x in handler:
-            x = x.strip('\n').split(';')
-            veh_id_list.append(x[0])
-    return veh_id_list
+
 
 
 # 返回离veh最近的rsu
@@ -622,7 +580,7 @@ def traditional_version(round_num, false_ratio):
 
     # 反转accident，索引其地址，返回其序号
     accident_dict_reverse = {v[0][0]: [k, v[1]] for k, v in accident_dict.items()}
-    veh_empty_ids = veh_id_fun()
+    veh_empty_ids = veh_id_init()
     veh_empty_list = [[] for u in range(len(veh_empty_ids))]
     veh_dict = dict(zip(veh_empty_ids, veh_empty_list))
 

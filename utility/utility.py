@@ -1,7 +1,15 @@
 import random
 import sha3
 import json
-from collections import defaultdict
+
+
+def distance_cal_x(loc1, loc2):
+    assert isinstance(loc1, int)
+    assert isinstance(loc2, int)
+    if loc1 < loc2:
+        return int(loc2 - loc1)
+    else:
+        return int(loc1 - loc2)
 
 
 def random_int_list(start, stop, length):

@@ -1,6 +1,8 @@
 # 完全随机选取false message的脚本
 from test_script.veh_trust.trust_v2 import *
 from test_script.veh_trust.trust_v4 import *
+from test_script.veh_trust.config import *
+
 
 # 时间节点前的请求权重
 TIME1 = 0.5
@@ -9,37 +11,7 @@ TIME2 =0.5
 # 累计消费信誉权重
 CUSUME = 0.5
 # 累计响应次数权重
-RESPONCE = 0.5
-
-
-def bl_operation_init(bl_address_ids):
-    bl_operation_init_dict = defaultdict(list)
-    for address1 in bl_address_ids:
-        # [时间节点之前的请求+响应，时间节点之后的请求+响应]
-        bl_operation_init_dict[address1].append([random.choice(range(0, 50)), random.choice(range(0, 50))])
-        # [时间节点之前的响应，时间节点之后的响应]
-        bl_operation_init_dict[address1].append([random.choice(range(0, 50)), random.choice(range(0, 50))])
-    return bl_operation_init_dict
-
-
-def cache_all_veh_init(veh_ids):
-    # 使用车辆而不是钱包，只是为了简化计算，毕竟理论上三个钱包共享内存
-    cache_request_veh_dict = defaultdict(list)
-    cache_answer_veh_dict = defaultdict(list)
-    cache_rating_veh_dict = defaultdict(list)
-    return cache_request_veh_dict, cache_answer_veh_dict, cache_rating_veh_dict
-
-
-def hash_request_msg_init():
-    return defaultdict(list)
-
-
-def hash_answer_msg_init():
-    return defaultdict(list)
-
-
-def hash_rate_msg_init():
-    return defaultdict(list)
+ANSWER = 0.5
 
 
 def status_request_cache(cache_request_veh_dict, tmp_msg_list, hash_request):
@@ -121,40 +93,6 @@ def answer_collect(veh_reference_set_valid_dict, bl_operation_set):
                     ])
                     rating_list_event_dict[rating_veh] = copy.deepcopy(tmp_rating_list)
     return rating_list_event_dict
-
-
-def probability_count_fuc2(msg, bl_op):
-    probability_true_resp_dict = defaultdict(list)
-    tmp_weight_recent_dict = defaultdict(list)
-    tmp_weight_past_dict = defaultdict(list)
-
-    for items in msg:
-        r1 = 1 - math.pow(0.08*(items[7]-items[4]), 3)
-        r2 = math.exp(-0.007*items[6])
-        pby_resq = ((r1 + r2) / 2)
-        probability_true_resp_dict[items[5]].append(pby_resq)
-
-        # 历史消费信誉，2天或2周时间间隔，例如 近2天/总4天，算出总的活跃度
-        tmp_weight_recent_dict[items[5]].append(bl_op[items[0]][0][1])
-        tmp_weight_past_dict[items[5]].append(bl_op[items[0]][0][0])
-
-    return probability_true_resp_dict
-
-
-def probability_count_fuc3(msg, bl_op):
-    probability_true_resp_dict = defaultdict(list)
-    tmp_weight_recent_dict = defaultdict(list)
-    tmp_weight_past_dict = defaultdict(list)
-
-    for items in msg:
-        r2 = 0.5 + math.exp(-0.014*(items[6]+50))
-        probability_true_resp_dict[items[5]].append(r2)
-
-        # 历史消费信誉，2天或2周时间间隔，例如 近2天/总4天，算出总的活跃度
-        tmp_weight_recent_dict[items[5]].append(bl_op[items[0]][0][1])
-        tmp_weight_past_dict[items[5]].append(bl_op[items[0]][0][0])
-
-    return probability_true_resp_dict
 
 
 def bayes_infer_v2(pro_list_dict, pe=PE):
