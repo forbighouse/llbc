@@ -1,8 +1,4 @@
-from test_script.veh_trust.config import *
-from test_script.veh_trust.trust_v2 import *
 from test_script.veh_trust.trust_v3 import *
-from test_script.veh_trust.init_fun import *
-from test_script.veh_trust.probability_count import *
 
 
 # 取距离远的车练设置为false message
@@ -10,8 +6,6 @@ def message_disturb1(res_valid_for_req_list, fal_rat, answer_dict):
     tmp_list = copy.deepcopy(res_valid_for_req_list)
     num_answer_init = len(tmp_list)
 
-    # 原论文的trick点在这，复现是通过对所有的响应按响应车辆到事件地点的距离进行降序排序
-    # 取距离较远的车辆开始设置为false响应
     tmp_list.sort(key=lambda x: x[6], reverse=True)
     num_false_msg = int(fal_rat*num_answer_init)
 
@@ -36,8 +30,7 @@ def rating_collect(filter_answer_set_dict, bl_operation_set):
     rating_list_event_dict = defaultdict(list)
     for sending_veh, answer_list_classified in filter_answer_set_dict.items():
         if len(answer_list_classified) > 1:
-            # credits_list = probability_count_fuc3(answer_list_classified, bl_operation_set)
-            credits_list = probability_count_fuc2(answer_list_classified, bl_operation_set)
+            credits_list = probability_count_fuc3(answer_list_classified, bl_operation_set)
             infer_result, test_result = bayes_infer_v2(credits_list)
             tmp_rating_list = []
             for answer3 in answer_list_classified:
@@ -84,6 +77,8 @@ def offset_count_v2(m, n, func_name):
     sita1 = sensitivity_fun(m) / (sensitivity_fun(m) + sensitivity_fun(n))
     sita2 = sensitivity_fun(n) / (sensitivity_fun(m) + sensitivity_fun(n))
     return (sita1*m - sita2*n) / (m + n)
+
+
 
 
 def traditional_v4(false_list, round_time=ROUNDS):
@@ -236,7 +231,7 @@ if __name__ == '__main__':
     # //【仿真2】不公平评分对信誉偏置的影响,单独设置吧//////
 
     false_msg_ratio_json = json.dumps(out_dict)
-    a = open(r"output/uli_new_order_first_picture 0.5.txt", "w", encoding='UTF-8')
+    a = open(r"output/first_picture 0.5.txt", "w", encoding='UTF-8')
     a.write(false_msg_ratio_json)
     a.close()
 
