@@ -71,10 +71,10 @@ def second_pic_func():
 
 
 def optimized_first_pic_func():
-    b = open("output/new_first_picture 0.5.txt", "r", encoding='UTF-8')
-    b2 = open("output/new_first_picture 0.1.txt", "r", encoding='UTF-8')
-    b3 = open("output/uli_new_first_picture 0.1.txt", "r", encoding='UTF-8')
-    b4 = open("output/uli_new_first_picture 0.5.txt", "r", encoding='UTF-8')
+    b = open("output/new_order_first_picture 0.5.txt", "r", encoding='UTF-8')
+    b2 = open("output/new_order_first_picture 0.1.txt", "r", encoding='UTF-8')
+    b3 = open("output/uli_new_order_first_picture 0.1.txt", "r", encoding='UTF-8')
+    b4 = open("output/uli_new_order_first_picture 0.5.txt", "r", encoding='UTF-8')
 
     out = b.read()
     out2 = b2.read()

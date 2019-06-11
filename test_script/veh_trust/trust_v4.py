@@ -37,7 +37,8 @@ def rating_collect(filter_answer_set_dict, bl_operation_set):
     for sending_veh, answer_list_classified in filter_answer_set_dict.items():
         if len(answer_list_classified) > 1:
             # credits_list = probability_count_fuc3(answer_list_classified, bl_operation_set)
-            credits_list = probability_count_fuc2(answer_list_classified, bl_operation_set)
+            # credits_list = probability_count_fuc2(answer_list_classified, bl_operation_set)
+            credits_list = probability_count_fuc4(answer_list_classified, bl_operation_set)
             infer_result, test_result = bayes_infer_v2(credits_list)
             tmp_rating_list = []
             for answer3 in answer_list_classified:
@@ -236,7 +237,7 @@ if __name__ == '__main__':
     # //【仿真2】不公平评分对信誉偏置的影响,单独设置吧//////
 
     false_msg_ratio_json = json.dumps(out_dict)
-    a = open(r"output/uli_new_order_first_picture 0.5.txt", "w", encoding='UTF-8')
+    a = open(r"output/uli_old_order_first_picture 0.1.txt", "w", encoding='UTF-8')
     a.write(false_msg_ratio_json)
     a.close()
 
