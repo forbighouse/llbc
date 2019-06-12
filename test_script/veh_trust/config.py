@@ -53,9 +53,6 @@ UPDATE_TXT = 0
 # veh和accident的距离值修正，根据accident的可能性判定公式，太近了超出1
 RATE_CORRECT = 50
 
-# =================== trust_v4 ================
-TRICKER = 60
-
 
 # =================== trust_v2 ================
 NUM_REQUEST_VEH = 50

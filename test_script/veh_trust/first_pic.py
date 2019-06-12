@@ -71,10 +71,10 @@ def second_pic_func():
 
 
 def optimized_first_pic_func():
-    b = open("output/new_order_first_picture 0.5.txt", "r", encoding='UTF-8')
-    b2 = open("output/new_order_first_picture 0.1.txt", "r", encoding='UTF-8')
-    b3 = open("output/uli_new_order_first_picture 0.1.txt", "r", encoding='UTF-8')
-    b4 = open("output/uli_new_order_first_picture 0.5.txt", "r", encoding='UTF-8')
+    b = open("output/first_picture_v3_0.5.txt", "r", encoding='UTF-8')
+    b2 = open("output/first_picture_v3_0.1.txt", "r", encoding='UTF-8')
+    b3 = open("output/uli_old_order_first_picture 0.1.txt", "r", encoding='UTF-8')
+    b4 = open("output/uli_old_order_first_picture 0.5.txt", "r", encoding='UTF-8')
 
     out = b.read()
     out2 = b2.read()
@@ -126,7 +126,7 @@ def optimized_first_pic_func():
     plt.xlabel("Percentage of false messages", fontdict={'family': 'Times New Roman', 'size': 12})
     plt.ylabel("Ratio of unfair ratings", fontdict={'family': 'Times New Roman', 'size': 12})
     plt.grid(linestyle='-.')
-    plt.savefig('output/3.pdf')
+    plt.savefig('output/4.pdf')
     plt.show()
 
 
