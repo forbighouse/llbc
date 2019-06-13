@@ -4,8 +4,8 @@ from collections import defaultdict
 
 
 def first_pic_func():
-    b = open("output/first_picture 0.5.txt", "r", encoding='UTF-8')
-    b2 = open("output/first_picture 0.1.txt", "r", encoding='UTF-8')
+    b = open("output/message_disturb_order_probability_count_fuc4_0.5", "r", encoding='UTF-8')
+    b2 = open("output/message_disturb_order_probability_count_fuc4_0.1", "r", encoding='UTF-8')
 
     out = b.read()
     out2 = b2.read()
@@ -71,10 +71,10 @@ def second_pic_func():
 
 
 def optimized_first_pic_func():
-    b = open("output/first_picture_v3_0.5.txt", "r", encoding='UTF-8')
-    b2 = open("output/first_picture_v3_0.1.txt", "r", encoding='UTF-8')
-    b3 = open("output/uli_old_order_first_picture 0.1.txt", "r", encoding='UTF-8')
-    b4 = open("output/uli_old_order_first_picture 0.5.txt", "r", encoding='UTF-8')
+    b = open("output/message_disturb_probability_count_fuc3_0.5.txt", "r", encoding='UTF-8')  # 0.5
+    b2 = open("output/message_disturb_probability_count_fuc3_0.1.txt", "r", encoding='UTF-8')  # 0.1
+    b3 = open("output/message_disturb_probability_count_fuc2_0.1.txt", "r", encoding='UTF-8')  # 0.1 new
+    b4 = open("output/message_disturb_probability_count_fuc2_0.5.txt", "r", encoding='UTF-8')  # 0.5 new
 
     out = b.read()
     out2 = b2.read()
@@ -126,7 +126,7 @@ def optimized_first_pic_func():
     plt.xlabel("Percentage of false messages", fontdict={'family': 'Times New Roman', 'size': 12})
     plt.ylabel("Ratio of unfair ratings", fontdict={'family': 'Times New Roman', 'size': 12})
     plt.grid(linestyle='-.')
-    plt.savefig('output/4.pdf')
+    plt.savefig('output/5.pdf')
     plt.show()
 
 

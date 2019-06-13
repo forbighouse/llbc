@@ -120,7 +120,7 @@ def message_filter(clean_msg_dict):
     return msg_valid_list
 
 
-def message_disturb(res_valid_for_req_list, fal_rat, answer_dict):
+def message_disturb(res_valid_for_req_list, fal_rat, answer_dict, trick=50):
     tmp_list = copy.deepcopy(res_valid_for_req_list)
     num_answer_init = len(tmp_list)
 

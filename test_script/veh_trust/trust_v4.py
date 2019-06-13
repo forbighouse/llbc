@@ -221,8 +221,8 @@ if __name__ == '__main__':
     # ==================================================================
     # out_dict = traditional_v3(false_list, ROUNDS)
     # ==================================================================
-    message_disturb_func = message_disturb_order
-    probability_func = probability_count_fuc4
+    message_disturb_func = message_disturb
+    probability_func = probability_count_fuc2
     bayer_func = bayes_infer_v2
     trick = 60
     average_dict = defaultdict(list)
@@ -237,7 +237,7 @@ if __name__ == '__main__':
     # ================================================================
 
     false_msg_ratio_json = json.dumps(out_dict)
-    fn1 = "{}{}_{}_{}".format("output/", message_disturb_func.__name__, probability_func.__name__, PE)
+    fn1 = "{}{}_{}_{}.txt".format("output/", message_disturb_func.__name__, probability_func.__name__, PE)
     a = open(fn1, "w", encoding='UTF-8')
     a.write(false_msg_ratio_json)
     a.close()

@@ -47,7 +47,9 @@ def probability_count_fuc4(msg, bl_op):
     for items in msg:
         if items[5] == 1:
             expand_ratio = round(((random.choice(range(25, 50))) / 50), 2)
-            r1 = 1 - math.exp(-0.014 * (items[6]+50) * expand_ratio)
+            r1 = 0.5 + math.exp(-0.014 * ((items[6]+50) * expand_ratio))
+            if r1 > 1:
+                r1 = 0.99
         else:
             expand_ratio = round(((random.choice(range(10, 25))) / 50), 2)
             r1 = 0.5 + math.exp(-0.014 * ((items[6] + 50) * (1+expand_ratio)))
