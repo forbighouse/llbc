@@ -50,7 +50,7 @@ def rating_collect(filter_answer_set_dict, probability_count_func, bayes_infer_f
                     hash_str(answer3, "answer"),  # 1请求时间
                     tmp_rating_tag                # 2评分
                 ])
-                rating_list_event_dict[sending_veh] = copy.deepcopy(tmp_rating_list)
+            rating_list_event_dict[sending_veh] = copy.deepcopy(tmp_rating_list)
     return rating_list_event_dict
 
 

@@ -1,7 +1,7 @@
 import random
 import sha3
 import json
-
+import numpy as np
 
 def distance_cal_x(loc1, loc2):
     assert isinstance(loc1, int)
@@ -32,8 +32,15 @@ def hash_str(address, msg_type):
         return x.hexdigest(8)
     elif msg_type == "rate":
         return x.hexdigest(8)
+    elif msg_type == "transaction":
+        return x.hexdigest(16)
     else:
         raise TypeError
+
+
+def transaction_emerge_generator(mean, timer):
+    return list(np.random.poisson(lam=mean, size=timer))
+
 
 if __name__ == '__main__':
     pass

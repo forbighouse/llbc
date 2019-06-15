@@ -109,12 +109,13 @@ def veh_address_allocation(veh_init_ids, bl_address_ids):
 
 
 def bl_operation_init(bl_address_ids):
-    bl_operation_init_dict = defaultdict(list)
+    bl_operation_init_dict = defaultdict(dict)
+    init_time_operation_dict = defaultdict(int)
     for address1 in bl_address_ids:
         # [时间节点之前的请求+响应，时间节点之后的请求+响应]
-        bl_operation_init_dict[address1].append([random.choice(range(0, 50)), random.choice(range(0, 50))])
+        init_time_operation_dict[address1] = random.choice(range(0, 50))
         # [时间节点之前的响应，时间节点之后的响应]
-        bl_operation_init_dict[address1].append([random.choice(range(0, 50)), random.choice(range(0, 50))])
+    bl_operation_init_dict[0] = init_time_operation_dict
     return bl_operation_init_dict
 
 

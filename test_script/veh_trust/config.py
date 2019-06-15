@@ -73,3 +73,7 @@ MAX_SPEED = 14
 SECOND_FOR_ONE_ROUND = 5
 # 总共多少轮
 ROUNDS = 12
+
+
+# =================== consensus_v1 ================
+THRESHOLD_OPERATION = 200

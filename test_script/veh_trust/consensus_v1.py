@@ -1,6 +1,29 @@
+# from test_script.veh_trust.trust_v3 import *
 from test_script.veh_trust.trust_v4 import *
 from test_script.veh_trust.init_fun import *
 from test_script.veh_trust.probability_count import *
+
+
+def request_generator(veh_ids, event_list, veh_address_dict, veh_trajectory_dict, round_time):
+    # 设置请求消息时间
+    sending_msg_list = []
+    trans_num_list = transaction_emerge_generator(2, round_time)
+    for index_id, msg_nums in enumerate(trans_num_list):
+        if msg_nums > 0:
+            tmp_sending_veh_list = random.sample(veh_ids, msg_nums)
+            for tmp_sending_veh in tmp_sending_veh_list:
+                event_ready_for_veh = random.choice(event_list)
+                activate_address = random.choice(veh_address_dict[tmp_sending_veh])
+                # temp_list包含了所有的【请求消息】
+                #     0          1           2            3                       4
+                # |<-地址->|<-请求车辆->|<-车辆位置->|<-消息次序->|<-[event的编号、距离要求、时间要求]->|
+                sending_msg_list.append([
+                    activate_address,                                # 0请求地址
+                    tmp_sending_veh,                                 # 1请求车辆
+                    veh_trajectory_dict[tmp_sending_veh][index_id],  # 2请求位置
+                    index_id,                                        # 3请求时间
+                    [event_ready_for_veh[0], REQ_DISTANCE_REQ, REQ_TIME_REQ]])
+    return sending_msg_list
 
 
 def answer_generator(tmp_msg_list, vail_veh, veh_address_dict):
@@ -39,11 +62,65 @@ def answer_generator(tmp_msg_list, vail_veh, veh_address_dict):
     return recv_msg_dict
 
 
-def transaction_pack(tmp_msg_list, rating_veh_dict, hash_answer_msg):
+def transaction_pack(tmp_msg_list, filter_answer_set_dict, rating_veh_dict, hash_answer_msg):
     trans_dict = defaultdict(list)
-    for req_id, answer_list  in rating_veh_dict.items():
+    for req_msgs in tmp_msg_list:
+        transaction_structure = defaultdict(dict)
+        transaction_structure["request_msg"] = req_msgs
+        transaction_structure["request_hash"] = hash_str(req_msgs, "request")
+        transaction_structure["answer_list"] = filter_answer_set_dict[req_msgs[0]]
+        transaction_structure["answer_list_hash"] = hash_str(filter_answer_set_dict[req_msgs[0]], "answer")
+        transaction_structure["rating_list"] = rating_veh_dict[req_msgs[0]]
+        trans_time = transaction_time(hash_answer_msg, rating_veh_dict[req_msgs[0]])
+        trans_dict[trans_time].append(copy.deepcopy(transaction_structure))
+    return trans_dict
 
 
+def transaction_time(hash_answer_msg, rating_for_sending_list):
+    answer_time = 0
+    for rating_msg in rating_for_sending_list:
+        answer_msg = hash_answer_msg[rating_msg[1]]
+        if answer_msg[7] > answer_time:
+            answer_time = answer_msg[7]
+    return answer_time
+
+
+def consensus_simulator(transactions_dict, bl_operation, threshold_op=THRESHOLD_OPERATION):
+    waiting_blockchain_status_dict = defaultdict(dict)
+    writed_blockchain_status_dict = defaultdict(list)
+    #
+    for time_trans, trans_list in transactions_dict.items():
+        for trans in trans_list:
+            tmp_write_dict = {}
+            trans_hash = hash_str(trans, "transaction")
+            tmp_write_dict["write_time"] = time_trans
+            tmp_write_dict["verify_list"] = []
+            waiting_blockchain_status_dict[trans_hash] = copy.deepcopy(tmp_write_dict)
+    sorted_transactions_dict = sorted(transactions_dict.items(), key=lambda x: x[0])
+    for time_trans1, trans_list1 in sorted_transactions_dict.items():
+        for trans3 in trans_list1:
+            # 字典（可能其他结构也类似）在迭代的时候不能删除里面的元素
+            for trans_hash2, trans_record_detail_dict in waiting_blockchain_status_dict.items():
+                if trans_record_detail_dict["write_time"] < time_trans1:
+                    trans_record_detail_dict["verify_list"].append([time_trans1, trans3])
+                    sum_operations = consensus_simulator_verify_count(trans_record_detail_dict["verify_list"], bl_operation)
+                    if sum_operations > threshold_op:
+                        writed_blockchain_status_dict[trans_hash2] = [time_trans1, waiting_blockchain_status_dict.pop(trans_hash2)]
+    return writed_blockchain_status_dict
+
+
+# 计算验DAG的某一个事务证列表内的事务的操作总和
+def consensus_simulator_verify_count(verify_list, bl_operation):
+    bl_operation_keys_list = list(bl_operation.keys())
+    sorted(bl_operation_keys_list)
+    sum_operation = 0
+    for records in verify_list:
+        if bl_operation_keys_list[-1] < records[0]:
+            request_id = records[1]["request_msg"][0]
+            sum_operation += bl_operation[bl_operation_keys_list[-1]][request_id]
+        else:
+            raise Exception("bl_operation的最终时间大于当前事务的发起时间，检查consensus_simulator_verify_count")
+    return sum_operation
 
 
 def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_infer_func, trickers, round_time=ROUNDS):
@@ -75,26 +152,11 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
 
     # // 设置请求车辆
     send_request_veh_id_list = random.sample(veh_ids, NUM_REQUEST_VEH)
-    # 设置请求消息时间
-    req_msg_order = random.sample(range(round_time*5), len(send_request_veh_id_list))
-    random.shuffle(req_msg_order)
-    tmp_msg_list = []
-    for veh_sending_req in send_request_veh_id_list:
-        event_ready_for_veh = random.choice(event_list)
-        activate_address = random.choice(veh_address_dict[veh_sending_req])
-        # temp_list包含了所有的【请求消息】
-        #     0          1           2            3                       4
-        # |<-地址->|<-请求车辆->|<-车辆位置->|<-消息次序->|<-[event的编号、距离要求、时间要求]->|
-        tmp_msg_list.append([
-            activate_address,                                                 # 0请求地址
-            veh_sending_req,                                                  # 1请求车辆
-            veh_location[veh_sending_req],                                    # 2请求位置
-            req_msg_order[send_request_veh_id_list.index(veh_sending_req)],   # 3请求时间
-            [event_ready_for_veh[0], REQ_DISTANCE_REQ, REQ_TIME_REQ]])        # 4[event的编号、距离要求、时间要求]
+    request_msg_list = request_generator(veh_ids, event_list, veh_address_dict, veh_trajectory_dict, round_time)
     # //向仿真参数里写入请求消息
-    cache_request_status = status_request_cache(cache_request_veh_dict, tmp_msg_list, hash_request_msg)
+    cache_request_status = status_request_cache(cache_request_veh_dict, request_msg_list, hash_request_msg)
     # //产生响应消息
-    recv_msg_dict = answer_generator(tmp_msg_list, vail_veh, veh_address_dict)
+    recv_msg_dict = answer_generator(request_msg_list, vail_veh, veh_address_dict)
     # //以反馈地址将反馈信息进行整理，第二个返回值根据请求的时间要求筛选出可用的反馈消息
     clean_msg_v1_dict, clean_valid_msg_v1_dict = message_cleaning(recv_msg_dict)
     # //从筛选后的反馈消息中只随机挑出来一条
@@ -118,9 +180,10 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
     filter_answer_set_dict = answer_filter(res_disturb_for_req_list)
     # //给相关集内的车辆分配响应，键是请求车辆，值是对响应的评分
     rating_veh_dict = rating_collect(filter_answer_set_dict, probability_count_fuc, bayes_infer_func, bl_operation)
-    # //【仿真2】比对错误消息评分的影响
-    transactions_dict = transaction_pack(tmp_msg_list, rating_veh_dict, hash_answer_msg)
-
+    # //【仿真2】共识协议
+    transactions_dict = transaction_pack(request_msg_list, filter_answer_set_dict, rating_veh_dict, hash_answer_msg)
+    # // 一个事务被最终写入区块链或者状态“不可变”的时间，或者叫以很大概率保持确定性的时间
+    mean_time_consume = consensus_simulator(transactions_dict, bl_operation)
 
     return res_rate_dict
 
