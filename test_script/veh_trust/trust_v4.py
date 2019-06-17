@@ -1,18 +1,24 @@
+from test_script.veh_trust.config import *
+from test_script.veh_trust.trust_v2 import *
 from test_script.veh_trust.trust_v3 import *
+from test_script.veh_trust.init_fun import *
+from test_script.veh_trust.probability_count import *
 
 
 # 取距离远的车练设置为false message
-def message_disturb1(res_valid_for_req_list, fal_rat, answer_dict):
+def message_disturb_order(res_valid_for_req_list, fal_rat, answer_dict, tricker):
     tmp_list = copy.deepcopy(res_valid_for_req_list)
     num_answer_init = len(tmp_list)
 
+    # 原论文的trick点在这，复现是通过对所有的响应按响应车辆到事件地点的距离进行降序排序
+    # 取距离较远的车辆开始设置为false响应
     tmp_list.sort(key=lambda x: x[6], reverse=True)
     num_false_msg = int(fal_rat*num_answer_init)
 
     list_sample = tmp_list[:num_false_msg]
     for msg4 in list_sample:
         msg4[5] = 0
-        msg4[6] += TRICKER
+        msg4[6] += tricker
     for veh_answer in tmp_list:
         answer_dict[hash_str(veh_answer, "answer")] = veh_answer
     return tmp_list
@@ -26,12 +32,12 @@ def answer_filter(res_disturb_for_req_list):
     return tmp_answer_dict
 
 
-def rating_collect(filter_answer_set_dict, bl_operation_set):
+def rating_collect(filter_answer_set_dict, probability_count_func, bayes_infer_func, bl_operation_set):
     rating_list_event_dict = defaultdict(list)
     for sending_veh, answer_list_classified in filter_answer_set_dict.items():
         if len(answer_list_classified) > 1:
-            credits_list = probability_count_fuc3(answer_list_classified, bl_operation_set)
-            infer_result, test_result = bayes_infer_v2(credits_list)
+            credits_list = probability_count_func(answer_list_classified, bl_operation_set)
+            infer_result, test_result = bayes_infer_func(credits_list)
             tmp_rating_list = []
             for answer3 in answer_list_classified:
                 tmp_rating_tag = 0
@@ -44,7 +50,7 @@ def rating_collect(filter_answer_set_dict, bl_operation_set):
                     hash_str(answer3, "answer"),  # 1请求时间
                     tmp_rating_tag                # 2评分
                 ])
-                rating_list_event_dict[sending_veh] = copy.deepcopy(tmp_rating_list)
+            rating_list_event_dict[sending_veh] = copy.deepcopy(tmp_rating_list)
     return rating_list_event_dict
 
 
@@ -79,9 +85,7 @@ def offset_count_v2(m, n, func_name):
     return (sita1*m - sita2*n) / (m + n)
 
 
-
-
-def traditional_v4(false_list, round_time=ROUNDS):
+def traditional_v4(false_list, message_disturb_func, probability_count_fuc, bayes_infer_func, trickers, round_time=ROUNDS):
     # //事件位置初始化 dict, location
     event_list, accident_dict = accident_factory()
     # //车辆id和位置初始化
@@ -172,7 +176,8 @@ def traditional_v4(false_list, round_time=ROUNDS):
         hash_answer_msg = hash_answer_msg_init()
         hash_rate_msg = hash_rate_msg_init()
         # //根据false_ratio改变其中一些消息的内容，组成假消息,并向缓存写入响应消息
-        res_disturb_for_req_list = message_disturb1(res_valid_for_req_list, _false_ratio, hash_answer_msg)
+        res_disturb_for_req_list = message_disturb_func(res_valid_for_req_list, _false_ratio, hash_answer_msg, trickers)
+        # res_disturb_for_req_list = message_disturb(res_valid_for_req_list, _false_ratio, hash_answer_msg)
         # //每一秒车辆的位置
         veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
         # //每一个响应对应的相关车辆集
@@ -180,7 +185,7 @@ def traditional_v4(false_list, round_time=ROUNDS):
         # //将相关集维持在[0,10]范围内，键是请求车辆，值是得到的响应列表
         filter_answer_set_dict = answer_filter(res_disturb_for_req_list)
         # //给相关集内的车辆分配响应，键是请求车辆，值是对响应的评分
-        rating_veh_dict = rating_collect(filter_answer_set_dict, bl_operation)
+        rating_veh_dict = rating_collect(filter_answer_set_dict, probability_count_fuc, bayes_infer_func, bl_operation)
         # //【仿真1】比对错误消息评分的影响
         rate_dict = comparison_rating_answer(rating_veh_dict, hash_answer_msg)
 
@@ -197,7 +202,7 @@ def traditional_v4(false_list, round_time=ROUNDS):
 def rate_ratio(ratio_dict):
     num_pos_rate = len(ratio_dict[1])
     num_neg_rate = len(ratio_dict[-1])
-    print("{} {} {} {}".format("*1:", num_pos_rate, "*-1:", num_neg_rate))
+    print("[1:{}], [-1:{}]".format(num_pos_rate, num_neg_rate))
     return num_neg_rate / (num_pos_rate + num_neg_rate)
 
 
@@ -216,22 +221,24 @@ if __name__ == '__main__':
     # ==================================================================
     # out_dict = traditional_v3(false_list, ROUNDS)
     # ==================================================================
-
+    message_disturb_func = message_disturb
+    probability_func = probability_count_fuc2
+    bayer_func = bayes_infer_v2
+    trick = 60
     average_dict = defaultdict(list)
     for i in range(50):
-        print("[round:] ", i)
-        res_dict = traditional_v4(false_list, ROUNDS)
+        print("[round:{}] ".format(i))
+        res_dict = traditional_v4(false_list, message_disturb_func, probability_func, bayer_func, trick, ROUNDS)
         for ratios, num in res_dict.items():
             average_dict[ratios].append(num)
     out_dict = defaultdict(int)
     for ratios1, num_list in average_dict.items():
         out_dict[ratios1] = mean_for_list(num_list)
     # ================================================================
-    
-    # //【仿真2】不公平评分对信誉偏置的影响,单独设置吧//////
 
     false_msg_ratio_json = json.dumps(out_dict)
-    a = open(r"output/first_picture 0.5.txt", "w", encoding='UTF-8')
+    fn1 = "{}{}_{}_{}.txt".format("output/", message_disturb_func.__name__, probability_func.__name__, PE)
+    a = open(fn1, "w", encoding='UTF-8')
     a.write(false_msg_ratio_json)
     a.close()
 

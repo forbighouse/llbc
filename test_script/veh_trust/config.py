@@ -45,16 +45,13 @@ TIME_TOLERANCE = 1
 # 事件发生的阈值
 THRESHOLD = 0.5
 # 事件发生的概率
-PE = 0.5  # 应该用动态的每个事件用一个，这里先用相同的测试
+PE = 0.1  # 应该用动态的每个事件用一个，这里先用相同的测试
 # 测试模式
 DEBUG = 0
 # 更新所有的txt文件
 UPDATE_TXT = 0
 # veh和accident的距离值修正，根据accident的可能性判定公式，太近了超出1
 RATE_CORRECT = 50
-
-# =================== trust_v4 ================
-TRICKER = 20
 
 
 # =================== trust_v2 ================
@@ -76,3 +73,7 @@ MAX_SPEED = 14
 SECOND_FOR_ONE_ROUND = 5
 # 总共多少轮
 ROUNDS = 12
+
+
+# =================== consensus_v1 ================
+THRESHOLD_OPERATION = 200
