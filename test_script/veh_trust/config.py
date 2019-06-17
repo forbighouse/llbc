@@ -77,3 +77,4 @@ ROUNDS = 12
 
 # =================== consensus_v1 ================
 THRESHOLD_OPERATION = 200
+VERIFY_NUM = 2

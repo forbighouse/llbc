@@ -109,20 +109,17 @@ def consensus_simulator(transactions_dict, bl_operation, threshold_op=THRESHOLD_
         # //从头往后找，只要时间比time_trans的要早，都要进行计算
         for time_trans2 in flat_sorted_transactions_list:
             if issue_time_trans[0] > time_trans2[0]:
-                # //判断issue_trans的front里面的trans的个数，如果超过预定义就跳过
-                if len(waiting_blockchain_status_dict[issue_time_trans[1]]["front_list"]) <= VERIFY_NUM:
+                # //条件1：判断issue_trans的front里面的trans的个数，如果超过预定义就不能再往里加了
+                len_front_list = len(waiting_blockchain_status_dict[issue_time_trans[1]]["front_list"])
+                # //条件2：判断time_trans2的behind里面的trans所涉及的发起request的车辆的信誉，如果达到预定义，就不能再选了
+                # len_behind_list = len(waiting_blockchain_status_dict[time_trans2[1]]["behind_list"])
+                if len_front_list <= VERIFY_NUM:
                     # //如果时间比time_trans的早，把这个trans放入time_trans的front_list里
+                    print("123")
                     waiting_blockchain_status_dict[issue_time_trans[1]]["front_list"].append(time_trans2)
+                    waiting_blockchain_status_dict[time_trans2[1]]["behind_list"].append(issue_time_trans)
 
-        for trans4 in tmp_waiting_trans_list:
-            waiting_blockchain_status_dict[hash_str(trans4, "transaction")]
 
-            for trans3 in time_trans_list[1]:
-                trans_hash3 = hash_str(trans3, "transaction")
-                waiting_blockchain_status_dict[trans_hash3]["verify_list"].append(trans3)
-        else:
-            print("pass")
-        pass
         # for trans3 in trans_list1:
         #     # 字典（可能其他结构也类似）在迭代的时候不能删除里面的元素
         #     for trans_hash2, trans_record_detail_dict in waiting_blockchain_status_dict.items():
@@ -215,6 +212,7 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
     rating_veh_dict = rating_collect(filter_answer_set_dict, probability_count_fuc, bayes_infer_func, bl_operation)
     # //【仿真2】共识协议
     transactions_dict = transaction_pack(request_msg_list, filter_answer_set_dict, rating_veh_dict, hash_answer_msg)
+    transaction_save(transactions_dict)
     # transaction_save(transactions_dict)
     # // 一个事务被最终写入区块链或者状态“不可变”的时间，或者叫以很大概率保持确定性的时间
     mean_time_consume = consensus_simulator(transactions_dict, bl_operation)
