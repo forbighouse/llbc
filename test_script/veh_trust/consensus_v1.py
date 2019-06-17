@@ -76,6 +76,7 @@ def transaction_pack(tmp_msg_list, filter_answer_set_dict, rating_veh_dict, hash
     return trans_dict
 
 
+# transaction的时间定义为其所包含的所有响应里面最大的时间
 def transaction_time(hash_answer_msg, rating_for_sending_list):
     answer_time = 0
     for rating_msg in rating_for_sending_list:
@@ -88,25 +89,57 @@ def transaction_time(hash_answer_msg, rating_for_sending_list):
 def consensus_simulator(transactions_dict, bl_operation, threshold_op=THRESHOLD_OPERATION):
     waiting_blockchain_status_dict = defaultdict(dict)
     writed_blockchain_status_dict = defaultdict(list)
-    #
-    for time_trans, trans_list in transactions_dict.items():
+    # // 构造等待缓存
+    for issue_time_trans, trans_list in transactions_dict.items():
         for trans in trans_list:
             tmp_write_dict = {}
             trans_hash = hash_str(trans, "transaction")
-            tmp_write_dict["write_time"] = time_trans
-            tmp_write_dict["verify_list"] = []
+            tmp_write_dict["write_time"] = issue_time_trans
+            tmp_write_dict["front_list"] = []
+            tmp_write_dict["behind_list"] = []
             waiting_blockchain_status_dict[trans_hash] = copy.deepcopy(tmp_write_dict)
-    sorted_transactions_dict = sorted(transactions_dict.items(), key=lambda x: x[0])
-    for time_trans1, trans_list1 in sorted_transactions_dict.items():
-        for trans3 in trans_list1:
-            # 字典（可能其他结构也类似）在迭代的时候不能删除里面的元素
-            for trans_hash2, trans_record_detail_dict in waiting_blockchain_status_dict.items():
-                if trans_record_detail_dict["write_time"] < time_trans1:
-                    trans_record_detail_dict["verify_list"].append([time_trans1, trans3])
-                    sum_operations = consensus_simulator_verify_count(trans_record_detail_dict["verify_list"], bl_operation)
-                    if sum_operations > threshold_op:
-                        writed_blockchain_status_dict[trans_hash2] = [time_trans1, waiting_blockchain_status_dict.pop(trans_hash2)]
+    # // 对输入的trans按时间进行排序，主要是为了后面计算方便
+    sorted_transactions_list = sorted(transactions_dict.items(), key=lambda x: x[0])
+
+    flat_sorted_transactions_list = flat_transaction(sorted_transactions_list)
+
+    # //开始迭代列表内的所有事务，此刻time_trans表示要发布的trans
+    for issue_time_trans in flat_sorted_transactions_list:
+        tmp_waiting_trans_list = []
+        # //从头往后找，只要时间比time_trans的要早，都要进行计算
+        for time_trans2 in flat_sorted_transactions_list:
+            if issue_time_trans[0] > time_trans2[0]:
+                # //判断issue_trans的front里面的trans的个数，如果超过预定义就跳过
+                if len(waiting_blockchain_status_dict[issue_time_trans[1]]["front_list"]) <= VERIFY_NUM:
+                    # //如果时间比time_trans的早，把这个trans放入time_trans的front_list里
+                    waiting_blockchain_status_dict[issue_time_trans[1]]["front_list"].append(time_trans2)
+
+        for trans4 in tmp_waiting_trans_list:
+            waiting_blockchain_status_dict[hash_str(trans4, "transaction")]
+
+            for trans3 in time_trans_list[1]:
+                trans_hash3 = hash_str(trans3, "transaction")
+                waiting_blockchain_status_dict[trans_hash3]["verify_list"].append(trans3)
+        else:
+            print("pass")
+        pass
+        # for trans3 in trans_list1:
+        #     # 字典（可能其他结构也类似）在迭代的时候不能删除里面的元素
+        #     for trans_hash2, trans_record_detail_dict in waiting_blockchain_status_dict.items():
+        #         if trans_record_detail_dict["write_time"] < time_trans1:
+        #             trans_record_detail_dict["verify_list"].append([time_trans1, trans3])
+        #             sum_operations = consensus_simulator_verify_count(trans_record_detail_dict["verify_list"], bl_operation)
+        #             if sum_operations > threshold_op:
+        #                 writed_blockchain_status_dict[trans_hash2] = [time_trans1, waiting_blockchain_status_dict.pop(trans_hash2)]
     return writed_blockchain_status_dict
+
+
+def flat_transaction(sorted_transactions_list):
+    tmp_sorted_list = []
+    for trans_list in sorted_transactions_list:
+        for trans in trans_list[1]:
+            tmp_sorted_list.append([trans_list[0], hash_str(trans, "transaction"), trans])
+    return tmp_sorted_list
 
 
 # 计算验DAG的某一个事务证列表内的事务的操作总和
@@ -151,7 +184,7 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
     vail_veh = veh_valid_fun(adjacency_dict)
 
     # // 设置请求车辆
-    send_request_veh_id_list = random.sample(veh_ids, NUM_REQUEST_VEH)
+    # send_request_veh_id_list = random.sample(veh_ids, NUM_REQUEST_VEH)
     request_msg_list = request_generator(veh_ids, event_list, veh_address_dict, veh_trajectory_dict, round_time)
     # //向仿真参数里写入请求消息
     cache_request_status = status_request_cache(cache_request_veh_dict, request_msg_list, hash_request_msg)
@@ -182,10 +215,27 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
     rating_veh_dict = rating_collect(filter_answer_set_dict, probability_count_fuc, bayes_infer_func, bl_operation)
     # //【仿真2】共识协议
     transactions_dict = transaction_pack(request_msg_list, filter_answer_set_dict, rating_veh_dict, hash_answer_msg)
+    # transaction_save(transactions_dict)
     # // 一个事务被最终写入区块链或者状态“不可变”的时间，或者叫以很大概率保持确定性的时间
     mean_time_consume = consensus_simulator(transactions_dict, bl_operation)
 
     return res_rate_dict
+
+
+def transaction_save(transactions_dict):
+    fn2 = "{}{}_{}.json".format("transactions/", "Transaction", time.strftime("%m%d_%H-%M", time.localtime()))
+    a1 = open(fn2, "w", encoding='utf-8')
+    json.dump(transactions_dict, a1, ensure_ascii=False)
+    a1.close()
+
+
+def transaction_read(fn3):
+    handler = open(fn3, 'r', encoding='utf-8')
+    _dict = json.load(handler)
+    b = defaultdict(dict)
+    for _keys in _dict.keys():
+        b[int(_keys)] = _dict[_keys]
+    return b
 
 
 if __name__ == '__main__':
