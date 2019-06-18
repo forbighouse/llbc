@@ -72,9 +72,10 @@ MAX_SPEED = 14
 # 一轮round_time抵多少秒
 SECOND_FOR_ONE_ROUND = 5
 # 总共多少轮
-ROUNDS = 12
+ROUNDS = 60
 
 
 # =================== consensus_v1 ================
 THRESHOLD_OPERATION = 200
 VERIFY_NUM = 2
+POISSON_MEAN = 5

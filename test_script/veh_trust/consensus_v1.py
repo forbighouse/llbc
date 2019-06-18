@@ -7,7 +7,7 @@ from test_script.veh_trust.probability_count import *
 def request_generator(veh_ids, event_list, veh_address_dict, veh_trajectory_dict, round_time):
     # 设置请求消息时间
     sending_msg_list = []
-    trans_num_list = transaction_emerge_generator(2, round_time)
+    trans_num_list = transaction_emerge_generator(POISSON_MEAN, round_time)
     for index_id, msg_nums in enumerate(trans_num_list):
         if msg_nums > 0:
             tmp_sending_veh_list = random.sample(veh_ids, msg_nums)
@@ -64,6 +64,7 @@ def answer_generator(tmp_msg_list, vail_veh, veh_address_dict):
 
 def transaction_pack(tmp_msg_list, filter_answer_set_dict, rating_veh_dict, hash_answer_msg):
     trans_dict = defaultdict(list)
+    count_transaction_num = 0
     for req_msgs in tmp_msg_list:
         transaction_structure = defaultdict(dict)
         transaction_structure["request_msg"] = req_msgs
@@ -73,6 +74,8 @@ def transaction_pack(tmp_msg_list, filter_answer_set_dict, rating_veh_dict, hash
         transaction_structure["rating_list"] = rating_veh_dict[req_msgs[0]]
         trans_time = transaction_time(hash_answer_msg, rating_veh_dict[req_msgs[0]])
         trans_dict[trans_time].append(copy.deepcopy(transaction_structure))
+        count_transaction_num += 1
+    print("{}{}".format("transaction num: ", count_transaction_num))
     return trans_dict
 
 
@@ -86,38 +89,55 @@ def transaction_time(hash_answer_msg, rating_for_sending_list):
     return answer_time
 
 
+def ex_flat_sorted_transactions(issue_time_trans, flat_sorted_transactions_list):
+    tmp_trans_list = []
+    for tmp_issue_time_trans in flat_sorted_transactions_list:
+        if tmp_issue_time_trans[0] < issue_time_trans[0]:
+            tmp_trans_list.append(tmp_issue_time_trans)
+    return tmp_trans_list
+
+
 def consensus_simulator(transactions_dict, bl_operation, threshold_op=THRESHOLD_OPERATION):
     waiting_blockchain_status_dict = defaultdict(dict)
     writed_blockchain_status_dict = defaultdict(list)
-    # // 构造等待缓存
-    for issue_time_trans, trans_list in transactions_dict.items():
-        for trans in trans_list:
-            tmp_write_dict = {}
-            trans_hash = hash_str(trans, "transaction")
-            tmp_write_dict["write_time"] = issue_time_trans
-            tmp_write_dict["front_list"] = []
-            tmp_write_dict["behind_list"] = []
-            waiting_blockchain_status_dict[trans_hash] = copy.deepcopy(tmp_write_dict)
     # // 对输入的trans按时间进行排序，主要是为了后面计算方便
     sorted_transactions_list = sorted(transactions_dict.items(), key=lambda x: x[0])
-
     flat_sorted_transactions_list = flat_transaction(sorted_transactions_list)
+    # // 构造等待缓存
+    for issue_time_trans in flat_sorted_transactions_list:
+        tmp_write_dict = {}
+        trans_hash = issue_time_trans[1]
+        tmp_write_dict["write_time"] = issue_time_trans[0]
+        tmp_write_dict["front_list"] = []
+        tmp_write_dict["behind_list"] = []
+        waiting_blockchain_status_dict[trans_hash] = copy.deepcopy(tmp_write_dict)
 
     # //开始迭代列表内的所有事务，此刻time_trans表示要发布的trans
     for issue_time_trans in flat_sorted_transactions_list:
         tmp_waiting_trans_list = []
-        # //从头往后找，只要时间比time_trans的要早，都要进行计算
-        for time_trans2 in flat_sorted_transactions_list:
-            if issue_time_trans[0] > time_trans2[0]:
-                # //条件1：判断issue_trans的front里面的trans的个数，如果超过预定义就不能再往里加了
+        time_trans2_list = ex_flat_sorted_transactions(issue_time_trans, flat_sorted_transactions_list)
+        if time_trans2_list:
+            for time_trans2 in time_trans2_list:
                 len_front_list = len(waiting_blockchain_status_dict[issue_time_trans[1]]["front_list"])
-                # //条件2：判断time_trans2的behind里面的trans所涉及的发起request的车辆的信誉，如果达到预定义，就不能再选了
-                # len_behind_list = len(waiting_blockchain_status_dict[time_trans2[1]]["behind_list"])
-                if len_front_list <= VERIFY_NUM:
-                    # //如果时间比time_trans的早，把这个trans放入time_trans的front_list里
-                    print("123")
-                    waiting_blockchain_status_dict[issue_time_trans[1]]["front_list"].append(time_trans2)
-                    waiting_blockchain_status_dict[time_trans2[1]]["behind_list"].append(issue_time_trans)
+                tmp_behind_list = waiting_blockchain_status_dict[time_trans2[1]]["behind_list"]
+                if len(tmp_behind_list) > 0:
+                    behind_count_score = 0
+                    for time_trans3 in tmp_behind_list:
+                        behind_count_score += time_trans3[2]['trust_score']
+                    # //判断这个trans的后向列表内的信誉值是不是超了，如果超了就放到writed里面，且不做操作
+                    if behind_count_score > THRESHOLD_OPERATION:
+                        waiting_blockchain_status_dict[time_trans2[1]]['behind_count_score'] = behind_count_score
+                        writed_blockchain_status_dict[time_trans2[1]] = copy.deepcopy(
+                            waiting_blockchain_status_dict[time_trans2[1]])
+                        continue
+                    else:
+                        waiting_blockchain_status_dict[time_trans2[1]]["behind_list"].append(issue_time_trans)
+                        if len_front_list < VERIFY_NUM:
+                            waiting_blockchain_status_dict[issue_time_trans[1]]['front_list'].append(time_trans2)
+                else:
+                    tmp_behind_list.append(issue_time_trans)
+                    if len_front_list < VERIFY_NUM:
+                        waiting_blockchain_status_dict[issue_time_trans[1]]['front_list'].append(time_trans2)
 
     return writed_blockchain_status_dict
 
@@ -126,6 +146,7 @@ def flat_transaction(sorted_transactions_list):
     tmp_sorted_list = []
     for trans_list in sorted_transactions_list:
         for trans in trans_list[1]:
+            trans["trust_score"] = random.randint(1, 100)
             tmp_sorted_list.append([trans_list[0], hash_str(trans, "transaction"), trans])
     return tmp_sorted_list
 
@@ -157,13 +178,13 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
     # //每辆车拥有的地址veh_address_dict，每个地址对应的车address_veh_dict。
     veh_address_dict, address_veh_dict, init_balance = veh_address_allocation(veh_init_ids, bl_address_ids)
     # //钱包金额初始化
-    bl_balance = bl_balance_init(bl_address_ids)
+    # bl_balance = bl_balance_init(bl_address_ids)
     # //钱包网络参与初始化（仿真）
     bl_operation = bl_operation_init(bl_address_ids)
     # //所有车辆节点的请求和响应缓存区初始化（仿真）
-    cache_request_veh_dict, cache_answer_veh_dict, cache_rating_veh_dict = cache_all_veh_init(veh_ids)
+    # cache_request_veh_dict, cache_answer_veh_dict, cache_rating_veh_dict = cache_all_veh_init(veh_ids)
     # //初始化全局请求字典，键是请求消息的hash值，值是消息本身
-    hash_request_msg = hash_request_msg_init()
+    # hash_request_msg = hash_request_msg_init()
 
     # //得到所有车辆与每一个事件之间的距离
     veh_trajectory_dict = veh_trajectory_fuc1(veh_location, speed_init_veh_dict, round_time)
@@ -174,25 +195,29 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
     # // 设置请求车辆
     # send_request_veh_id_list = random.sample(veh_ids, NUM_REQUEST_VEH)
     request_msg_list = request_generator(veh_ids, event_list, veh_address_dict, veh_trajectory_dict, round_time)
+    print("{}{}".format("request message: ", len(request_msg_list)))
     # //向仿真参数里写入请求消息
-    cache_request_status = status_request_cache(cache_request_veh_dict, request_msg_list, hash_request_msg)
+    # cache_request_status = status_request_cache(cache_request_veh_dict, request_msg_list, hash_request_msg)
     # //产生响应消息
     recv_msg_dict = answer_generator(request_msg_list, vail_veh, veh_address_dict)
+    print("answer_generator")
     # //以反馈地址将反馈信息进行整理，第二个返回值根据请求的时间要求筛选出可用的反馈消息
     clean_msg_v1_dict, clean_valid_msg_v1_dict = message_cleaning(recv_msg_dict)
+    print("message_cleaning")
     # //从筛选后的反馈消息中只随机挑出来一条
     res_valid_for_req_list = message_filter(clean_valid_msg_v1_dict)
+    print("message_filter")
     # //存储仿真结果
     res_rate_dict = defaultdict(float)
-
     # //初始化响应、评分字典
     hash_answer_msg = hash_answer_msg_init()
-    hash_rate_msg = hash_rate_msg_init()
+    # hash_rate_msg = hash_rate_msg_init()
 
     _false_ratio = 0.1
     # //根据false_ratio改变其中一些消息的内容，组成假消息,并向缓存写入响应消息
     res_disturb_for_req_list = message_disturb_func(res_valid_for_req_list, _false_ratio, hash_answer_msg, trickers)
-    # res_disturb_for_req_list = message_disturb(res_valid_for_req_list, _false_ratio, hash_answer_msg)
+    print("message_disturb_func")
+    print("{}{}".format("answer message: ", len(res_disturb_for_req_list)))
     # //每一秒车辆的位置
     veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
     # //每一个响应对应的相关车辆集
@@ -240,21 +265,21 @@ if __name__ == '__main__':
     bayer_func = bayes_infer_v2
     trick = 60
     average_dict = defaultdict(list)
-    for i in range(50):
+    for i in range(2):
         print("[round:{}] ".format(i))
         res_dict = consensus_v1(false_list, message_disturb_func, probability_func, bayer_func, trick, ROUNDS)
-        for ratios, num in res_dict.items():
-            average_dict[ratios].append(num)
-    out_dict = defaultdict(int)
-    for ratios1, num_list in average_dict.items():
-        out_dict[ratios1] = mean_for_list(num_list)
+    #     for ratios, num in res_dict.items():
+    #         average_dict[ratios].append(num)
+    # out_dict = defaultdict(int)
+    # for ratios1, num_list in average_dict.items():
+    #     out_dict[ratios1] = mean_for_list(num_list)
     # ================================================================
 
-    false_msg_ratio_json = json.dumps(out_dict)
-    fn1 = "{}{}_{}_{}.txt".format("output/", message_disturb_func.__name__, probability_func.__name__, PE)
-    a = open(fn1, "w", encoding='UTF-8')
-    a.write(false_msg_ratio_json)
-    a.close()
+    # false_msg_ratio_json = json.dumps(out_dict)
+    # fn1 = "{}{}_{}_{}.txt".format("output/", message_disturb_func.__name__, probability_func.__name__, PE)
+    # a = open(fn1, "w", encoding='UTF-8')
+    # a.write(false_msg_ratio_json)
+    # a.close()
 
     # res_offset_dict = collect_offset(false_list)
     # res_offset_dict_json = json.dumps(res_offset_dict)

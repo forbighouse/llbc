@@ -97,7 +97,7 @@ def message_cleaning(recv_msg_dict):
         tmp_valid_msg_collection_dict = defaultdict(list)
         for msg1 in msg_list:
             tmp_msg_collection_dict[msg1[0]].append(msg1)
-            tmp_msg_dict[recv_address] = copy.deepcopy(tmp_msg_collection_dict)
+            # tmp_msg_dict[recv_address] = copy.deepcopy(tmp_msg_collection_dict)
             # 针对请求时间，筛选可用的消息
             little_num = msg1[7] - msg1[4]
             # //可能按时间清洗后出现却req的问题
