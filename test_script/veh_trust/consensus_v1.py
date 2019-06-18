@@ -119,15 +119,6 @@ def consensus_simulator(transactions_dict, bl_operation, threshold_op=THRESHOLD_
                     waiting_blockchain_status_dict[issue_time_trans[1]]["front_list"].append(time_trans2)
                     waiting_blockchain_status_dict[time_trans2[1]]["behind_list"].append(issue_time_trans)
 
-
-        # for trans3 in trans_list1:
-        #     # 字典（可能其他结构也类似）在迭代的时候不能删除里面的元素
-        #     for trans_hash2, trans_record_detail_dict in waiting_blockchain_status_dict.items():
-        #         if trans_record_detail_dict["write_time"] < time_trans1:
-        #             trans_record_detail_dict["verify_list"].append([time_trans1, trans3])
-        #             sum_operations = consensus_simulator_verify_count(trans_record_detail_dict["verify_list"], bl_operation)
-        #             if sum_operations > threshold_op:
-        #                 writed_blockchain_status_dict[trans_hash2] = [time_trans1, waiting_blockchain_status_dict.pop(trans_hash2)]
     return writed_blockchain_status_dict
 
 

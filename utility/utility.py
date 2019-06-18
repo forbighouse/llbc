@@ -3,6 +3,7 @@ import sha3
 import json
 import numpy as np
 
+
 def distance_cal_x(loc1, loc2):
     assert isinstance(loc1, int)
     assert isinstance(loc2, int)
