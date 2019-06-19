@@ -200,13 +200,10 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
     # cache_request_status = status_request_cache(cache_request_veh_dict, request_msg_list, hash_request_msg)
     # //产生响应消息
     recv_msg_dict = answer_generator(request_msg_list, vail_veh, veh_address_dict)
-    print("answer_generator")
     # //以反馈地址将反馈信息进行整理，第二个返回值根据请求的时间要求筛选出可用的反馈消息
     clean_msg_v1_dict, clean_valid_msg_v1_dict = message_cleaning(recv_msg_dict)
-    print("message_cleaning")
     # //从筛选后的反馈消息中只随机挑出来一条
     res_valid_for_req_list = message_filter(clean_valid_msg_v1_dict)
-    print("message_filter")
     # //存储仿真结果
     res_rate_dict = defaultdict(float)
     # //初始化响应、评分字典
@@ -216,7 +213,6 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
     _false_ratio = 0.1
     # //根据false_ratio改变其中一些消息的内容，组成假消息,并向缓存写入响应消息
     res_disturb_for_req_list = message_disturb_func(res_valid_for_req_list, _false_ratio, hash_answer_msg, trickers)
-    print("message_disturb_func")
     print("{}{}".format("answer message: ", len(res_disturb_for_req_list)))
     # //每一秒车辆的位置
     veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
