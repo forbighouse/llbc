@@ -120,6 +120,7 @@ def consensus_simulator(transactions_dict, bl_operation, threshold_op=THRESHOLD_
             for time_trans2 in time_trans2_list:
                 len_front_list = len(waiting_blockchain_status_dict[issue_time_trans[1]]["front_list"])
                 tmp_behind_list = waiting_blockchain_status_dict[time_trans2[1]]["behind_list"]
+
                 if len(tmp_behind_list) > 0:
                     behind_count_score = 0
                     for time_trans3 in tmp_behind_list:
@@ -127,8 +128,8 @@ def consensus_simulator(transactions_dict, bl_operation, threshold_op=THRESHOLD_
                     # //判断这个trans的后向列表内的信誉值是不是超了，如果超了就放到writed里面，且不做操作
                     if behind_count_score > THRESHOLD_OPERATION:
                         waiting_blockchain_status_dict[time_trans2[1]]['behind_count_score'] = behind_count_score
-                        writed_blockchain_status_dict[time_trans2[1]] = copy.deepcopy(
-                            waiting_blockchain_status_dict[time_trans2[1]])
+                        writed_blockchain_status_dict[time_trans2[1]] = waiting_blockchain_status_dict[time_trans2[1]]
+                        tmp_waiting_trans_list.append(time_trans2)
                         continue
                     else:
                         waiting_blockchain_status_dict[time_trans2[1]]["behind_list"].append(issue_time_trans)
@@ -138,6 +139,22 @@ def consensus_simulator(transactions_dict, bl_operation, threshold_op=THRESHOLD_
                     tmp_behind_list.append(issue_time_trans)
                     if len_front_list < VERIFY_NUM:
                         waiting_blockchain_status_dict[issue_time_trans[1]]['front_list'].append(time_trans2)
+        if not time_trans2_list:
+            continue
+        elif len(tmp_waiting_trans_list) == len(time_trans2_list):
+            tag_time = 0
+            tmp_trans = 0
+            for trans5 in time_trans2_list:
+                if trans5[0] > tag_time:
+                    tag_time = trans5[0]
+                    tmp_trans = trans5
+            if tmp_trans == 0:
+                tmp_trans1 = random.choice(time_trans2_list)
+                waiting_blockchain_status_dict[tmp_trans1[1]]["behind_list"].append(issue_time_trans)
+                waiting_blockchain_status_dict[issue_time_trans[1]]['front_list'].append(tmp_trans1)
+            else:
+                waiting_blockchain_status_dict[tmp_trans[1]]["behind_list"].append(issue_time_trans)
+                waiting_blockchain_status_dict[issue_time_trans[1]]['front_list'].append(tmp_trans)
 
     return writed_blockchain_status_dict
 

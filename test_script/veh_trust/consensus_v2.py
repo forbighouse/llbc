@@ -20,10 +20,10 @@ def writed_consume_save(mean_time_consume):
 def writed_consume_read(fn4):
     handler = open(fn4, 'r', encoding='utf-8')
     _dict = json.load(handler)
-    b = defaultdict(dict)
-    for _keys in _dict.keys():
-        b[int(_keys)] = _dict[_keys]
-    return b
+    # b = defaultdict(dict)
+    # for _keys in _dict.keys():
+    #     b[int(_keys)] = _dict[_keys]
+    return _dict
 
 
 def consensus_v2():
@@ -35,8 +35,21 @@ def consensus_v2():
 
     # // 一个事务被最终写入区块链或者状态“不可变”的时间，或者叫以很大概率保持确定性的时间
     mean_time_consume = consensus_simulator(transactions_dict, bl_operation)
-    writed_consume_save(mean_time_consume)
+    # writed_consume_save(mean_time_consume)
 
 
 if __name__ == '__main__':
-    consensus_v2()
+    # consensus_v2()
+    mean_result_dict = writed_consume_read("dag_result/dag_0620_16-59.json")
+    time_interval = defaultdict(list)
+    for tran_hash, writed_tran in mean_result_dict.items():
+        if writed_tran["front_list"]:
+            tmp_time_interval_num = 0
+            for trans6 in writed_tran["behind_list"]:
+                if (trans6[0] - writed_tran["write_time"]) > tmp_time_interval_num:
+                    tmp_time_interval_num = trans6[0] - writed_tran["write_time"]
+            time_interval[writed_tran["write_time"]].append(tmp_time_interval_num)
+
+
+
+    pass
