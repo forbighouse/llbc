@@ -10,8 +10,9 @@ def request_generator(veh_ids, event_list, veh_address_dict, veh_trajectory_dict
     trans_num_list = transaction_emerge_generator(POISSON_MEAN, round_time)
     for index_id, msg_nums in enumerate(trans_num_list):
         if msg_nums > 0:
-            tmp_sending_veh_list = random.sample(veh_ids, msg_nums)
-            for tmp_sending_veh in tmp_sending_veh_list:
+            # tmp_sending_veh_list = random.sample(veh_ids, msg_nums)
+            for tmp_sending_veh1 in range(msg_nums):
+                tmp_sending_veh = random.choice(veh_ids)
                 event_ready_for_veh = random.choice(event_list)
                 activate_address = random.choice(veh_address_dict[tmp_sending_veh])
                 # temp_list包含了所有的【请求消息】
@@ -104,10 +105,10 @@ def consensus_simulator(transactions_dict, bl_operation, threshold_op=THRESHOLD_
     sorted_transactions_list = sorted(transactions_dict.items(), key=lambda x: x[0])
     flat_sorted_transactions_list = flat_transaction(sorted_transactions_list)
     # // 构造等待缓存
-    for issue_time_trans in flat_sorted_transactions_list:
+    for issue_time_trans_ in flat_sorted_transactions_list:
         tmp_write_dict = {}
-        trans_hash = issue_time_trans[1]
-        tmp_write_dict["write_time"] = issue_time_trans[0]
+        trans_hash = issue_time_trans_[1]
+        tmp_write_dict["write_time"] = issue_time_trans_[0]
         tmp_write_dict["front_list"] = []
         tmp_write_dict["behind_list"] = []
         waiting_blockchain_status_dict[trans_hash] = copy.deepcopy(tmp_write_dict)
@@ -132,9 +133,9 @@ def consensus_simulator(transactions_dict, bl_operation, threshold_op=THRESHOLD_
                         tmp_waiting_trans_list.append(time_trans2)
                         continue
                     else:
-                        waiting_blockchain_status_dict[time_trans2[1]]["behind_list"].append(issue_time_trans)
                         if len_front_list < VERIFY_NUM:
                             waiting_blockchain_status_dict[issue_time_trans[1]]['front_list'].append(time_trans2)
+                            waiting_blockchain_status_dict[time_trans2[1]]["behind_list"].append(issue_time_trans)
                 else:
                     tmp_behind_list.append(issue_time_trans)
                     if len_front_list < VERIFY_NUM:
@@ -232,9 +233,9 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
     res_disturb_for_req_list = message_disturb_func(res_valid_for_req_list, _false_ratio, hash_answer_msg, trickers)
     print("{}{}".format("answer message: ", len(res_disturb_for_req_list)))
     # //每一秒车辆的位置
-    veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
+    # veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
     # //每一个响应对应的相关车辆集
-    veh_reference_set_all_dict = veh_reference_collect(res_disturb_for_req_list, veh_location_all_dict)
+    # veh_reference_set_all_dict = veh_reference_collect(res_disturb_for_req_list, veh_location_all_dict)
     # //将相关集维持在[0,10]范围内，键是请求车辆，值是得到的响应列表
     filter_answer_set_dict = answer_filter(res_disturb_for_req_list)
     # //给相关集内的车辆分配响应，键是请求车辆，值是对响应的评分
@@ -244,13 +245,13 @@ def consensus_v1(false_list, message_disturb_func, probability_count_fuc, bayes_
     transaction_save(transactions_dict)
     # transaction_save(transactions_dict)
     # // 一个事务被最终写入区块链或者状态“不可变”的时间，或者叫以很大概率保持确定性的时间
-    mean_time_consume = consensus_simulator(transactions_dict, bl_operation)
+    # mean_time_consume = consensus_simulator(transactions_dict, bl_operation)
 
     return res_rate_dict
 
 
 def transaction_save(transactions_dict):
-    fn2 = "{}{}_{}.json".format("transactions/", "Transaction", time.strftime("%m%d_%H-%M", time.localtime()))
+    fn2 = "{}{}_{}_{}.json".format("transactions/", "Transaction", POISSON_MEAN, time.strftime("%m%d_%H-%M", time.localtime()))
     a1 = open(fn2, "w", encoding='utf-8')
     json.dump(transactions_dict, a1, ensure_ascii=False)
     a1.close()
@@ -278,9 +279,10 @@ if __name__ == '__main__':
     bayer_func = bayes_infer_v2
     trick = 60
     average_dict = defaultdict(list)
-    for i in range(2):
-        print("[round:{}] ".format(i))
-        res_dict = consensus_v1(false_list, message_disturb_func, probability_func, bayer_func, trick, ROUNDS)
+    # for i in range(2):
+    #     print("[round:{}] ".format(i))
+    #     res_dict = consensus_v1(false_list, message_disturb_func, probability_func, bayer_func, trick, ROUNDS)
+    res_dict = consensus_v1(false_list, message_disturb_func, probability_func, bayer_func, trick, ROUNDS)
     #     for ratios, num in res_dict.items():
     #         average_dict[ratios].append(num)
     # out_dict = defaultdict(int)
