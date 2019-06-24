@@ -92,8 +92,8 @@ def consensus_v2():
     time_dict = defaultdict(list)
     for file_name in file_list:
         path_file_name = "transactions/{}".format(file_name)
-        transactions_dict = transaction_read(path_file_name)
-        # transactions_dict = transaction_read("transactions/Transaction_5_0623_19-18.json")
+        # transactions_dict = transaction_read(path_file_name)
+        transactions_dict = transaction_read("transactions/Transaction_100_0624_15-24.json")
         split_list = file_name.split("_")
         # // 一个事务被最终写入区块链或者状态“不可变”的时间，或者叫以很大概率保持确定性的时间
         mean_time_consume = consensus_simulator_v2(transactions_dict, bl_operation)
@@ -112,8 +112,39 @@ def consensus_v2():
     pass
 
 
+def consensus_test_v2():
+    # //地址钱包初始化
+    bl_address_ids = bl_address_read()
+    # //钱包网络参与初始化（仿真）
+    bl_operation = bl_operation_init(bl_address_ids)
+
+    time_dict = defaultdict(list)
+
+    file_name = "Transaction_100_0624_10-20.json"
+    path_file_name = "transactions/{}".format(file_name)
+
+    transactions_dict = transaction_read(path_file_name)
+    split_list = file_name.split("_")
+    # // 一个事务被最终写入区块链或者状态“不可变”的时间，或者叫以很大概率保持确定性的时间
+    mean_time_consume = consensus_simulator_v2(transactions_dict, bl_operation)
+    # writed_consume_save(mean_time_consume)
+
+    time_interval = defaultdict(list)
+    for tran_hash, writed_tran in mean_time_consume.items():
+        if writed_tran["front_list"]:
+            tmp_time_interval_num = 0
+            for trans6 in writed_tran["behind_list"]:
+                if (trans6[0] - writed_tran["write_time"]) > tmp_time_interval_num:
+                    tmp_time_interval_num = trans6[0] - writed_tran["write_time"]
+            time_interval[writed_tran["write_time"]].append(tmp_time_interval_num)
+    time_dict[int(split_list[1])] = copy.deepcopy(time_interval)
+    mean_dict = count_mean_time(time_dict)
+    pass
+
+
 if __name__ == '__main__':
-    consensus_v2()
+    # consensus_v2()
+    consensus_test_v2()
     # mean_result_dict = writed_consume_read("dag_result/dag_0621_16-14.json")
     # time_interval = defaultdict(list)
     # for tran_hash, writed_tran in mean_result_dict.items():

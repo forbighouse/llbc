@@ -7,7 +7,7 @@ from collections import defaultdict
 
 # ================== base_veh_location ===================
 # 仿真车辆的数量
-VEH_NUM = 50
+VEH_NUM = 100
 # veh位置的文件名称
 VEH_LOCATION_FILE = 'init_file/veh_list.txt'
 # accident的文件名称
@@ -21,7 +21,7 @@ BLOCKCHAIN_ADDRESS_TOTAL_NUM = round((1+2)*VEH_NUM)
 # 事件的类型，例如车祸、红绿灯、限行、拥堵等
 ACCIDENT_TYPE = 0
 # 仿真的事件数量
-ACCIDENT_NUM = 50
+ACCIDENT_NUM = 10
 # 道路长度，目前只有一条直路
 ROAD_LEN = 5000
 
@@ -35,7 +35,7 @@ THRESHOLD_COMMUNICATION = 300
 # RSU的间距
 RSU_DISTANCE = 250
 # 仿真车辆的数量
-VEH_NUM = 50
+VEH_NUM = 100
 # 仿真时间
 time_len = 200000
 # 车辆感知范围，设定车辆在多近的距离才可以汇报事件

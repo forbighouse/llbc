@@ -6,12 +6,13 @@ from test_script.veh_trust.config import *
 
 
 def veh_test_location(veh_num):
-    distance_veh = random.sample(range(5, 100), veh_num)
-    start_point = random.sample(range(5, 100), 1)
+    # distance_veh = random.sample(range(5, 100), veh_num)
+    # start_point = random.sample(range(5, 100), 1)
     veh_locations = []
     d_location = 0
-    for i in distance_veh:
-        d_location += start_point[0] + i
+    for i in range(veh_num):
+        dis_ = random.choice(range(5, 100))
+        d_location += dis_
         veh_locations.append(d_location)
     veh_id_list = [str(uuid.uuid3(uuid.NAMESPACE_DNS, str(i))) for i in range(veh_num)]
     with open(VEH_LOCATION_FILE, 'w')as w:
