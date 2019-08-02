@@ -75,7 +75,7 @@ def consensus_simulator_v2(transactions_dict, bl_operation, threshold_op=THRESHO
         for trans2 in trans_chain["behind_list"]:
             sum_behind_trust += trans2[2]["trust_score"]
             tmp_writed_dict["behind_list"].append(trans2)
-            if sum_behind_trust > THRESHOLD_OPERATION:
+            if sum_behind_trust > threshold_op:
                 tmp_writed_dict['behind_count_score'] = sum_behind_trust
                 writed_blockchain_status_dict[trans_hash1] = copy.deepcopy(tmp_writed_dict)
                 break
@@ -92,11 +92,12 @@ def consensus_v2():
     time_dict = defaultdict(list)
     for file_name in file_list:
         path_file_name = "transactions/{}".format(file_name)
-        # transactions_dict = transaction_read(path_file_name)
-        transactions_dict = transaction_read("transactions/Transaction_100_0624_15-24.json")
+        transactions_dict = transaction_read(path_file_name)
+        # transactions_dict = transaction_read("transactions/Transaction_100_0624_15-24.json")
         split_list = file_name.split("_")
         # // 一个事务被最终写入区块链或者状态“不可变”的时间，或者叫以很大概率保持确定性的时间
-        mean_time_consume = consensus_simulator_v2(transactions_dict, bl_operation)
+        # mean_time_consume = consensus_simulator_v2(transactions_dict, bl_operation)
+        mean_time_consume = consensus_simulator(transactions_dict, bl_operation)
         # writed_consume_save(mean_time_consume)
 
         time_interval = defaultdict(list)
@@ -143,8 +144,8 @@ def consensus_test_v2():
 
 
 if __name__ == '__main__':
-    # consensus_v2()
-    consensus_test_v2()
+    consensus_v2()
+    # consensus_test_v2()
     # mean_result_dict = writed_consume_read("dag_result/dag_0621_16-14.json")
     # time_interval = defaultdict(list)
     # for tran_hash, writed_tran in mean_result_dict.items():
@@ -154,7 +155,5 @@ if __name__ == '__main__':
     #             if (trans6[0] - writed_tran["write_time"]) > tmp_time_interval_num:
     #                 tmp_time_interval_num = trans6[0] - writed_tran["write_time"]
     #         time_interval[writed_tran["write_time"]].append(tmp_time_interval_num)
-
-
 
     pass

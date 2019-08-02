@@ -76,7 +76,7 @@ ROUNDS = 60
 
 
 # =================== consensus_v1 ================
-THRESHOLD_OPERATION = 200
+THRESHOLD_OPERATION = 250
 VERIFY_NUM = 2
 POISSON_MEAN = 100
 

@@ -130,7 +130,30 @@ def optimized_first_pic_func():
     plt.show()
 
 
+def final_pic_func():
+    x_TPS = [5, 10, 25, 50, 100]
+    y_random = [20.4, 15.6, 9.05, 6.25, 5.69]
+    y_250 = [15.5, 9.32, 5.7, 3.86, 3.5]
+    y_200 = [10.45, 7.99, 3.87, 2.88, 2.49]
+    y_150 = [6.7, 4.5, 2.3, 1.6, 1.4]
+
+    plt.plot(x_TPS, y_random, color='k', linestyle='-', marker='s', label='random selection')
+    plt.plot(x_TPS, y_250, color='r', linestyle='-', marker='o', label='Θ=250')
+    plt.plot(x_TPS, y_200, color='b', linestyle='-', marker='v', label='Θ=200')
+    plt.plot(x_TPS, y_150, color='g', linestyle='-', marker='^', label='Θ=150')
+
+    plt.legend(loc='upper right', prop={'family': 'Times New Roman', 'size': 12})
+    # plt.xlim([0, 100])
+    # plt.ylim([-1, 1])
+    plt.xlabel("Transactions per second (TPS)", fontdict={'family': 'Times New Roman', 'size': 12})
+    plt.ylabel("Average time of transaction confirm (s)", fontdict={'family': 'Times New Roman', 'size': 12})
+    plt.grid(linestyle='-.')
+    plt.savefig('output/time-TPS.pdf')
+    plt.show()
+
+
 if __name__ == "__main__":
     # first_pic_func()
     # second_pic_func()
-    optimized_first_pic_func()
+    # optimized_first_pic_func()
+    final_pic_func()
