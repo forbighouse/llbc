@@ -235,7 +235,7 @@ def traditional_v3(false_list, round_time=ROUNDS):
         hash_answer_msg = hash_answer_msg_init()
         hash_rate_msg = hash_rate_msg_init()
         # //根据false_ratio改变其中一些消息的内容，组成假消息,并向缓存写入响应消息
-        res_disturb_for_req_list = message_disturb1(res_valid_for_req_list, _false_ratio, hash_answer_msg)
+        res_disturb_for_req_list = message_disturb_order(res_valid_for_req_list, _false_ratio, hash_answer_msg)
         # //每一秒车辆的位置
         veh_location_all_dict = veh_location_every_round(veh_location, speed_init_veh_dict, round_time)
         # //每一个响应对应的相关车辆集

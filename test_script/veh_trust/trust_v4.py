@@ -221,8 +221,8 @@ if __name__ == '__main__':
     # ==================================================================
     # out_dict = traditional_v3(false_list, ROUNDS)
     # ==================================================================
-    message_disturb_func = message_disturb
-    probability_func = probability_count_fuc2
+    message_disturb_func = message_disturb_order
+    probability_func = probability_count_fuc3
     bayer_func = bayes_infer_v2
     trick = 60
     average_dict = defaultdict(list)

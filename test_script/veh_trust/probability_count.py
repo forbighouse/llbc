@@ -36,8 +36,8 @@ def probability_count_fuc3(msg, bl_op):
         probability_true_resp_dict[items[5]].append(r2)
 
         # 历史消费信誉，2天或2周时间间隔，例如 近2天/总4天，算出总的活跃度
-        tmp_weight_recent_dict[items[5]].append(bl_op[items[0]][0][1])
-        tmp_weight_past_dict[items[5]].append(bl_op[items[0]][0][0])
+        # tmp_weight_recent_dict[items[5]].append(bl_op[items[0]][0][1])
+        # tmp_weight_past_dict[items[5]].append(bl_op[items[0]][0][0])
 
     return probability_true_resp_dict
 

@@ -72,8 +72,8 @@ def second_pic_func():
 
 def optimized_first_pic_func():
     b = open("output/message_disturb_probability_count_fuc3_0.5.txt", "r", encoding='UTF-8')  # 0.5
-    b2 = open("output/message_disturb_probability_count_fuc3_0.1.txt", "r", encoding='UTF-8')  # 0.1
-    b3 = open("output/message_disturb_probability_count_fuc2_0.1.txt", "r", encoding='UTF-8')  # 0.1 new
+    b2 = open("output/message_disturb_order_probability_count_fuc3_0.5.txt", "r", encoding='UTF-8')  # 0.1
+    b3 = open("output/message_disturb_order_probability_count_fuc2_0.5.txt", "r", encoding='UTF-8')  # 0.1 new
     b4 = open("output/message_disturb_probability_count_fuc2_0.5.txt", "r", encoding='UTF-8')  # 0.5 new
 
     out = b.read()
@@ -115,16 +115,17 @@ def optimized_first_pic_func():
         x4.append(round(float(key), 2) * 100)
         y4.append(values)
 
-    plt.plot(x2, y2, color='k', linestyle='-', marker='s', label='PE = 0.1')
-    plt.plot(x, y, color='r', linestyle='-', marker='o', label='PE = 0.5')
-    plt.plot(x3, y3, color='g', linestyle='-', marker='p', label='PE = 0.1 new')
-    plt.plot(x4, y4, color='b', linestyle='-', marker='h', label='PE = 0.5 new')
+
+    plt.plot(x2, y2, color='k', linestyle='-', marker='s', label='Existing scheme')
+    plt.plot(x3, y3, color='g', linestyle='-', marker='p', label='Proposed scheme')
+    plt.plot(x, y, color='r', linestyle='-', marker='o', label='Existing scheme with bad faith ')
+    plt.plot(x4, y4, color='b', linestyle='-', marker='h', label='Proposed scheme with bad faith')
 
     plt.legend(loc='upper left', prop={'family': 'Times New Roman', 'size': 12})
     plt.xlim([0, 100])
     plt.ylim([0, 1])
     plt.xlabel("Percentage of false messages", fontdict={'family': 'Times New Roman', 'size': 12})
-    plt.ylabel("Ratio of unfair ratings", fontdict={'family': 'Times New Roman', 'size': 12})
+    plt.ylabel("Ratio of unfair decision", fontdict={'family': 'Times New Roman', 'size': 12})
     plt.grid(linestyle='-.')
     plt.savefig('output/5.pdf')
     plt.show()
@@ -155,5 +156,5 @@ def final_pic_func():
 if __name__ == "__main__":
     # first_pic_func()
     # second_pic_func()
-    # optimized_first_pic_func()
-    final_pic_func()
+    optimized_first_pic_func()
+    # final_pic_func()
