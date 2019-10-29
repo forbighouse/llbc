@@ -76,20 +76,10 @@ def optimized_first_pic_func():
     b3 = open("output/message_disturb_order_probability_count_fuc2_0.5.txt", "r", encoding='UTF-8')  # 0.1 new
     b4 = open("output/message_disturb_probability_count_fuc2_0.5.txt", "r", encoding='UTF-8')  # 0.5 new
 
-    out = b.read()
-    out2 = b2.read()
-    out3 = b3.read()
-    out4 = b4.read()
-
-    out = json.loads(out)
-    out2 = json.loads(out2)
-    out3 = json.loads(out3)
-    out4 = json.loads(out4)
-
-    c_dict = dict(out)
-    c2_dict = dict(out2)
-    c3_dict = dict(out3)
-    c4_dict = dict(out4)
+    c_dict = dict(json.loads(b.read()))
+    c2_dict = dict(json.loads(b2.read()))
+    c3_dict = dict(json.loads(b3.read()))
+    c4_dict = dict(json.loads(b4.read()))
 
     x = []
     y = []
@@ -115,19 +105,21 @@ def optimized_first_pic_func():
         x4.append(round(float(key), 2) * 100)
         y4.append(values)
 
+    plt.plot(x3, y3, color='g', linestyle='-', marker='p', label='Existing scheme')
+    plt.plot(x2, y2, color='k', linestyle='-', marker='s', label='Proposed scheme')
 
-    plt.plot(x2, y2, color='k', linestyle='-', marker='s', label='Existing scheme')
-    plt.plot(x3, y3, color='g', linestyle='-', marker='p', label='Proposed scheme')
-    plt.plot(x, y, color='r', linestyle='-', marker='o', label='Existing scheme with bad faith ')
-    plt.plot(x4, y4, color='b', linestyle='-', marker='h', label='Proposed scheme with bad faith')
+    plt.plot(x, y, color='r', linestyle='-', marker='o', label='Existing scheme with random false message')
+    plt.plot(x4, y4, color='b', linestyle='-', marker='h', label='Proposed scheme with random false message')
 
-    plt.legend(loc='upper left', prop={'family': 'Times New Roman', 'size': 12})
+    plt.legend(loc='upper left', prop={'family': 'Times New Roman', 'size': 14})
     plt.xlim([0, 100])
     plt.ylim([0, 1])
-    plt.xlabel("Percentage of false messages", fontdict={'family': 'Times New Roman', 'size': 12})
-    plt.ylabel("Ratio of unfair decision", fontdict={'family': 'Times New Roman', 'size': 12})
+    plt.xlabel("Percentage of false messages", fontdict={'family': 'Times New Roman', 'size': 14})
+    plt.ylabel("Ratio of unfair decision", fontdict={'family': 'Times New Roman', 'size': 14})
     plt.grid(linestyle='-.')
-    plt.savefig('output/5.pdf')
+    fig = plt.gcf()
+    fig.set_size_inches(8.5, 6.5)
+    fig.savefig('output/5.pdf', dpi=100)
     plt.show()
 
 
