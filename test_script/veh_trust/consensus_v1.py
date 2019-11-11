@@ -91,10 +91,13 @@ def transaction_time(hash_answer_msg, rating_for_sending_list):
 
 
 def ex_flat_sorted_transactions(issue_time_trans, flat_sorted_transactions_list):
+    # 必须是排好序的transaction列表
     tmp_trans_list = []
     for tmp_issue_time_trans in flat_sorted_transactions_list:
         if tmp_issue_time_trans[0] < issue_time_trans[0]:
             tmp_trans_list.append(tmp_issue_time_trans)
+        else:
+            break
     return tmp_trans_list
 
 
