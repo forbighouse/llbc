@@ -1,0 +1,42 @@
+import uuid
+import random
+import json
+from collections import defaultdict
+
+json_path = 'pickup_data_statistics.json'
+
+
+# 给请求随机赋予一些响应，初始化这些响应包含的距离和时间
+
+
+def a(req, vehicle_set):
+    vehicle_num = random.randint(3, 5)
+    res = random.sample(list(vehicle_set.items()), vehicle_num)
+
+
+
+def main():
+    a = defaultdict(dict)
+    for e in range(10):
+        a[initialize_id()]['reputation'] = (initialize_reputation())
+    print(a)
+
+
+# 给车随机赋一个信誉值
+def initialize_reputation():
+    return round(random.random(), 2)
+# 给车随机赋一个id
+
+def initialize_id():
+    return str(uuid.uuid1())
+
+
+def read_csv():
+    with open(json_path, 'r') as jsonfile:
+        json_string = json.load(jsonfile)
+        a = json_string['0']
+
+
+
+if __name__ == "__main__":
+    read_csv()
