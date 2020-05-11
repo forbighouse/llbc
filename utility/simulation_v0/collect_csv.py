@@ -2,7 +2,7 @@ import pandas as pd
 import json
 from collections import defaultdict
 
-excel_path = '2019-01-07.xlsx'
+excel_path = '2019-01-04_20.xlsx'
 excel_path_of_full_file = 'yellow_tripdata_2019-01.csv'
 
 
@@ -27,7 +27,7 @@ def pickup_location():
 
 
     json_str = json.dumps(statistics_result, indent=4)
-    with open('picklocation_data_statistics07.json', 'w') as json_file:
+    with open('picklocation_data_statistics04_20.json', 'w') as json_file:
         json_file.write(json_str)
 
 
@@ -47,7 +47,7 @@ def trip_distance():
         # statistics_result[int(hour)]['distance'] += trip_dis
 
     json_str = json.dumps(statistics_result, indent=4)
-    with open('distance_data_statistics07.json', 'w') as json_file:
+    with open('distance_data_statistics04_20.json', 'w') as json_file:
         json_file.write(json_str)
 
 
@@ -63,7 +63,7 @@ def extract_date_based():
 
 
 if __name__ == "__main__":
-    trip_distance()
-    # pickup_location()
+    # trip_distance()
+    pickup_location()
     # extract_date_based()
 

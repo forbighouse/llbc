@@ -209,19 +209,6 @@ def sort_key_dict_scle(input_time):
     return x17, y17
 
 
-def sort_value_dict(input_time, input_top):
-    z17_value = sorted(input_time.items(), key = lambda x: x[1], reverse=True)
-    x17_value_sort_list = []
-    y17_value_sort_list = []
-    account_17 = 0
-    for i in z17_value:
-        x17_value_sort_list.append(i[0])
-        y17_value_sort_list.append(i[1])
-        account_17 += 1
-        if account_17 == input_top:
-            break
-    return x17_value_sort_list, y17_value_sort_list
-
 
 def vehilce_ditribution_pic():
 
