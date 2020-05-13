@@ -137,7 +137,7 @@ def optimized_first_pic_func():
 
 
     # fig.tight_layout()
-    fig.savefig('output/(4)ratio.pdf', dpi=300)
+    # fig.savefig('output/(4)ratio.pdf', dpi=300)
     plt.show()
 
 
@@ -181,5 +181,5 @@ def final_pic_func():
 if __name__ == "__main__":
     # first_pic_func()
     # second_pic_func()
-    # optimized_first_pic_func()
-    final_pic_func()
+    optimized_first_pic_func()
+    # final_pic_func()
