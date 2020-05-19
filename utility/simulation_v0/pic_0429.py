@@ -134,9 +134,9 @@ def vehicle_number_pic_func():
     # ax[2].set_title("19-01-07")
 
     y1_newsticks = [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8]
-    ax[0].set_xlabel('Hours', fontsize=14)
-    ax[1].set_xlabel('Hours', fontsize=14)
-    ax[2].set_xlabel('Hours', fontsize=14)
+    ax[0].set_xlabel('Hours (Holidays)', fontsize=14)
+    ax[1].set_xlabel('Hours (Weekends)', fontsize=14)
+    ax[2].set_xlabel('Hours (Weekdays)', fontsize=14)
     ax[0].tick_params(axis='x', rotation=0, labelsize=14)
     ax[1].tick_params(axis='x', rotation=0, labelsize=14)
     ax[2].tick_params(axis='x', rotation=0, labelsize=14)
@@ -176,7 +176,7 @@ def vehicle_number_pic_func():
     # plt.ylim([0, 1])
     # plt.xlabel("Percentage of false messages", fontdict={'family': 'Times New Roman', 'size': 12})
     # plt.ylabel("Ratio of unfair ratings", fontdict={'family': 'Times New Roman', 'size': 12})
-    # fig.savefig('(1)vehicle_number.pdf', dpi=300)
+    fig.savefig('(1)vehicle_number.pdf', dpi=300)
     plt.show()
 
 
@@ -205,9 +205,15 @@ def sort_key_dict_scle(input_time):
     y17 = []
     for i in z17:
         x17.append(i[0])
-        y17.append(round(i[1], 1))
+        y17.append(round(((i[1]*3)/60), 1))
     return x17, y17
 
+
+def count_txn_number(input_lst):
+    txn_num = 0
+    for i in input_lst:
+        txn_num += i
+    return txn_num
 
 
 def vehilce_ditribution_pic():
@@ -231,12 +237,12 @@ def vehilce_ditribution_pic():
     x2_d_18, y2_d_18 = sort_key_dict_scle(d02_dict['18'])
 
     # 车的数量，求分布
-    x7_08, y7_08 = sort_key_dict_scle(c07_dict['8'])
-    x4_08, y4_08 = sort_key_dict_scle(c04_dict['8'])
-    x2_08, y2_08 = sort_key_dict_scle(c02_dict['8'])
-    x7_18, y7_18 = sort_key_dict_scle(c07_dict['18'])
-    x4_18, y4_18 = sort_key_dict_scle(c04_dict['18'])
-    x2_18, y2_18 = sort_key_dict_scle(c02_dict['18'])
+    x7_08, y7_08 = sort_key_dict(c07_dict['8'])
+    x4_08, y4_08 = sort_key_dict(c04_dict['8'])
+    x2_08, y2_08 = sort_key_dict(c02_dict['8'])
+    x7_18, y7_18 = sort_key_dict(c07_dict['18'])
+    x4_18, y4_18 = sort_key_dict(c04_dict['18'])
+    x2_18, y2_18 = sort_key_dict(c02_dict['18'])
 
     x7_08 = np.array(x7_08)
     x4_08 = np.array(x4_08)
@@ -250,8 +256,17 @@ def vehilce_ditribution_pic():
     a18_ = np.intersect1d(x4_18, x2_18)
     a18 = np.intersect1d(x7_18, a18_)
 
+    #
     x08 = a08.tolist()
     x18 = a18.tolist()
+
+    print("7_08:", count_txn_number(y7_d_08))
+    print("4_08:", count_txn_number(y4_d_08))
+    print("2_08:", count_txn_number(y2_d_08))
+    print("7_18:", count_txn_number(y7_d_18))
+    print("4_18:", count_txn_number(y4_d_18))
+    print("2_18:", count_txn_number(y2_d_18))
+
 
     # x17_value_sort_list, y17_value_sort_list = sort_value_dict(clock17, len(clock17.keys()))
     # x7_value_sort_list, y7_value_sort_list = sort_value_dict(clock7, 15)
@@ -264,9 +279,9 @@ def vehilce_ditribution_pic():
     fig, ax = plt.subplots(2, 1, figsize=(16, 9), dpi=300)
     ax0_2 = ax[0].twinx()
     # 未累积面积图
-    ax[0].fill_between(x7_08, y1=y7_08, y2=0, label="Midweek 08 o'clock", alpha=0.5, color='blue')
-    ax[0].fill_between(x4_08, y1=y4_08, y2=0, label="Weekend 08 o'clock", alpha=0.5, color='green')
-    ax[0].fill_between(x2_08, y1=y2_08, y2=0, label="Holiday 08 o'clock", alpha=0.5, color='red')
+    ax[0].fill_between(x7_08, y1=y7_08, y2=0, label="Midweek 08 o'clock", alpha=0.3, color='blue')
+    ax[0].fill_between(x4_08, y1=y4_08, y2=0, label="Weekend 08 o'clock", alpha=0.3, color='green')
+    ax[0].fill_between(x2_08, y1=y2_08, y2=0, label="Holiday 08 o'clock", alpha=0.3, color='red')
     # transaction图
     ax0_2.plot(x7_d_08, y7_d_08, label="Midweek 08 o'clock", linestyle="dashed", color='blue')
     ax0_2.plot(x4_d_08, y4_d_08, label="Weekend 08 o'clock", linestyle="dashed", color='green')
@@ -280,13 +295,13 @@ def vehilce_ditribution_pic():
     ax[0].legend(loc='upper left', prop={'size': 16}, framealpha=0.5)
     ax0_2.legend(loc='upper right', prop={'size': 16}, framealpha=0.5)
     ax[0].set_ylim(0, 1000)
-    ax0_2.set_ylabel("Number of transactions", fontsize=14)
+    ax0_2.set_ylabel("Number of transaction", fontsize=14)
 
 
     ax1_2 = ax[1].twinx()
-    ax[1].fill_between(x7_18, y1=y7_18, y2=0, label="Midweek 18 o'clock", alpha=0.5, color='blue')
-    ax[1].fill_between(x4_18, y1=y4_18, y2=0, label="Weekend 18 o'clock", alpha=0.5, color='green')
-    ax[1].fill_between(x2_18, y1=y2_18, y2=0, label="Holiday 18 o'clock", alpha=0.5, color='red')
+    ax[1].fill_between(x7_18, y1=y7_18, y2=0, label="Midweek 18 o'clock", alpha=0.3, color='blue')
+    ax[1].fill_between(x4_18, y1=y4_18, y2=0, label="Weekend 18 o'clock", alpha=0.3, color='green')
+    ax[1].fill_between(x2_18, y1=y2_18, y2=0, label="Holiday 18 o'clock", alpha=0.3, color='red')
     # transaction图
     ax1_2.plot(x7_d_18, y7_d_18, label="Midweek 18 o'clock", linestyle="dashed", color='blue')
     ax1_2.plot(x4_d_18, y4_d_18, label="Weekend 18 o'clock", linestyle="dashed", color='green')
@@ -301,10 +316,11 @@ def vehilce_ditribution_pic():
     ax1_2.set_ylabel("Number of transactions", fontsize=14)
     ax[1].set_ylim(0, 1000)
     ax[1].set_xticks(x18[::3])
+
     fig.tight_layout()
 
     # plt.grid(linestyle='-.')
-    # plt.savefig('(2)transaction distribution.pdf')
+    plt.savefig('(2)transaction distribution.pdf')
     plt.show()
 
 

@@ -2,6 +2,7 @@ import json
 import matplotlib.pyplot as plt
 from collections import defaultdict
 import numpy as np
+from matplotlib.ticker import MultipleLocator
 
 
 def first_pic_func():
@@ -142,7 +143,7 @@ def optimized_first_pic_func():
 
 
 def final_pic_func():
-    x_TPS = [5, 10, 250, 5000, 10000]
+    x_TPS = [1, 5, 10, 250, 5000, 10000]
     y_random = [20.4, 15.6, 9.05, 6.85, 8.69]
     y_75 = [15.5, 9.32, 5.86, 5.36, 4.8]
     y_50 = [10.45, 7.99, 5.17, 4.18, 3.79]
@@ -165,6 +166,9 @@ def final_pic_func():
     ax.plot(x_TPS, y_first_proposed, color='0.5', linestyle='--', linewidth=newlinewidth, marker='*', markersize=markersize,
             label='Frist_confirming')
 
+    xminorLocator = MultipleLocator(10)
+    ax.xaxis.set_minor_locator(xminorLocator)
+
     # ax.set_xlim(0, 10000)
     plt.legend(loc='upper right', prop={'size': 12})
     # plt.xlim([0, 100])
@@ -173,7 +177,7 @@ def final_pic_func():
     plt.ylabel("Confirming time (sec)", fontdict={'size': 12})
     plt.grid(linestyle='-.')
     plt.xscale('log')
-    fig.savefig('output/(3)TPS.pdf', dpi=300)
+    # fig.savefig('output/(3)TPS.pdf', dpi=300)
 
     plt.show()
 
@@ -181,5 +185,5 @@ def final_pic_func():
 if __name__ == "__main__":
     # first_pic_func()
     # second_pic_func()
-    optimized_first_pic_func()
-    # final_pic_func()
+    # optimized_first_pic_func()
+    final_pic_func()
