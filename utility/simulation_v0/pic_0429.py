@@ -2,6 +2,8 @@ import json
 import matplotlib.pyplot as plt
 from collections import defaultdict
 import numpy as np
+from matplotlib.ticker import MultipleLocator, FuncFormatter
+import math
 
 
 import seaborn as sns
@@ -113,7 +115,7 @@ def vehicle_number_pic_func():
     print("02 transaction = ", int_02_sum_miles)
 
     newlinewidth = 1.5
-    fig, ax = plt.subplots(1, 3, figsize=(24, 9), sharey='row', sharex='col', dpi=300)
+    fig, ax = plt.subplots(1, 3, figsize=(24, 8), sharey='row', sharex='col', dpi=300)
     ax[0].bar(hours_02_list, vehicle_numbers_02_list, label="01-02 ", color='tab:blue', alpha=.3)
     ax[1].bar(hours_04_list, vehicle_numbers_04_list, label="01-04 ", color='tab:blue', alpha=.3)
     ax[2].bar(hours_07_list, vehicle_numbers_07_list, label="01-07 ", color='tab:blue', alpha=.3)
@@ -134,13 +136,14 @@ def vehicle_number_pic_func():
     # ax[2].set_title("19-01-07")
 
     y1_newsticks = [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8]
-    ax[0].set_xlabel('Hours (Holidays)', fontsize=14)
-    ax[1].set_xlabel('Hours (Weekends)', fontsize=14)
-    ax[2].set_xlabel('Hours (Weekdays)', fontsize=14)
-    ax[0].tick_params(axis='x', rotation=0, labelsize=14)
-    ax[1].tick_params(axis='x', rotation=0, labelsize=14)
-    ax[2].tick_params(axis='x', rotation=0, labelsize=14)
-    ax[0].set_ylabel('Number of vehicles  (${10^4}$)', color='tab:blue', fontsize=14)
+    ax[0].set_xlabel('Hours (Holidays)', fontsize=18)
+    ax[1].set_xlabel('Hours (Weekends)', fontsize=18)
+    ax[2].set_xlabel('Hours (Weekdays)', fontsize=18)
+    ax[0].tick_params(axis='x', rotation=0, labelsize=18)
+    ax[1].tick_params(axis='x', rotation=0, labelsize=18)
+    ax[2].tick_params(axis='x', rotation=0, labelsize=18)
+    ax[0].set_ylabel('Number of vehicles  (${10^4}$)', color='tab:blue', fontsize=18)
+    ax[0].tick_params(axis='y', labelcolor='tab:blue', labelsize=18)
     ax[0].set_yticks(y1_newsticks)
     ax[1].set_yticks(y1_newsticks)
     ax[2].set_yticks(y1_newsticks)
@@ -152,10 +155,10 @@ def vehicle_number_pic_func():
     y1_2_newsticks = [11.3, 163.73]
     y2_2_newsticks = [15.86, 183.12]
     y3_2_newsticks = [13.1, 25, 50, 75, 100, 125, 150, 175, 190, 195.7]
-    ax3_2.set_ylabel("Standard deviation", color='tab:red', fontsize=14)
-    ax1_2.tick_params(axis='y', labelcolor='tab:red')
-    ax2_2.tick_params(axis='y', labelcolor='tab:red')
-    ax3_2.tick_params(axis='y', labelcolor='tab:red')
+    ax3_2.set_ylabel("Standard deviation", color='tab:red', fontsize=18)
+    ax1_2.tick_params(axis='y', labelcolor='tab:red', labelsize=18)
+    ax2_2.tick_params(axis='y', labelcolor='tab:red', labelsize=18)
+    ax3_2.tick_params(axis='y', labelcolor='tab:red', labelsize=18)
     ax1_2.set_yticks(y1_2_newsticks)
     ax2_2.set_yticks(y2_2_newsticks)
     ax3_2.set_yticks(y3_2_newsticks)
@@ -205,7 +208,7 @@ def sort_key_dict_scle(input_time):
     y17 = []
     for i in z17:
         x17.append(i[0])
-        y17.append(round(((i[1]*3)/60), 1))
+        y17.append(round(((i[1]*3)), 1))
     return x17, y17
 
 
@@ -214,6 +217,31 @@ def count_txn_number(input_lst):
     for i in input_lst:
         txn_num += i
     return txn_num
+
+
+def count_all_trip():
+    d07_dict = read_from_json(distance_json_path07)
+    d04_dict = read_from_json(distance_json_path04)
+    d02_dict = read_from_json(distance_json_path02)
+
+    _sum_1 = 0
+    for values in d02_dict.values():
+        for values_2 in values.values():
+            _sum_1 += int(values_2)
+
+    _sum_2 = 0
+    for values in d04_dict.values():
+        for values_3 in values.values():
+            _sum_2 += int(values_3)
+
+    _sum_3 = 0
+    for values in d07_dict.values():
+        for values_4 in values.values():
+            _sum_3 += int(values_4)
+
+    print(_sum_1)
+    print(_sum_2)
+    print(_sum_3)
 
 
 def vehilce_ditribution_pic():
@@ -288,14 +316,14 @@ def vehilce_ditribution_pic():
     ax0_2.plot(x2_d_08, y2_d_08, label="Holiday 08 o'clock", linestyle="dashed", color='red')
     ax[0].set_xlabel('zones', fontsize=14)
     ax[0].tick_params(axis='x', rotation=60, labelsize=14)
-    ax[0].set_ylabel('Number of vehicles', fontsize=14)
+    ax[0].set_ylabel('Number of vehicles', fontsize=16)
     # ax.set_yticks(y1_newsticks)
     ax[0].grid(alpha=.4)
     ax[0].set_xticks(x08[::3])
     ax[0].legend(loc='upper left', prop={'size': 16}, framealpha=0.5)
     ax0_2.legend(loc='upper right', prop={'size': 16}, framealpha=0.5)
     ax[0].set_ylim(0, 1000)
-    ax0_2.set_ylabel("Number of transaction", fontsize=14)
+    ax0_2.set_ylabel("Number of transaction", fontsize=16)
 
 
     ax1_2 = ax[1].twinx()
@@ -308,12 +336,12 @@ def vehilce_ditribution_pic():
     ax1_2.plot(x2_d_18, y2_d_18, label="Holiday 18 o'clock", linestyle="dashed", color='red')
     ax[1].set_xlabel('zones', fontsize=14)
     ax[1].tick_params(axis='x', rotation=60, labelsize=14)
-    ax[1].set_ylabel('Number of vehicles', fontsize=14)
+    ax[1].set_ylabel('Number of vehicles', fontsize=16)
     # ax.set_yticks(y1_newsticks)
     ax[1].grid(alpha=.4)
     ax[1].legend(loc='upper left', prop={'size': 16}, framealpha=0.5)
     ax1_2.legend(loc='upper right', prop={'size': 16}, framealpha=0.5)
-    ax1_2.set_ylabel("Number of transactions", fontsize=14)
+    ax1_2.set_ylabel("Number of transactions", fontsize=16)
     ax[1].set_ylim(0, 1000)
     ax[1].set_xticks(x18[::3])
 
@@ -383,8 +411,44 @@ def account_vehicle_number():
     print("07-18 o'clock, Vehicle number = ", account_18_oclock_vehicle)
 
 
+def vehicle_to_tps():
+    def lines_func(x):
+        y = []
+        for i in x:
+            _res = (0.5686 * i) - 4.3135
+            y.append(round(_res))
+        return y
+    input_vehicle_number = [25, 50, 75, 100, 250, 500, 750, 1000, 3500, 5000, 7500, 10000, 18000]
+    input_line_number = np.arange(10, 18000, 10)
+    input_line_number = list(input_line_number)
+    y_tps = lines_func(input_vehicle_number)
+    y_base = lines_func(input_line_number)
+
+
+    fig, ax = plt.subplots(1, 1, figsize=(16, 6), dpi=300)
+    ax.plot(input_line_number, y_base, label="Holiday 08 o'clock", color='red')
+    ax.scatter(input_vehicle_number, y_tps, color='red')
+    ax.set_ylabel("TPS", fontsize=18)
+    ax.set_xlabel("Number of peers", fontsize=18)
+    ax.tick_params(axis='y', labelsize=18)
+    ax.tick_params(axis='x', labelsize=18)
+    # new_yticks = [1, 10, 100, 1000, 10000]
+    # ax.set_yticks(new_yticks)
+    xminorLocator = MultipleLocator(10)
+    ax.xaxis.set_minor_locator(xminorLocator)
+    plt.ylim(10, 11000)
+    plt.xlim(10, 20000)
+
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.savefig('(5)TPS increase.pdf')
+    plt.show()
+
+
 if __name__ == "__main__":
     # vehicle_number_pic_func()
-    vehilce_ditribution_pic()
+    # vehilce_ditribution_pic()
     # vehicle_distribution_one_zone_pic(164)
     # account_vehicle_number()
+    vehicle_to_tps()
+    # count_all_trip()
