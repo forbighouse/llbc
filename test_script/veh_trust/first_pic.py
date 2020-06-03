@@ -116,8 +116,8 @@ def optimized_first_pic_func():
 
     # fig, ax = plt.subplots(1, 1, figsize=(16, 9), dpi=300)
     fig, ax = plt.subplots(1, 1, dpi=300)
-    newlinewidth = 1.5
-    markersize = 6
+    newlinewidth = 1
+    markersize = 4
     x_newticks = range(0, 105, 10)
     y_newticks = np.arange(0, 1.1, 0.1)
     ax.plot(x3, y3, color='g', linewidth=newlinewidth, marker='v', markersize=markersize,
@@ -130,12 +130,12 @@ def optimized_first_pic_func():
             label='DRMWT with Malicious Nodes')
 
     ax.hlines(0.5, x_newticks[0], x_newticks[-1], colors='0.5', linewidth=newlinewidth*2, linestyles="dashed")
-    plt.legend(loc='upper left', prop={'size': 12})
+    plt.legend(loc='upper left', prop={'size': 10})
 
     ax.set_xticks(x_newticks)
     ax.set_yticks(y_newticks)
-    ax.set_xlabel("Percentage of fake response", fontdict={'size': 14})
-    ax.set_ylabel("Ratio of false request result", fontdict={'size': 14})
+    ax.set_xlabel("Percentage of fake response", fontdict={'size': 10})
+    ax.set_ylabel("Ratio of false request result", fontdict={'size': 10})
     ax.grid(True)
     plt.xlim(x_newticks[0], 100)
     plt.ylim(0, 1)
@@ -184,7 +184,7 @@ def final_pic_func():
 
     newlinewidth = 1.5
     markersize = 10
-    fig, ax = plt.subplots(3, 1, figsize=(16, 14), dpi=300)
+    fig, ax = plt.subplots(3, 1, figsize=(16, 18), dpi=300)
     # fig, ax = plt.subplots(3, 1, dpi=300)
     # ax.plot(x_TPS, y_random, color='k', linewidth=newlinewidth, marker='s', markersize=markersize,
     #         label='Confirmed with random selection')
