@@ -10,7 +10,6 @@ from utility.simulation_v0.pic_0429 import *
 import numpy as np
 
 
-import seaborn as sns
 
 # http://liyangbit.com/pythonvisualization/matplotlib-top-50-visualizations/
 
@@ -329,9 +328,6 @@ if __name__ == "__main__":
     # b()
     tps_to_confirm_time(8, 'TPS=10000.json')
     # count_res()
-
-
-
 
     with open('miles_s_m_h_04.json', 'w') as json_file:
         json_file.write((10, res))

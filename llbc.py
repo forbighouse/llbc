@@ -9,7 +9,7 @@ import time
 import matplotlib.pyplot as plt
 from score.simulator import *
 
-LOCATION_FILE = './test_script/location_test.txt'
+LOCATION_FILE = './paper1/location_test.txt'
 
 
 def main():

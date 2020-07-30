@@ -1,4 +1,4 @@
-from test_script.veh_trust.consensus_v1 import *
+from paper1.veh_trust.consensus_v1 import *
 import os
 
 

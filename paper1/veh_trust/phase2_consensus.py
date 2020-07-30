@@ -1,4 +1,4 @@
-from test_script.veh_trust.consensus_v1 import *
+from paper1.veh_trust.consensus_v1 import *
 
 def p2_consensus(path_file_name):
     # 读入仿真车辆的id，300地址代替50辆车
@@ -24,7 +24,7 @@ def p2_consensus(path_file_name):
     writed_blockchain_status_dict = defaultdict(dict)
     for trans_hash1, trans_chain in waiting_blockchain_status_dict.items():
         sum_behind_trust = 0
-        tmp_writed_dict = {}
+        tmp_writed_dict = {}   
         tmp_writed_dict["write_time"] = trans_chain["write_time"]
         tmp_writed_dict["front_list"] = trans_chain["front_list"]
         for store_txn, chain_content in  waiting_blockchain_status_dict.items():

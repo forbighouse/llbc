@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from utility.utility import *
-from test_script.veh_trust.init_fun import *
-from test_script.veh_trust.probability_count import *
+from paper1.veh_trust.init_fun import *
+from paper1.veh_trust.probability_count import *
 
 # 生成rsu的位置
 def rsu_location():

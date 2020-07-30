@@ -1,4 +1,4 @@
-from test_script.veh_trust.config import *
+from paper1.veh_trust.config import *
 
 
 def probability_count_fuc2(msg, bl_op):

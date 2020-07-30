@@ -1,7 +1,7 @@
-# from test_script.veh_trust.trust_v3 import *
-from test_script.veh_trust.trust_v4 import *
-from test_script.veh_trust.init_fun import *
-from test_script.veh_trust.probability_count import *
+# from paper1.veh_trust.trust_v3 import *
+from paper1.veh_trust.trust_v4 import *
+from paper1.veh_trust.init_fun import *
+from paper1.veh_trust.probability_count import *
 
 
 def request_generator(veh_ids, event_list, veh_address_dict, veh_trajectory_dict, round_time):

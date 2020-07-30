@@ -1,4 +1,4 @@
-from test_script.veh_trust.config import *
+from paper1.veh_trust.config import *
 
 
 def accident_factory(accident_fast_mode=0):

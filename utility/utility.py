@@ -43,5 +43,19 @@ def transaction_emerge_generator(mean, timer):
     return list(np.random.poisson(lam=mean, size=timer))
 
 
+def company():
+    f = open("2.txt", "rb")
+    line = f.readlines()
+    # a = line.split(";")
+    line = str(line)
+    a = line.split(",")
+
+    print(len(a))
+
+
+    f.close()
+
+
 if __name__ == '__main__':
+    company()
     pass

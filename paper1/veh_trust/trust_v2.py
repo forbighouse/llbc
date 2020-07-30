@@ -1,5 +1,5 @@
-from test_script.veh_trust.trust_management_simulator import *
-from test_script.veh_trust.config import *
+from paper1.veh_trust.trust_management_simulator import *
+from paper1.veh_trust.config import *
 
 from utility.utility import *
 

@@ -1,8 +1,8 @@
 import uuid
 import random
 from collections import defaultdict
-from test_script.veh_trust.trust_v2 import MAX_SPEED
-from test_script.veh_trust.config import *
+from paper1.veh_trust.trust_v2 import MAX_SPEED
+from paper1.veh_trust.config import *
 
 
 def veh_test_location(veh_num):
