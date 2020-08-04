@@ -1,0 +1,4502 @@
+{
+    "cb50ef6107ec4667a72a4279e04b80e0": {
+        "confirm_time_delay": 0.30000000000000004,
+        "active_vehicle": 11,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "cd3b4dcda6dc45698706a3ddd1ce4ba9": {
+        "confirm_time_delay": 0.3,
+        "active_vehicle": 11,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "0631d0560d7d485b96cb9c3051f280d6": {
+        "confirm_time_delay": 0.2,
+        "active_vehicle": 11,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "f2f97d0cb99c4a74b1c5db2851cc8540": {
+        "confirm_time_delay": 0.4,
+        "active_vehicle": 11,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "7ebca2f495a54d8e84a4e77a26e8c6c8": {
+        "confirm_time_delay": 0.30000000000000004,
+        "active_vehicle": 11,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "2983b1f2ff3d48d79fed517ffed9cd4f": {
+        "confirm_time_delay": 0.6000000000000001,
+        "active_vehicle": 20,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "f1b203c84c2940e3af8b18c19b27d98d": {
+        "confirm_time_delay": 0.6000000000000001,
+        "active_vehicle": 20,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "f1fedac496de42a2af85c854f7d41335": {
+        "confirm_time_delay": 0.5,
+        "active_vehicle": 20,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "b485fee167ee49318b4c7ae7311bfec8": {
+        "confirm_time_delay": 0.5999999999999999,
+        "active_vehicle": 20,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "785ea7b13a0241dd840bfe6ccb786837": {
+        "confirm_time_delay": 0.7,
+        "active_vehicle": 20,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "2529942ffafd475ebae19ff30028d3f2": {
+        "confirm_time_delay": 0.7999999999999999,
+        "active_vehicle": 20,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "4dc54190c33e432697551f3f405b3621": {
+        "confirm_time_delay": 0.8999999999999999,
+        "active_vehicle": 29,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "5a7b0a116c8c48d89062c278661a6926": {
+        "confirm_time_delay": 1.0,
+        "active_vehicle": 29,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "f6d7d30f05a548389b28de5757b6b5dc": {
+        "confirm_time_delay": 1.0000000000000002,
+        "active_vehicle": 29,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "e8b928324d3645a7982d7b91ad35652b": {
+        "confirm_time_delay": 1.2,
+        "active_vehicle": 29,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "1b70bb8d5db74b90bf8e65d69058d283": {
+        "confirm_time_delay": 1.0,
+        "active_vehicle": 29,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "24d5c6283eed416695a944af13a58740": {
+        "confirm_time_delay": 1.3000000000000003,
+        "active_vehicle": 29,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "b7454323cf40444396f7e76ef790e930": {
+        "confirm_time_delay": 1.6,
+        "active_vehicle": 37,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "d15d27e052d144c1b803524f1ee72e3b": {
+        "confirm_time_delay": 1.7999999999999998,
+        "active_vehicle": 37,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "c6ce5cb82d7e475aadca0654a25387c5": {
+        "confirm_time_delay": 1.5999999999999999,
+        "active_vehicle": 37,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "cb75240b199240ad991469c82970a85c": {
+        "confirm_time_delay": 1.4,
+        "active_vehicle": 37,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "ba742fc482f441bda6cc0a44bd14b100": {
+        "confirm_time_delay": 1.2999999999999998,
+        "active_vehicle": 37,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "e08d7a12bd3c4c60991851809a747436": {
+        "confirm_time_delay": 1.6999999999999997,
+        "active_vehicle": 37,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "5363bd8014d84f888567af0637e66947": {
+        "confirm_time_delay": 1.6999999999999997,
+        "active_vehicle": 37,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "3519683537c747caa57967b60ecfc81f": {
+        "confirm_time_delay": 1.6999999999999997,
+        "active_vehicle": 47,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "a3902fc7a664462b98c11deab5e917ed": {
+        "confirm_time_delay": 1.9,
+        "active_vehicle": 47,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "efff768cbf1c4c63906036a71a31f45d": {
+        "confirm_time_delay": 1.9000000000000004,
+        "active_vehicle": 47,
+        "txn_ac_weight": 70,
+        "consensus_condition": 40
+    },
+    "d4c70ff5db0d4af6b7f2fd9936fc009f": {
+        "confirm_time_delay": 1.7999999999999998,
+        "active_vehicle": 47,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "e6f6c43127774318b2097a35ef52cc29": {
+        "confirm_time_delay": 1.6,
+        "active_vehicle": 47,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "fd9b0b903cd342c198f3ca44c6bb90ba": {
+        "confirm_time_delay": 1.8999999999999995,
+        "active_vehicle": 57,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "add2a51bcfdd4889891d48b3445cefdc": {
+        "confirm_time_delay": 1.7999999999999998,
+        "active_vehicle": 57,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "0802ddca75ae4f1089b708566ab80cab": {
+        "confirm_time_delay": 2.0,
+        "active_vehicle": 57,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "9272104b2e244338a34c1334f537005b": {
+        "confirm_time_delay": 2.0,
+        "active_vehicle": 57,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "7e74ba346896492fa75052dc6c2e82e2": {
+        "confirm_time_delay": 2.3000000000000003,
+        "active_vehicle": 57,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "42d142d6dda64e9290a3824c5a2186ed": {
+        "confirm_time_delay": 2.2,
+        "active_vehicle": 57,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "6512633080f441a5bb206f0b77e41922": {
+        "confirm_time_delay": 2.3000000000000003,
+        "active_vehicle": 57,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "4f5bd7ea5fca4ae88f843e5f9e52c71b": {
+        "confirm_time_delay": 2.0000000000000004,
+        "active_vehicle": 57,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "9be7e7d5ee8c4665bbfacd3341a902ab": {
+        "confirm_time_delay": 2.1000000000000005,
+        "active_vehicle": 66,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "be5b6d03afb042618545f26934c10f1e": {
+        "confirm_time_delay": 2.1000000000000005,
+        "active_vehicle": 66,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "c216948ea872422f80adf49c3424cc61": {
+        "confirm_time_delay": 2.2,
+        "active_vehicle": 66,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "a701e8f07462480fba3bc0537dc41657": {
+        "confirm_time_delay": 2.2,
+        "active_vehicle": 66,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "eef6cde5ef3f4018b2f83c077fd69864": {
+        "confirm_time_delay": 2.7,
+        "active_vehicle": 66,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "18cd880b6a8447919b1df6dde9f17f11": {
+        "confirm_time_delay": 2.6000000000000005,
+        "active_vehicle": 66,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "ad4081681ef44098b455e7bd94ece9b6": {
+        "confirm_time_delay": 2.6999999999999993,
+        "active_vehicle": 76,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "62b468d7b71b426cbd93df0d9bf021c5": {
+        "confirm_time_delay": 2.6999999999999993,
+        "active_vehicle": 76,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "20c3e2d408a4452ebb96a410683438d9": {
+        "confirm_time_delay": 2.7,
+        "active_vehicle": 76,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "04dc393334c849bbafa6361ddf6a8095": {
+        "confirm_time_delay": 2.5,
+        "active_vehicle": 76,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "4255ad1a54f64b3eb41184acfd407bae": {
+        "confirm_time_delay": 2.8,
+        "active_vehicle": 76,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "38d32992e5d84b368ac8e6acb7349ba3": {
+        "confirm_time_delay": 2.7,
+        "active_vehicle": 76,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "ddd129a4127e4ba29f5d6f46cc26cc3d": {
+        "confirm_time_delay": 2.8000000000000007,
+        "active_vehicle": 76,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "1b88873a1e3d4ba194e7e6488bb68cbf": {
+        "confirm_time_delay": 2.6000000000000005,
+        "active_vehicle": 76,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "65c548107ba84d4e8f55d8b36d340448": {
+        "confirm_time_delay": 3.1999999999999993,
+        "active_vehicle": 86,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "84320d7aee364569b019402082f47936": {
+        "confirm_time_delay": 3.0999999999999996,
+        "active_vehicle": 86,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "d4bee2efac0143018d439657a8a9f6d9": {
+        "confirm_time_delay": 3.1000000000000005,
+        "active_vehicle": 86,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "8b5ac14825a844db912df2db3228f591": {
+        "confirm_time_delay": 3.1000000000000005,
+        "active_vehicle": 86,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "d0122767bcfb4ec69f529858a2c4a650": {
+        "confirm_time_delay": 3.2,
+        "active_vehicle": 95,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "ebb67fd478ec4adca0c514836c78176b": {
+        "confirm_time_delay": 3.0999999999999996,
+        "active_vehicle": 95,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "540f32ac76324af3b4047d8932a25e5c": {
+        "confirm_time_delay": 3.3000000000000007,
+        "active_vehicle": 95,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "c4df6ec047064dccb13a23cf243fc054": {
+        "confirm_time_delay": 3.2,
+        "active_vehicle": 95,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "9f5fa6ef39db48dcbb52fa1b9bcdb936": {
+        "confirm_time_delay": 3.3,
+        "active_vehicle": 95,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "37ca873f671d4c80813833a5e49233b9": {
+        "confirm_time_delay": 3.3,
+        "active_vehicle": 95,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "7e953dde077a410c92a04b53acc93c46": {
+        "confirm_time_delay": 3.500000000000001,
+        "active_vehicle": 95,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "b259643d739a48c2a68f6336c1f8a738": {
+        "confirm_time_delay": 3.4000000000000004,
+        "active_vehicle": 95,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "2ac86b58884a4f80b1008f78966f4683": {
+        "confirm_time_delay": 3.4000000000000004,
+        "active_vehicle": 95,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "43c92e330d29469b81130fda6bd4bb0f": {
+        "confirm_time_delay": 3.1999999999999993,
+        "active_vehicle": 103,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "fd2a704fe8d84404b387ce22a47bc2e5": {
+        "confirm_time_delay": 3.1999999999999993,
+        "active_vehicle": 103,
+        "txn_ac_weight": 44,
+        "consensus_condition": 40
+    },
+    "353ebc6c9249460a95b486e5987d15bc": {
+        "confirm_time_delay": 3.3000000000000007,
+        "active_vehicle": 103,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "22176d9dda99445f8dc3c9ebb3db37cf": {
+        "confirm_time_delay": 3.3000000000000007,
+        "active_vehicle": 103,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "a92020e779b549058823dbf8eda0f87d": {
+        "confirm_time_delay": 3.3999999999999995,
+        "active_vehicle": 103,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "f6197a7d113844fca3411836757b0b87": {
+        "confirm_time_delay": 3.3999999999999995,
+        "active_vehicle": 103,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "f31cd33337064b56b4a243c470ec8454": {
+        "confirm_time_delay": 3.8999999999999995,
+        "active_vehicle": 112,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "f1ad07040e8e46dd91caf86569078050": {
+        "confirm_time_delay": 3.8,
+        "active_vehicle": 112,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "b3a653ae9f644a91b889b76640613d7e": {
+        "confirm_time_delay": 4.0,
+        "active_vehicle": 112,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "d12bfd719e58481094b59111a819729a": {
+        "confirm_time_delay": 3.8000000000000007,
+        "active_vehicle": 112,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "6e498454dddb4213bd7673312fdabc4a": {
+        "confirm_time_delay": 3.8999999999999995,
+        "active_vehicle": 112,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "8c12db03ccda4627b17e8eef24e9842c": {
+        "confirm_time_delay": 3.8999999999999995,
+        "active_vehicle": 112,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "55cdf06d8d2f4128ab0c9ce8513eee2f": {
+        "confirm_time_delay": 4.0,
+        "active_vehicle": 112,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "dcdd06e518794707ad4c3b4448699825": {
+        "confirm_time_delay": 4.0,
+        "active_vehicle": 120,
+        "txn_ac_weight": 77,
+        "consensus_condition": 40
+    },
+    "14919f3419434a0b879ae1de0d81dfe3": {
+        "confirm_time_delay": 3.9000000000000004,
+        "active_vehicle": 120,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "1cf3335de22346c2a3cfd414313b86b3": {
+        "confirm_time_delay": 4.0,
+        "active_vehicle": 120,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "31778016fc054d0c9ca6369e56fdd388": {
+        "confirm_time_delay": 4.0,
+        "active_vehicle": 120,
+        "txn_ac_weight": 71,
+        "consensus_condition": 40
+    },
+    "3d76000f24d1424390b025093f74f89c": {
+        "confirm_time_delay": 3.700000000000001,
+        "active_vehicle": 120,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "12c0138df82a4b28b86175e5dfcb6fc8": {
+        "confirm_time_delay": 3.9000000000000004,
+        "active_vehicle": 120,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "59d77fd772cb4f8699767a0da2892f59": {
+        "confirm_time_delay": 3.8000000000000007,
+        "active_vehicle": 120,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "9a04569fc5194d37ab98a5d81e1c060b": {
+        "confirm_time_delay": 4.399999999999999,
+        "active_vehicle": 130,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "4aec79519ad04e99bdd496fb6c93df1f": {
+        "confirm_time_delay": 4.399999999999999,
+        "active_vehicle": 130,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "82a579aae2734675b2808b7319612fb8": {
+        "confirm_time_delay": 4.300000000000001,
+        "active_vehicle": 130,
+        "txn_ac_weight": 74,
+        "consensus_condition": 40
+    },
+    "904b9e31c47243dbaaca3356b7a7cfea": {
+        "confirm_time_delay": 4.0,
+        "active_vehicle": 130,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "22dcf33e3aa147cc9640a215af43dec2": {
+        "confirm_time_delay": 4.4,
+        "active_vehicle": 130,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "c923987e6838451eb9ef3d2244a9976e": {
+        "confirm_time_delay": 4.4,
+        "active_vehicle": 130,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "e026cc0332834ca3953adc843f8d3c7f": {
+        "confirm_time_delay": 4.800000000000001,
+        "active_vehicle": 138,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "f88c8b69b0d74a2a97229e709ae6a939": {
+        "confirm_time_delay": 4.800000000000001,
+        "active_vehicle": 138,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "a0362495746341da8c3cdf5bef16654d": {
+        "confirm_time_delay": 5.200000000000001,
+        "active_vehicle": 138,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "bd3fde94c9b54ff4a2fffeca32df58f2": {
+        "confirm_time_delay": 5.200000000000001,
+        "active_vehicle": 138,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "94f03589fb244db19beee58d51df70d0": {
+        "confirm_time_delay": 5.199999999999999,
+        "active_vehicle": 145,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "9ca39ca1e9b7420da5918ac92c3bd79b": {
+        "confirm_time_delay": 5.199999999999999,
+        "active_vehicle": 145,
+        "txn_ac_weight": 70,
+        "consensus_condition": 40
+    },
+    "d7d7b5890c774f9699fe44bf323d2c29": {
+        "confirm_time_delay": 5.199999999999999,
+        "active_vehicle": 145,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "e69b83a061f340089a404886f96fae01": {
+        "confirm_time_delay": 5.300000000000001,
+        "active_vehicle": 145,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "72743e4f65684cf4b57eb7addc016cd1": {
+        "confirm_time_delay": 5.4,
+        "active_vehicle": 145,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "32626b1e235e45928969e3ba704c3c90": {
+        "confirm_time_delay": 5.6,
+        "active_vehicle": 145,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "215390c7be914d6ca7a0300d08427c5d": {
+        "confirm_time_delay": 5.800000000000001,
+        "active_vehicle": 153,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "325ff1e1432e4ae39740eae57f142bf4": {
+        "confirm_time_delay": 5.899999999999999,
+        "active_vehicle": 153,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "66bfd9bd664f41e5903ed7413390c372": {
+        "confirm_time_delay": 5.799999999999999,
+        "active_vehicle": 153,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "3404b645d88148359550c03c26af2f84": {
+        "confirm_time_delay": 5.999999999999998,
+        "active_vehicle": 153,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "4db24a77165d402d95071b0d58b711a8": {
+        "confirm_time_delay": 6.000000000000002,
+        "active_vehicle": 153,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "8c549d02293c40d6961ba7cbf324f7e7": {
+        "confirm_time_delay": 6.1,
+        "active_vehicle": 153,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "2079a531d73142c1a36ac193c94da3f2": {
+        "confirm_time_delay": 5.700000000000001,
+        "active_vehicle": 153,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "d30d13090f98494c96926dd29a8cfc70": {
+        "confirm_time_delay": 5.9,
+        "active_vehicle": 161,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "5b0ebd75457c43288a0ca7d64df04028": {
+        "confirm_time_delay": 6.100000000000001,
+        "active_vehicle": 161,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "73eebcff9ebb46a58205e70cb60e93b0": {
+        "confirm_time_delay": 6.199999999999999,
+        "active_vehicle": 161,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "4748e2c35f534af48a11c4c87ff3be40": {
+        "confirm_time_delay": 6.200000000000001,
+        "active_vehicle": 161,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "3fd0b5edbf0446cc83709bb9d07035dd": {
+        "confirm_time_delay": 6.600000000000001,
+        "active_vehicle": 168,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "0baefd9d96064042b91a2e713198cb68": {
+        "confirm_time_delay": 6.699999999999999,
+        "active_vehicle": 168,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "56da4715d04e492ca4a108d69f3a81cd": {
+        "confirm_time_delay": 6.5,
+        "active_vehicle": 168,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "ba7d89d0073a4a5a91fa724368459a12": {
+        "confirm_time_delay": 6.599999999999998,
+        "active_vehicle": 168,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "4873fa356c854a4f85516c729608a11c": {
+        "confirm_time_delay": 6.700000000000001,
+        "active_vehicle": 168,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "c4228980c5594150a77a297f89238566": {
+        "confirm_time_delay": 6.699999999999999,
+        "active_vehicle": 168,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "377ab10a06e042f79cef2bea78492a1d": {
+        "confirm_time_delay": 6.699999999999999,
+        "active_vehicle": 168,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "6f87b2abd38c4d3384855395b781c0c5": {
+        "confirm_time_delay": 7.000000000000002,
+        "active_vehicle": 176,
+        "txn_ac_weight": 69,
+        "consensus_condition": 40
+    },
+    "dadb94f60a724c3d8306eb3b58ad46a0": {
+        "confirm_time_delay": 6.900000000000002,
+        "active_vehicle": 176,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "0bf49f8ebfb1462ba8b0e95acd102f6b": {
+        "confirm_time_delay": 7.400000000000002,
+        "active_vehicle": 176,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "192faa9f604442d2b82b5fd4c30b7084": {
+        "confirm_time_delay": 7.400000000000002,
+        "active_vehicle": 176,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "058add7c5ec64fb6b3d3db64807864be": {
+        "confirm_time_delay": 7.5,
+        "active_vehicle": 176,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "c3dfb5d69de245cb98d2ce5c1519b1b7": {
+        "confirm_time_delay": 7.4,
+        "active_vehicle": 176,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "36f0a57ce28c496baf2f3f3627cb3bb1": {
+        "confirm_time_delay": 7.700000000000001,
+        "active_vehicle": 184,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "9c8342c067e346d9bcbe9026c6f96d6b": {
+        "confirm_time_delay": 7.600000000000001,
+        "active_vehicle": 184,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "c377ce5ecefc4fdcb15ddc03719adc2e": {
+        "confirm_time_delay": 7.800000000000001,
+        "active_vehicle": 184,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "5831dbe161f547d79644e7638d595858": {
+        "confirm_time_delay": 7.200000000000001,
+        "active_vehicle": 184,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "35856b6d1e6b4871b7a2169f7cb6d7ff": {
+        "confirm_time_delay": 7.799999999999999,
+        "active_vehicle": 184,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "4589f327e9124e9ba0b12730cce1383d": {
+        "confirm_time_delay": 7.699999999999999,
+        "active_vehicle": 184,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "b65e28173b18424f8c905e64c4f72fe5": {
+        "confirm_time_delay": 7.800000000000001,
+        "active_vehicle": 192,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "d2622b879fd0455ebcaac35fd6f99177": {
+        "confirm_time_delay": 7.800000000000001,
+        "active_vehicle": 192,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "eabed577b64046bfb51ce83706b985e0": {
+        "confirm_time_delay": 7.800000000000001,
+        "active_vehicle": 192,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "8108cedb6a434e938108263f7e0429ac": {
+        "confirm_time_delay": 8.099999999999998,
+        "active_vehicle": 192,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "5597ec6d034e4567a13dfd9211dbb1e0": {
+        "confirm_time_delay": 8.0,
+        "active_vehicle": 192,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "7b9e936871eb4b7db191161c7b1facb7": {
+        "confirm_time_delay": 7.899999999999999,
+        "active_vehicle": 192,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "bee37334e2634029aa3e2ef2938cb11c": {
+        "confirm_time_delay": 8.2,
+        "active_vehicle": 201,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "17919e7b135443f1b30afd998df19440": {
+        "confirm_time_delay": 8.1,
+        "active_vehicle": 201,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "2ea1e4a3eade4678beb047f88c9d4e0c": {
+        "confirm_time_delay": 8.2,
+        "active_vehicle": 201,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "b0425884c3bb447d8a4697fbecead945": {
+        "confirm_time_delay": 8.2,
+        "active_vehicle": 201,
+        "txn_ac_weight": 43,
+        "consensus_condition": 40
+    },
+    "b03a00b262a6479ba9d49dfe35c086ef": {
+        "confirm_time_delay": 8.200000000000001,
+        "active_vehicle": 201,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "5d8e8380ae8545cfaadcb34d6a6d0be4": {
+        "confirm_time_delay": 8.3,
+        "active_vehicle": 201,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "a5ecce6a8bfa461c8eff96652ed08a9d": {
+        "confirm_time_delay": 8.0,
+        "active_vehicle": 201,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "3634a5ea931441bd8b05a499d165ca52": {
+        "confirm_time_delay": 8.3,
+        "active_vehicle": 211,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "48d98e703b20491db0ae751f9845ded1": {
+        "confirm_time_delay": 8.399999999999999,
+        "active_vehicle": 211,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "3c32090503d5425294507f347b30f624": {
+        "confirm_time_delay": 8.399999999999999,
+        "active_vehicle": 211,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "ad77eec01b044c4599c8f1bb607302bd": {
+        "confirm_time_delay": 8.399999999999999,
+        "active_vehicle": 211,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "b955b69c41614b8aa88e104438847812": {
+        "confirm_time_delay": 8.299999999999999,
+        "active_vehicle": 211,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "d46c639286e84b04a1cb1092f6ccfb9a": {
+        "confirm_time_delay": 8.799999999999999,
+        "active_vehicle": 211,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "89a450cbf2aa430ba4535068813374b2": {
+        "confirm_time_delay": 8.799999999999999,
+        "active_vehicle": 211,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "01ab35bd169c4c969c4737855a5f64f4": {
+        "confirm_time_delay": 8.799999999999999,
+        "active_vehicle": 221,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "c0ba1549bcd0468691f264256d781145": {
+        "confirm_time_delay": 8.799999999999999,
+        "active_vehicle": 221,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "5db4b8a5b57f4b1ca59afb024a98e17c": {
+        "confirm_time_delay": 8.899999999999999,
+        "active_vehicle": 221,
+        "txn_ac_weight": 42,
+        "consensus_condition": 40
+    },
+    "1244fdbb92e3480395b4c5a986311234": {
+        "confirm_time_delay": 8.7,
+        "active_vehicle": 221,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "6e27a0926ff14418aecda96cc9b5a739": {
+        "confirm_time_delay": 9.100000000000001,
+        "active_vehicle": 221,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "50cb2c3cf58249d5a0ddc561caf44118": {
+        "confirm_time_delay": 9.0,
+        "active_vehicle": 221,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "3c0275a3bbc045fe987177f85999de92": {
+        "confirm_time_delay": 9.0,
+        "active_vehicle": 231,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "ee0315ce4e9445fd82e48ba0210d4239": {
+        "confirm_time_delay": 9.0,
+        "active_vehicle": 231,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "57fdf5d6160b4b5ea8139dadd57a337c": {
+        "confirm_time_delay": 9.3,
+        "active_vehicle": 231,
+        "txn_ac_weight": 44,
+        "consensus_condition": 40
+    },
+    "d12a57a29c754a979de7e9869b16f537": {
+        "confirm_time_delay": 9.200000000000003,
+        "active_vehicle": 231,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "f5d43b6cbaee4494a5ad1692ee4230b3": {
+        "confirm_time_delay": 9.200000000000003,
+        "active_vehicle": 231,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "f21bff87c10048f6a921de6e83dbb002": {
+        "confirm_time_delay": 9.299999999999997,
+        "active_vehicle": 231,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "a197ae93ee4e49fea2205b04f218ee12": {
+        "confirm_time_delay": 9.2,
+        "active_vehicle": 231,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "cfeb1e4c8e204326bfa16188abbc56df": {
+        "confirm_time_delay": 9.399999999999999,
+        "active_vehicle": 238,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "9958eabba6fe45699075dda42b80d20c": {
+        "confirm_time_delay": 9.2,
+        "active_vehicle": 238,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "f336728bd0954962a51940ab679fee40": {
+        "confirm_time_delay": 9.600000000000001,
+        "active_vehicle": 238,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "157e5b108e95466e8f1e33d0416cccb7": {
+        "confirm_time_delay": 9.3,
+        "active_vehicle": 238,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "075f8b46bb8e4fa7b866e32c34e1ece9": {
+        "confirm_time_delay": 9.7,
+        "active_vehicle": 245,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "9eda568c28ed4e52b117ffd9be2ff382": {
+        "confirm_time_delay": 9.600000000000001,
+        "active_vehicle": 245,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "c3717cd023cb4f7591a2782ef5abbe4a": {
+        "confirm_time_delay": 9.899999999999999,
+        "active_vehicle": 245,
+        "txn_ac_weight": 70,
+        "consensus_condition": 40
+    },
+    "26628c96c27e48b8930626d869e57674": {
+        "confirm_time_delay": 9.900000000000002,
+        "active_vehicle": 245,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "3ec49e9cdd1a4589b8a8bcedb65dcb2e": {
+        "confirm_time_delay": 9.700000000000003,
+        "active_vehicle": 245,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "2c69ac63bcef492380792d338600ecd4": {
+        "confirm_time_delay": 9.599999999999998,
+        "active_vehicle": 245,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "96cd68998a2b49c88956bb8905874639": {
+        "confirm_time_delay": 9.600000000000001,
+        "active_vehicle": 245,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "c0e15aca01e04212a68ab2d433926d2b": {
+        "confirm_time_delay": 9.8,
+        "active_vehicle": 253,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "49e181c8ba984dea961ff9dd08fc2998": {
+        "confirm_time_delay": 9.8,
+        "active_vehicle": 253,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "b271fcebe2ac4ff9a79c33c636273275": {
+        "confirm_time_delay": 10.200000000000003,
+        "active_vehicle": 253,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "bab57168c50b4c31836ad05cbcb52344": {
+        "confirm_time_delay": 10.200000000000003,
+        "active_vehicle": 253,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "41a5d7338bce4e0f80204ba6ada2da8a": {
+        "confirm_time_delay": 10.2,
+        "active_vehicle": 253,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "92e1f619d09241e4b2754869ba555a0a": {
+        "confirm_time_delay": 10.100000000000001,
+        "active_vehicle": 253,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "746a4cd001ea497ebd82b4c5066d0128": {
+        "confirm_time_delay": 10.400000000000002,
+        "active_vehicle": 260,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "5860ef790ec340d7b7fad6c881c97884": {
+        "confirm_time_delay": 10.3,
+        "active_vehicle": 260,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "3bfa3857c74d41289be4c5d057679ecb": {
+        "confirm_time_delay": 10.099999999999998,
+        "active_vehicle": 260,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "d03f3e88075a41bca24cffbd414dbea9": {
+        "confirm_time_delay": 9.8,
+        "active_vehicle": 260,
+        "txn_ac_weight": 76,
+        "consensus_condition": 40
+    },
+    "3f25f231cad7470682061b3d3e675659": {
+        "confirm_time_delay": 9.899999999999999,
+        "active_vehicle": 260,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "990c3a1f095a491495a254880de71ebe": {
+        "confirm_time_delay": 10.0,
+        "active_vehicle": 260,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "34174fe500be4724b39643151249b26f": {
+        "confirm_time_delay": 10.100000000000001,
+        "active_vehicle": 260,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "4b9961a60f1d481fb337b6f765a78920": {
+        "confirm_time_delay": 10.399999999999999,
+        "active_vehicle": 270,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "8e4a55cebb8e450f850be24e785b5c4d": {
+        "confirm_time_delay": 10.5,
+        "active_vehicle": 270,
+        "txn_ac_weight": 69,
+        "consensus_condition": 40
+    },
+    "535fae6244d249faaa9b900e2aada76d": {
+        "confirm_time_delay": 10.5,
+        "active_vehicle": 270,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "e2116474ce3d4a1c8fc7e9ea5a863dff": {
+        "confirm_time_delay": 10.8,
+        "active_vehicle": 270,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "a9acbc34e759460392d355cc01f7cfc3": {
+        "confirm_time_delay": 10.8,
+        "active_vehicle": 270,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "4d4112c33ef24d22a29beabed1c9c4fd": {
+        "confirm_time_delay": 10.7,
+        "active_vehicle": 270,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "a609b020921e4ca38a71523a2616edf2": {
+        "confirm_time_delay": 10.900000000000002,
+        "active_vehicle": 277,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "1077246827db45a68a9c1d75ef1fe810": {
+        "confirm_time_delay": 10.900000000000002,
+        "active_vehicle": 277,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "eb18206f96584043b54186da39719b27": {
+        "confirm_time_delay": 11.0,
+        "active_vehicle": 277,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "8a1bd06f4ac340a6af33fc12673df72c": {
+        "confirm_time_delay": 10.600000000000001,
+        "active_vehicle": 277,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "41e19ab1610044a0a189ba1c81b1ab8f": {
+        "confirm_time_delay": 10.900000000000002,
+        "active_vehicle": 277,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "d4bfc77b79c94904a8aaf752f6792e4c": {
+        "confirm_time_delay": 10.700000000000003,
+        "active_vehicle": 277,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "2f8f47ce5d77454bacdb2251f3bd7ab7": {
+        "confirm_time_delay": 11.0,
+        "active_vehicle": 277,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "bf5db0fefca24cacbb4f0b895005c4db": {
+        "confirm_time_delay": 11.100000000000001,
+        "active_vehicle": 285,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "b91b71879c604aa2b755d8c691687d58": {
+        "confirm_time_delay": 11.200000000000003,
+        "active_vehicle": 285,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "aea8557170c2460b99893d101025efe0": {
+        "confirm_time_delay": 11.199999999999996,
+        "active_vehicle": 285,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "470b92c87ad3471ba2fe96ce10e63924": {
+        "confirm_time_delay": 10.899999999999999,
+        "active_vehicle": 285,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "cf358c8cc476444c8e30e2fb729e133d": {
+        "confirm_time_delay": 11.0,
+        "active_vehicle": 285,
+        "txn_ac_weight": 72,
+        "consensus_condition": 40
+    },
+    "a6dc58f6775745b480791167fa1c0073": {
+        "confirm_time_delay": 11.299999999999997,
+        "active_vehicle": 285,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "cdc136beba5b4d86afe5a532e075b7fc": {
+        "confirm_time_delay": 11.5,
+        "active_vehicle": 292,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "51b1b9a9b5334600a7f3ed8789ea429b": {
+        "confirm_time_delay": 11.500000000000004,
+        "active_vehicle": 292,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "7543c47f332a4beb8719ae3ef4542aa4": {
+        "confirm_time_delay": 11.7,
+        "active_vehicle": 292,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "3aa369f8bc714138b9728b4abf0a8d78": {
+        "confirm_time_delay": 11.700000000000003,
+        "active_vehicle": 292,
+        "txn_ac_weight": 73,
+        "consensus_condition": 40
+    },
+    "0d7aeb8fe1cf4e85814ce01232844cee": {
+        "confirm_time_delay": 11.599999999999998,
+        "active_vehicle": 292,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "9d2970121edc4f77bd9de3e01ed791fb": {
+        "confirm_time_delay": 11.7,
+        "active_vehicle": 292,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "30caaadae41c42978d4b70d5deeb2ae5": {
+        "confirm_time_delay": 11.5,
+        "active_vehicle": 299,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "4a7be42a822646d78340d40ffd14cd49": {
+        "confirm_time_delay": 11.700000000000003,
+        "active_vehicle": 299,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "5c707d71f51d4ba2a277f5d025dae3b0": {
+        "confirm_time_delay": 11.799999999999997,
+        "active_vehicle": 299,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "1e18e94e1a264a19bf7ae468500616f8": {
+        "confirm_time_delay": 11.699999999999996,
+        "active_vehicle": 299,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "5f385df755834ff486168f9619f5494c": {
+        "confirm_time_delay": 11.7,
+        "active_vehicle": 299,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "75c66ea737b046b4a9f84941ffc4a886": {
+        "confirm_time_delay": 11.999999999999996,
+        "active_vehicle": 299,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "28987870ce1a494388e1000100a6d4cf": {
+        "confirm_time_delay": 11.999999999999996,
+        "active_vehicle": 299,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "6cd970208d854224aecb459f1d36dc0e": {
+        "confirm_time_delay": 12.0,
+        "active_vehicle": 309,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "8b42339d5958445a9e895c6b782ae9e3": {
+        "confirm_time_delay": 12.0,
+        "active_vehicle": 309,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "0a3afaf3300942f1a88ab0c04fbbdea1": {
+        "confirm_time_delay": 12.099999999999998,
+        "active_vehicle": 309,
+        "txn_ac_weight": 76,
+        "consensus_condition": 40
+    },
+    "4defdfa0c3f447059955d0cff264b038": {
+        "confirm_time_delay": 12.2,
+        "active_vehicle": 309,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "47f2058a0a05446ca0feafbb15d835ec": {
+        "confirm_time_delay": 12.3,
+        "active_vehicle": 309,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "8df001855aa9422fb6e68f7e3ce353a5": {
+        "confirm_time_delay": 12.399999999999999,
+        "active_vehicle": 309,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "8786d61bef044579966e9bde25c2d031": {
+        "confirm_time_delay": 12.700000000000003,
+        "active_vehicle": 315,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "6b515f5fd9ff47389ce4caebc2e37314": {
+        "confirm_time_delay": 12.499999999999996,
+        "active_vehicle": 315,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "997399829b424d63a7940bdaaf17289c": {
+        "confirm_time_delay": 12.399999999999999,
+        "active_vehicle": 315,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "81fc41d16ac44f8ca527fdb10446b695": {
+        "confirm_time_delay": 12.5,
+        "active_vehicle": 315,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "2ccdff68664a45da98b8b7a5e18b02de": {
+        "confirm_time_delay": 12.5,
+        "active_vehicle": 315,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "6975713c9d164d61a0618292852727ad": {
+        "confirm_time_delay": 12.600000000000001,
+        "active_vehicle": 315,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "9c2c7258473d4622a28eb4198a33f020": {
+        "confirm_time_delay": 13.099999999999998,
+        "active_vehicle": 320,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "f83ede4bc49f4729b3f3db94e0ba3dfa": {
+        "confirm_time_delay": 13.3,
+        "active_vehicle": 320,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "e6b656383b664ad2b0278e4150c80a54": {
+        "confirm_time_delay": 13.200000000000003,
+        "active_vehicle": 320,
+        "txn_ac_weight": 73,
+        "consensus_condition": 40
+    },
+    "01c993827cfb41fd896b49aee7328e39": {
+        "confirm_time_delay": 13.300000000000004,
+        "active_vehicle": 320,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "967ac18e96f147a690810604a7038811": {
+        "confirm_time_delay": 13.300000000000004,
+        "active_vehicle": 320,
+        "txn_ac_weight": 70,
+        "consensus_condition": 40
+    },
+    "9df150525ef34ce68c7691c5e56bfd40": {
+        "confirm_time_delay": 13.200000000000003,
+        "active_vehicle": 320,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "63afcf5b19e04f2bb43364b6dd90d253": {
+        "confirm_time_delay": 13.199999999999996,
+        "active_vehicle": 320,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "83c579c1499b4e869fe59d612fbc41ee": {
+        "confirm_time_delay": 12.999999999999996,
+        "active_vehicle": 320,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "92670338a7774309aa6815e6802508fb": {
+        "confirm_time_delay": 13.300000000000004,
+        "active_vehicle": 326,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "f297afae68334028a1e46f9e8e418483": {
+        "confirm_time_delay": 13.000000000000004,
+        "active_vehicle": 326,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "a7c488985ce24a68bfd37687127a02f5": {
+        "confirm_time_delay": 13.400000000000002,
+        "active_vehicle": 326,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "bbb1f1158de849688c81e9e17d8e2a27": {
+        "confirm_time_delay": 13.400000000000002,
+        "active_vehicle": 326,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "cec8165c9a2145ceb2c46ca79d569fa5": {
+        "confirm_time_delay": 13.900000000000002,
+        "active_vehicle": 332,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "3a29282451264e44bb4964680a27241a": {
+        "confirm_time_delay": 13.600000000000001,
+        "active_vehicle": 332,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "dc399511f1f248d2bff446f62c29144a": {
+        "confirm_time_delay": 14.0,
+        "active_vehicle": 332,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "7b8d8f7290f7410c9fec73d21d7ffbed": {
+        "confirm_time_delay": 14.0,
+        "active_vehicle": 332,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "c85e4360df5e4814aa61ca41bd79b189": {
+        "confirm_time_delay": 14.199999999999996,
+        "active_vehicle": 332,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "65366d4bc2b648d292f19302b5a2bb09": {
+        "confirm_time_delay": 14.099999999999998,
+        "active_vehicle": 332,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "c1211f852ea845dfa054d2ca3141d9d1": {
+        "confirm_time_delay": 14.400000000000002,
+        "active_vehicle": 339,
+        "txn_ac_weight": 70,
+        "consensus_condition": 40
+    },
+    "6e98616b2f0b4e3c88273bcb491fbf21": {
+        "confirm_time_delay": 14.200000000000003,
+        "active_vehicle": 339,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "97db6fec6c914db88d7f765f2b9b8849": {
+        "confirm_time_delay": 14.5,
+        "active_vehicle": 339,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "b08ebb6680fc49cb9035e028c4a06ee9": {
+        "confirm_time_delay": 14.3,
+        "active_vehicle": 339,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "efbb630f589244f0ad5721429121fc54": {
+        "confirm_time_delay": 14.400000000000002,
+        "active_vehicle": 339,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "b0808b5cee29439ebf0dd646a57bc163": {
+        "confirm_time_delay": 14.400000000000002,
+        "active_vehicle": 339,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "fb724db65833497286446939c1f7776d": {
+        "confirm_time_delay": 14.700000000000003,
+        "active_vehicle": 344,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "bb269a93759845b587a6169b30c19d32": {
+        "confirm_time_delay": 14.600000000000001,
+        "active_vehicle": 344,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "8f896f7d6a12463a88ad86bd4c3c84e1": {
+        "confirm_time_delay": 14.899999999999999,
+        "active_vehicle": 344,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "170281ff023b43dda96f3096a547a097": {
+        "confirm_time_delay": 14.900000000000002,
+        "active_vehicle": 344,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "92b73e1c4aee4405aa3c9aeedfb50e77": {
+        "confirm_time_delay": 14.600000000000001,
+        "active_vehicle": 344,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "687eecf0a8d74ae9ace2065cb24db1eb": {
+        "confirm_time_delay": 14.899999999999999,
+        "active_vehicle": 351,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "ab30cbc3bb554bfebd0d91868bf33e5d": {
+        "confirm_time_delay": 14.600000000000001,
+        "active_vehicle": 351,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "0d1d6ac0efa742bfa796c6592817b214": {
+        "confirm_time_delay": 14.700000000000003,
+        "active_vehicle": 351,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "5954f258a9104f9aa45054b2a6686c38": {
+        "confirm_time_delay": 14.699999999999996,
+        "active_vehicle": 351,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "08424810d9174344b36cb7067f161837": {
+        "confirm_time_delay": 15.0,
+        "active_vehicle": 351,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "1a9b510afb3e4b268354a8f4def8a754": {
+        "confirm_time_delay": 15.199999999999996,
+        "active_vehicle": 351,
+        "txn_ac_weight": 69,
+        "consensus_condition": 40
+    },
+    "c57bf7b2c7934afd83e4521b15bfdce8": {
+        "confirm_time_delay": 15.099999999999998,
+        "active_vehicle": 351,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "3513c49291384b26a979251129b0ce47": {
+        "confirm_time_delay": 15.2,
+        "active_vehicle": 359,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "0af9a1a8ce824685b7346fe6c8f14d09": {
+        "confirm_time_delay": 15.0,
+        "active_vehicle": 359,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "6591820ab1b74b3798b7030991a0d150": {
+        "confirm_time_delay": 15.100000000000001,
+        "active_vehicle": 359,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "684a1023ea3e41368e1a26c0b4ca2e37": {
+        "confirm_time_delay": 14.700000000000003,
+        "active_vehicle": 359,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "f8b8db8b74d84a95a81b83ccf8be99d9": {
+        "confirm_time_delay": 15.0,
+        "active_vehicle": 359,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "96137a608b3840b7b4b29a82e2e2d68c": {
+        "confirm_time_delay": 14.899999999999999,
+        "active_vehicle": 359,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "42ed03e29ab8411f97f542d844967a41": {
+        "confirm_time_delay": 15.100000000000001,
+        "active_vehicle": 359,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "e1e3f1c881b64c7192672aaaa1d6565d": {
+        "confirm_time_delay": 15.100000000000001,
+        "active_vehicle": 359,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "326e2011530f4466b6c611c48db5298c": {
+        "confirm_time_delay": 15.3,
+        "active_vehicle": 365,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "48377d83eb60457e9cc47e2c406b77e1": {
+        "confirm_time_delay": 15.2,
+        "active_vehicle": 365,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "0c516db5c827401c94c76902bce0faae": {
+        "confirm_time_delay": 15.7,
+        "active_vehicle": 365,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "d0957b88c7554ef3acbd89f61bacaa93": {
+        "confirm_time_delay": 15.5,
+        "active_vehicle": 365,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "da5321bff54a4011bfd20faebc526994": {
+        "confirm_time_delay": 15.799999999999997,
+        "active_vehicle": 365,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "01ce00a5e4244684b8b495fc4a6a0a25": {
+        "confirm_time_delay": 16.0,
+        "active_vehicle": 371,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "b8eaa46c00ff48e49b9123fae630f70d": {
+        "confirm_time_delay": 15.900000000000002,
+        "active_vehicle": 371,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "01fc02f69bcb468fafc70dccfb06174a": {
+        "confirm_time_delay": 15.900000000000002,
+        "active_vehicle": 371,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "ef465e1a2a4c44899e35ece1e911d37d": {
+        "confirm_time_delay": 16.1,
+        "active_vehicle": 371,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "dd6178b4cb094b6ab9fcacdf02f01944": {
+        "confirm_time_delay": 16.200000000000003,
+        "active_vehicle": 371,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "ff38f0293bdb40ba8ab8d83f8e57a0fe": {
+        "confirm_time_delay": 16.6,
+        "active_vehicle": 379,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "c99c8c8008574a18bd85e8fd283b9e6c": {
+        "confirm_time_delay": 16.400000000000002,
+        "active_vehicle": 379,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "dd7433b3311042a0b6bee1cce8bde4d1": {
+        "confirm_time_delay": 16.599999999999998,
+        "active_vehicle": 379,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "ff8a838ab6d64426a9bec5225ca34555": {
+        "confirm_time_delay": 16.4,
+        "active_vehicle": 379,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "18455448bd7a449bbb2a093381c3c311": {
+        "confirm_time_delay": 16.400000000000002,
+        "active_vehicle": 379,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "ebf4021219d8421fb6bce92df5258e65": {
+        "confirm_time_delay": 16.3,
+        "active_vehicle": 379,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "7772fde1ba154d23861636af2b9d4518": {
+        "confirm_time_delay": 16.400000000000002,
+        "active_vehicle": 379,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "71cef301b3d84d2487cc616ab09c1f54": {
+        "confirm_time_delay": 16.400000000000002,
+        "active_vehicle": 379,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "dd940065ae5e482e9ae6734bbeddcac6": {
+        "confirm_time_delay": 16.4,
+        "active_vehicle": 383,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "25efd3b79c374f53bd6498ae1a0f54d0": {
+        "confirm_time_delay": 16.3,
+        "active_vehicle": 383,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "f43a64efaa064c3f81c7531fe72549ad": {
+        "confirm_time_delay": 16.8,
+        "active_vehicle": 383,
+        "txn_ac_weight": 71,
+        "consensus_condition": 40
+    },
+    "b238b14aacbd4deba1f07785892b6a56": {
+        "confirm_time_delay": 16.8,
+        "active_vehicle": 383,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "a9000ce62b284b8f925c4330ddebce82": {
+        "confirm_time_delay": 16.999999999999996,
+        "active_vehicle": 383,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "709fa4bc9f68483780c11a02ccd26ec3": {
+        "confirm_time_delay": 16.799999999999997,
+        "active_vehicle": 383,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "cae690268ca346bda9a0390dae18470d": {
+        "confirm_time_delay": 16.8,
+        "active_vehicle": 390,
+        "txn_ac_weight": 72,
+        "consensus_condition": 40
+    },
+    "d3622298890d467998ba27ce07e216ee": {
+        "confirm_time_delay": 16.999999999999996,
+        "active_vehicle": 390,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "c8b00cae6a694746b6c84f212f301505": {
+        "confirm_time_delay": 16.999999999999996,
+        "active_vehicle": 390,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "d6d65eba3f984b73b947b48b5121b29b": {
+        "confirm_time_delay": 17.3,
+        "active_vehicle": 390,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "a9459bcca2ca4d46a54770bc8534df26": {
+        "confirm_time_delay": 17.199999999999996,
+        "active_vehicle": 390,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "dde6671eff1c4497aaf90b3121cfbdad": {
+        "confirm_time_delay": 17.4,
+        "active_vehicle": 396,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "4c34b051c2ca4bfe868134845166a23a": {
+        "confirm_time_delay": 17.5,
+        "active_vehicle": 396,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "1e7374b6fe024170b74e0be588b0167b": {
+        "confirm_time_delay": 17.5,
+        "active_vehicle": 396,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "3c174084b8b94d3b96467e898c84984d": {
+        "confirm_time_delay": 17.5,
+        "active_vehicle": 396,
+        "txn_ac_weight": 78,
+        "consensus_condition": 40
+    },
+    "75831d12986144c8bbc2584d6abf2cdd": {
+        "confirm_time_delay": 17.700000000000003,
+        "active_vehicle": 396,
+        "txn_ac_weight": 69,
+        "consensus_condition": 40
+    },
+    "fb21e1fe12b543f0b5a5eb83d8aacf3d": {
+        "confirm_time_delay": 17.6,
+        "active_vehicle": 396,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "f2447ab3236a436bab99cfe8d7597fa3": {
+        "confirm_time_delay": 17.699999999999996,
+        "active_vehicle": 396,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "7638ddf189e9434480e129db330eabbd": {
+        "confirm_time_delay": 17.6,
+        "active_vehicle": 396,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "ec9b5a8e9ada4b3194f5967464fe5bc5": {
+        "confirm_time_delay": 17.800000000000004,
+        "active_vehicle": 403,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "ce746ae25c494f8badf63ee433dafbaa": {
+        "confirm_time_delay": 17.800000000000004,
+        "active_vehicle": 403,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "d7ca5c5832f84244ac91ac0f978039ab": {
+        "confirm_time_delay": 17.799999999999997,
+        "active_vehicle": 403,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "0d8d28a67895460ca88375c95cef2b72": {
+        "confirm_time_delay": 17.799999999999997,
+        "active_vehicle": 403,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "48a0370290494603995dc93b06cbe4fe": {
+        "confirm_time_delay": 17.700000000000003,
+        "active_vehicle": 403,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "c8f19de7b7724883b32bb3bee458efde": {
+        "confirm_time_delay": 17.900000000000006,
+        "active_vehicle": 403,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "dabce778e3724734b8222ff66a496777": {
+        "confirm_time_delay": 18.1,
+        "active_vehicle": 409,
+        "txn_ac_weight": 71,
+        "consensus_condition": 40
+    },
+    "6b5236d978fe4c24af8c67833428b0a4": {
+        "confirm_time_delay": 18.0,
+        "active_vehicle": 409,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "38b6bc6fafa14740ba505ea994c4e169": {
+        "confirm_time_delay": 18.0,
+        "active_vehicle": 409,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "1facf68ed0374a478c540a08215c6ca2": {
+        "confirm_time_delay": 17.800000000000004,
+        "active_vehicle": 409,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "c7717b783aaa4b62a6861d219b7c428e": {
+        "confirm_time_delay": 17.799999999999997,
+        "active_vehicle": 409,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "88d0a59b350c487ea8f9a6f226ee73e5": {
+        "confirm_time_delay": 17.599999999999994,
+        "active_vehicle": 409,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "b7f861ad17ac405b841f87a3b945e030": {
+        "confirm_time_delay": 18.0,
+        "active_vehicle": 409,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "6d00aeb0e8644945b79eb63e8314c301": {
+        "confirm_time_delay": 18.0,
+        "active_vehicle": 409,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "718d8c8efb994575baa8d537adb2eb61": {
+        "confirm_time_delay": 18.300000000000004,
+        "active_vehicle": 415,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "95868b0deb3d44e3ac15ca690678c85f": {
+        "confirm_time_delay": 18.299999999999997,
+        "active_vehicle": 415,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "bddc2763c2f048638f3737ad3ca97267": {
+        "confirm_time_delay": 18.4,
+        "active_vehicle": 415,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "9e11ab2452b24fcab49beba931a67c1c": {
+        "confirm_time_delay": 18.299999999999997,
+        "active_vehicle": 415,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "10ce4e6f3ee6426ba75899ad4cd1b65c": {
+        "confirm_time_delay": 18.300000000000004,
+        "active_vehicle": 415,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "9d4d5ca034d9402fb8325f3a13dd6080": {
+        "confirm_time_delay": 18.5,
+        "active_vehicle": 415,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "266a1163c3974435aaa91324aeb07582": {
+        "confirm_time_delay": 18.5,
+        "active_vehicle": 415,
+        "txn_ac_weight": 44,
+        "consensus_condition": 40
+    },
+    "2c5d27550e0e4e10a79cf5eca2e845b4": {
+        "confirm_time_delay": 18.9,
+        "active_vehicle": 422,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "215b4ecccad145eea7572f76515c75d0": {
+        "confirm_time_delay": 18.9,
+        "active_vehicle": 422,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "52ac810c23754f84b2a0ad91143d36ac": {
+        "confirm_time_delay": 18.6,
+        "active_vehicle": 422,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "a540805c59e045188bbc38cd4db84fcf": {
+        "confirm_time_delay": 18.700000000000003,
+        "active_vehicle": 422,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "a1a640c3f6f24e018a2a9c720a5cafe0": {
+        "confirm_time_delay": 19.0,
+        "active_vehicle": 422,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "5858a21b391b4e5289dac9249ac926c4": {
+        "confirm_time_delay": 19.1,
+        "active_vehicle": 428,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "a9cf4caf1d5d42e28cd9c28a96e83863": {
+        "confirm_time_delay": 19.4,
+        "active_vehicle": 428,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "67e5b841ed9b4ccab8fff8a9a5365971": {
+        "confirm_time_delay": 19.5,
+        "active_vehicle": 428,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "4e8f5222519c47b3b23f897e9d847d17": {
+        "confirm_time_delay": 19.6,
+        "active_vehicle": 428,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "c1d3cf28f4b1466a912943a6778e3f33": {
+        "confirm_time_delay": 19.6,
+        "active_vehicle": 428,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "4805d0d462e34eb4bd96df7a5263048a": {
+        "confirm_time_delay": 19.800000000000004,
+        "active_vehicle": 433,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "bd26f3b845ab4dfabbcb6268527d3fe4": {
+        "confirm_time_delay": 19.700000000000003,
+        "active_vehicle": 433,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "7a120f6dc5e848258625e59843dda77a": {
+        "confirm_time_delay": 19.700000000000003,
+        "active_vehicle": 433,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "b1af2b466ab14da8914f0a65140a2dd5": {
+        "confirm_time_delay": 19.6,
+        "active_vehicle": 433,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "7f8179922cee4adb9cbcba2e464fb024": {
+        "confirm_time_delay": 19.9,
+        "active_vehicle": 433,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "e20b1eaeb5ec4707ab35185164de0045": {
+        "confirm_time_delay": 19.700000000000003,
+        "active_vehicle": 433,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "05ffdf3dba3b4f79ad6f7a3ce3ba93a9": {
+        "confirm_time_delay": 20.0,
+        "active_vehicle": 441,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "92b00b58f0ef4466b6725e4d04cbd64d": {
+        "confirm_time_delay": 19.800000000000004,
+        "active_vehicle": 441,
+        "txn_ac_weight": 43,
+        "consensus_condition": 40
+    },
+    "e33c3b88821546568562ea359108269d": {
+        "confirm_time_delay": 20.0,
+        "active_vehicle": 441,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "1e35f1017bb848cb86821f0e0a015394": {
+        "confirm_time_delay": 20.0,
+        "active_vehicle": 441,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "ee0754ec584048258b557ceb96507d76": {
+        "confirm_time_delay": 20.200000000000003,
+        "active_vehicle": 441,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "77af33597c87455fbd4b2fe7af024d1a": {
+        "confirm_time_delay": 20.200000000000003,
+        "active_vehicle": 441,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "bf6a395411f9414ab2cc3c2e3b4f07a0": {
+        "confirm_time_delay": 20.299999999999997,
+        "active_vehicle": 441,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "ebe00b53cefd422da7f8ca022a33d664": {
+        "confirm_time_delay": 20.299999999999997,
+        "active_vehicle": 441,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "15d5e0802be2470bbe8f130b939a59ed": {
+        "confirm_time_delay": 20.799999999999997,
+        "active_vehicle": 445,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "1a47f9cf4991492aba960f7c6039f221": {
+        "confirm_time_delay": 20.200000000000003,
+        "active_vehicle": 445,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "86d8d5a4c88d441c9297399e9cfcd478": {
+        "confirm_time_delay": 20.4,
+        "active_vehicle": 445,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "6efe2e464a784884b61aaae23db594ee": {
+        "confirm_time_delay": 20.299999999999997,
+        "active_vehicle": 445,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "bfaaf246d5104762abb5b0fc49b23774": {
+        "confirm_time_delay": 20.4,
+        "active_vehicle": 451,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "7161bf8b0ef1490796d9d4e27672ba8e": {
+        "confirm_time_delay": 20.299999999999997,
+        "active_vehicle": 451,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "dfadff5eca5c4a23bc09800dfbed7b6b": {
+        "confirm_time_delay": 20.4,
+        "active_vehicle": 451,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "02a393bd92e441a3b13af07a04ca8e24": {
+        "confirm_time_delay": 20.799999999999997,
+        "active_vehicle": 451,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "1844f028501f462a952be89e7b5a5406": {
+        "confirm_time_delay": 21.0,
+        "active_vehicle": 451,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "6afb02a831dd4216af5346d6a563213c": {
+        "confirm_time_delay": 21.0,
+        "active_vehicle": 451,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "f22ca012513145ffb3d494f7909a3663": {
+        "confirm_time_delay": 21.200000000000003,
+        "active_vehicle": 456,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "a279b51fca5542838117bd704cc3bf62": {
+        "confirm_time_delay": 21.200000000000003,
+        "active_vehicle": 456,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "d277d9d353a547909b8da9339ed2ab97": {
+        "confirm_time_delay": 21.299999999999997,
+        "active_vehicle": 456,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "7656e80a99e846fb8a7360a4ea209b35": {
+        "confirm_time_delay": 21.199999999999996,
+        "active_vehicle": 456,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "0d2a525d4de5479e8d4742624db6fc50": {
+        "confirm_time_delay": 21.5,
+        "active_vehicle": 456,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "4678b6a24b844f85a5a70f96078ab926": {
+        "confirm_time_delay": 21.5,
+        "active_vehicle": 456,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "e1488944772b462282228c8adef78c36": {
+        "confirm_time_delay": 21.799999999999997,
+        "active_vehicle": 466,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "8e984e71b8ab4b608813cd7897774822": {
+        "confirm_time_delay": 21.699999999999996,
+        "active_vehicle": 466,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "e8e8cbb4d67a4463bd1ce7e6d6102594": {
+        "confirm_time_delay": 21.599999999999994,
+        "active_vehicle": 466,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "3402386616ad40ccbbd6ac6cf24dfc4d": {
+        "confirm_time_delay": 21.700000000000003,
+        "active_vehicle": 466,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "7a51dfd81d2449b2aa6b070be192059a": {
+        "confirm_time_delay": 21.5,
+        "active_vehicle": 466,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "65e487144c5f4cce86e3b8143a1b3a54": {
+        "confirm_time_delay": 21.599999999999994,
+        "active_vehicle": 466,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "e4a4a24d089f42c3b25ee28cc6e4f824": {
+        "confirm_time_delay": 21.599999999999994,
+        "active_vehicle": 466,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "0e52919c757740859a7b8aa2fe094d01": {
+        "confirm_time_delay": 21.700000000000003,
+        "active_vehicle": 473,
+        "txn_ac_weight": 44,
+        "consensus_condition": 40
+    },
+    "99c3693fae3c49d9ae79601319a7ae25": {
+        "confirm_time_delay": 21.5,
+        "active_vehicle": 473,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "aab489f709b847d3819c2e95188c5060": {
+        "confirm_time_delay": 21.699999999999996,
+        "active_vehicle": 473,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "27cc9b5e817b49e0afdab9eec22efc11": {
+        "confirm_time_delay": 21.5,
+        "active_vehicle": 473,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "f21b05a166e74e7f9ffb055af516a247": {
+        "confirm_time_delay": 21.800000000000004,
+        "active_vehicle": 473,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "cf1f2ac2f32548b2a9db025ebb25fc09": {
+        "confirm_time_delay": 21.800000000000004,
+        "active_vehicle": 473,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "6d09b412616345d2b0da8689bc4e42b3": {
+        "confirm_time_delay": 22.0,
+        "active_vehicle": 473,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "c4deca0674b44fca9542b667260fac2b": {
+        "confirm_time_delay": 21.699999999999996,
+        "active_vehicle": 473,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "f4c0030ff4df40f7a7c062cbdc4da9c3": {
+        "confirm_time_delay": 21.700000000000003,
+        "active_vehicle": 479,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "1ffac683751544788c4a697eec1584a0": {
+        "confirm_time_delay": 21.700000000000003,
+        "active_vehicle": 479,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "e3dda31a8d9a4690a7e251c5edc31b71": {
+        "confirm_time_delay": 21.700000000000003,
+        "active_vehicle": 479,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "db49d81b58b74995a12f039a02a8f73b": {
+        "confirm_time_delay": 21.6,
+        "active_vehicle": 479,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "e0f4cfa78ef24fe980a306e50417f837": {
+        "confirm_time_delay": 22.0,
+        "active_vehicle": 479,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "dd4811f425e14cb8b2112c157b2b9136": {
+        "confirm_time_delay": 22.0,
+        "active_vehicle": 479,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "8af69b2818b048a7a0fe94388bd70976": {
+        "confirm_time_delay": 22.199999999999996,
+        "active_vehicle": 479,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "f64655b0aa6b4b38a7d5b0033a395f39": {
+        "confirm_time_delay": 22.199999999999996,
+        "active_vehicle": 479,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "d119bc4826054008bca64a0f295c5cf8": {
+        "confirm_time_delay": 22.300000000000004,
+        "active_vehicle": 484,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "f45011c4e70c42e9807581bd020fb006": {
+        "confirm_time_delay": 22.1,
+        "active_vehicle": 484,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "4d73e0d6c6f449829097e2c4f84f76b3": {
+        "confirm_time_delay": 22.6,
+        "active_vehicle": 484,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "12652d7dc27b4fcb9fc362c3c679561c": {
+        "confirm_time_delay": 22.400000000000006,
+        "active_vehicle": 484,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "f1cc1329fc5243ceaf41bed87ebc96e3": {
+        "confirm_time_delay": 22.5,
+        "active_vehicle": 484,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "7d24419966fe4ff2867bb627d30bf815": {
+        "confirm_time_delay": 22.5,
+        "active_vehicle": 484,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "4bc9fdf5bf5d420aa2904a58313ce02f": {
+        "confirm_time_delay": 23.0,
+        "active_vehicle": 489,
+        "txn_ac_weight": 73,
+        "consensus_condition": 40
+    },
+    "103f4a2745974e32a4da7ba849829e48": {
+        "confirm_time_delay": 22.9,
+        "active_vehicle": 489,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "ff67f5ad054e4217a7b9de48c2647ab9": {
+        "confirm_time_delay": 22.699999999999996,
+        "active_vehicle": 489,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "7f0f84430a3246429e9845431e7b95b2": {
+        "confirm_time_delay": 22.599999999999994,
+        "active_vehicle": 489,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "1209e960aaad4b3a82381c9b58769727": {
+        "confirm_time_delay": 22.599999999999994,
+        "active_vehicle": 489,
+        "txn_ac_weight": 40,
+        "consensus_condition": 40
+    },
+    "b90a5782cc9f42ff8306567a997ad533": {
+        "confirm_time_delay": 22.89999999999999,
+        "active_vehicle": 495,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "bfabd92b2f5e45dabe5bb03df26cc068": {
+        "confirm_time_delay": 22.89999999999999,
+        "active_vehicle": 495,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "5cbe482695f6405d86135fc86f7208e7": {
+        "confirm_time_delay": 22.89999999999999,
+        "active_vehicle": 495,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "c4bb8320b7da4b0489387904941d7d81": {
+        "confirm_time_delay": 23.0,
+        "active_vehicle": 495,
+        "txn_ac_weight": 74,
+        "consensus_condition": 40
+    },
+    "6da53889476d45f989f81f12517a842a": {
+        "confirm_time_delay": 22.699999999999996,
+        "active_vehicle": 495,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "9b931b231e374060a623a3a158d7607e": {
+        "confirm_time_delay": 23.099999999999994,
+        "active_vehicle": 495,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "29a1756d0bcd4670bd61bd3981e6ae0d": {
+        "confirm_time_delay": 23.099999999999994,
+        "active_vehicle": 495,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "6039b1a227c04203b02d9b0f41f907fd": {
+        "confirm_time_delay": 23.5,
+        "active_vehicle": 499,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "3a7da537a69f4b9fbaf64776380ac2a7": {
+        "confirm_time_delay": 23.4,
+        "active_vehicle": 499,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "e999eaf34f7a46e0897b253b0f833a81": {
+        "confirm_time_delay": 23.5,
+        "active_vehicle": 499,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "aa77cd5a9450458190bc5a2447c0a096": {
+        "confirm_time_delay": 23.5,
+        "active_vehicle": 499,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "da3240c43bd843ff81606804bc644bd7": {
+        "confirm_time_delay": 23.699999999999996,
+        "active_vehicle": 499,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "fd4a6f458a4c4d58806bef98b3e4b15d": {
+        "confirm_time_delay": 23.999999999999993,
+        "active_vehicle": 501,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "e82ba5aa96724a0c8d0b999f21e056c9": {
+        "confirm_time_delay": 23.800000000000004,
+        "active_vehicle": 501,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "ead30d2d97824b12bcd22ab25c43ced9": {
+        "confirm_time_delay": 23.799999999999997,
+        "active_vehicle": 501,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "718e4cd7238749f5a66df027c75c68fe": {
+        "confirm_time_delay": 24.099999999999994,
+        "active_vehicle": 501,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "8258c98d9d4945a59cfe357509876f87": {
+        "confirm_time_delay": 23.89999999999999,
+        "active_vehicle": 501,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "4363b6e2055044ef84c413860b5dd253": {
+        "confirm_time_delay": 24.5,
+        "active_vehicle": 506,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "30e9a292fa95486bbdde4f82a301b0b9": {
+        "confirm_time_delay": 24.400000000000006,
+        "active_vehicle": 506,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "e828c97e229d41dfb727c012af55e7a1": {
+        "confirm_time_delay": 24.500000000000007,
+        "active_vehicle": 506,
+        "txn_ac_weight": 41,
+        "consensus_condition": 40
+    },
+    "de42ef17f2c044ed972cd5d3ec2d9ab9": {
+        "confirm_time_delay": 24.400000000000006,
+        "active_vehicle": 506,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "4d476fa9b55f45ae8a4621bc9f091787": {
+        "confirm_time_delay": 24.5,
+        "active_vehicle": 506,
+        "txn_ac_weight": 74,
+        "consensus_condition": 40
+    },
+    "d87b9b0337e140618f4dbe4ecdf39702": {
+        "confirm_time_delay": 24.300000000000004,
+        "active_vehicle": 506,
+        "txn_ac_weight": 71,
+        "consensus_condition": 40
+    },
+    "148715a4b5444dd292fdf37bca0b3a99": {
+        "confirm_time_delay": 24.699999999999996,
+        "active_vehicle": 511,
+        "txn_ac_weight": 44,
+        "consensus_condition": 40
+    },
+    "9d36fd3a9f2c4a629b6f69d7f538cddc": {
+        "confirm_time_delay": 24.799999999999997,
+        "active_vehicle": 511,
+        "txn_ac_weight": 69,
+        "consensus_condition": 40
+    },
+    "af9e93654cf745a2b8b9906917067783": {
+        "confirm_time_delay": 24.900000000000006,
+        "active_vehicle": 511,
+        "txn_ac_weight": 75,
+        "consensus_condition": 40
+    },
+    "8bafc23174b84cb78798a02c6d98aa24": {
+        "confirm_time_delay": 25.0,
+        "active_vehicle": 511,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "9c1ad0fc87ae4623aa2bd4bf96d0aeb6": {
+        "confirm_time_delay": 25.0,
+        "active_vehicle": 511,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "c45db6c48d564a0c92eaf77611175932": {
+        "confirm_time_delay": 24.9,
+        "active_vehicle": 511,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "1a023914be8a431b95a6136d1b797153": {
+        "confirm_time_delay": 25.1,
+        "active_vehicle": 513,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "5dce775269044b579753f82a393cbf69": {
+        "confirm_time_delay": 25.1,
+        "active_vehicle": 513,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "a4e2599f77364a3b9b67b5f228b5c0c7": {
+        "confirm_time_delay": 25.1,
+        "active_vehicle": 513,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "ad8dd149dda94d0598069ee9edeb87fc": {
+        "confirm_time_delay": 25.4,
+        "active_vehicle": 513,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "eb6c2bf4eaf24f4ea9bf86c17f8757b2": {
+        "confirm_time_delay": 25.299999999999997,
+        "active_vehicle": 513,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "d14acaad5802440b91501bff68b554d1": {
+        "confirm_time_delay": 25.39999999999999,
+        "active_vehicle": 513,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "3fa99cacfa774ba4a9501f839251d2d4": {
+        "confirm_time_delay": 25.099999999999994,
+        "active_vehicle": 513,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "06a53929cc6946a29327ffbbafd43da6": {
+        "confirm_time_delay": 25.699999999999996,
+        "active_vehicle": 517,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "11d81586c029484ebf9bfb99d64474ea": {
+        "confirm_time_delay": 25.599999999999994,
+        "active_vehicle": 517,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "ceafd033c98c4848bd81611c60dca6ad": {
+        "confirm_time_delay": 26.0,
+        "active_vehicle": 517,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "682dd85df7e5446ead0dfe0d3ca9aa6c": {
+        "confirm_time_delay": 25.599999999999994,
+        "active_vehicle": 517,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "b993cb02e5a6470c8a5c5c49ec1a0835": {
+        "confirm_time_delay": 25.700000000000003,
+        "active_vehicle": 517,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "e261efdb11d649b29d53b617bb1779e1": {
+        "confirm_time_delay": 25.700000000000003,
+        "active_vehicle": 517,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "0aeb06d2f9b24cdc82d5cf3e96300b6c": {
+        "confirm_time_delay": 26.099999999999994,
+        "active_vehicle": 524,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "8747e904ed9647c1b24c848807e14ca6": {
+        "confirm_time_delay": 25.9,
+        "active_vehicle": 524,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "7b09f07766594071b7f05cdfcf6f4e97": {
+        "confirm_time_delay": 26.0,
+        "active_vehicle": 524,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "e06e58be60194316a2e9a8035ba1806f": {
+        "confirm_time_delay": 25.9,
+        "active_vehicle": 524,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "d50b4fc5f0c84b42a37a4a66fb0f4ba4": {
+        "confirm_time_delay": 25.999999999999993,
+        "active_vehicle": 524,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "fcb9ba5fd248494f9791b2cbd1fe9eb8": {
+        "confirm_time_delay": 25.999999999999993,
+        "active_vehicle": 524,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "173828949cc547cfae329f0962b1af5b": {
+        "confirm_time_delay": 26.39999999999999,
+        "active_vehicle": 527,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "27e460042fc141e28404c96d96832fee": {
+        "confirm_time_delay": 26.199999999999996,
+        "active_vehicle": 527,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "fda3286743fe48fa842125a9967ab549": {
+        "confirm_time_delay": 26.299999999999997,
+        "active_vehicle": 527,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "c9744e6ca14c4325a9dac3fdf98b4122": {
+        "confirm_time_delay": 26.400000000000006,
+        "active_vehicle": 527,
+        "txn_ac_weight": 69,
+        "consensus_condition": 40
+    },
+    "951bc04554384d17a89e4e990fb5cd10": {
+        "confirm_time_delay": 26.4,
+        "active_vehicle": 527,
+        "txn_ac_weight": 44,
+        "consensus_condition": 40
+    },
+    "936cad3735724e4884fb0042c9f1160c": {
+        "confirm_time_delay": 26.400000000000006,
+        "active_vehicle": 527,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "1205ca565c16422596df4df0c3211398": {
+        "confirm_time_delay": 26.699999999999996,
+        "active_vehicle": 529,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "695106df06544476a580d7b7a2d59167": {
+        "confirm_time_delay": 26.700000000000003,
+        "active_vehicle": 529,
+        "txn_ac_weight": 70,
+        "consensus_condition": 40
+    },
+    "fa23bc29431a4a96b5bbc266083ea7e2": {
+        "confirm_time_delay": 26.799999999999997,
+        "active_vehicle": 529,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "a2cc9a864f034f2f9fbc70d9d4bd1d44": {
+        "confirm_time_delay": 26.900000000000006,
+        "active_vehicle": 529,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "9394cf79d1c64747916110f08143fa12": {
+        "confirm_time_delay": 26.800000000000004,
+        "active_vehicle": 529,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "733edd8eb6ea4efdbb57a3c9195b49b7": {
+        "confirm_time_delay": 26.699999999999996,
+        "active_vehicle": 529,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "d99975fb13224efdb0ba6fee7c7693fd": {
+        "confirm_time_delay": 27.1,
+        "active_vehicle": 533,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "e4d6f8e3ed914bf1bcb0f1950673683a": {
+        "confirm_time_delay": 27.300000000000004,
+        "active_vehicle": 533,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "9b0757aa999749079a99d919417346ae": {
+        "confirm_time_delay": 27.299999999999997,
+        "active_vehicle": 533,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "30d2787935574151841107a1861bff1e": {
+        "confirm_time_delay": 27.299999999999997,
+        "active_vehicle": 533,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "2aa136e9e99a45edafce666d2785b40c": {
+        "confirm_time_delay": 27.60000000000001,
+        "active_vehicle": 533,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "c350b0ec716f45d7b4adf279dbf9f441": {
+        "confirm_time_delay": 27.300000000000004,
+        "active_vehicle": 533,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "c1c5591a348b4671bef3038b2fc10d67": {
+        "confirm_time_delay": 27.5,
+        "active_vehicle": 537,
+        "txn_ac_weight": 75,
+        "consensus_condition": 40
+    },
+    "4d77e02782e64c8e915bf3ad59612ce3": {
+        "confirm_time_delay": 27.60000000000001,
+        "active_vehicle": 537,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "2db6230df8924d8696e0cb7d676a26b8": {
+        "confirm_time_delay": 27.599999999999994,
+        "active_vehicle": 537,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "90284999686f43418ee0223b92c34872": {
+        "confirm_time_delay": 27.499999999999993,
+        "active_vehicle": 537,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "a7ea4b8d210c4aa28b7f0307275fce5d": {
+        "confirm_time_delay": 27.699999999999996,
+        "active_vehicle": 537,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "f589c2e4d40f4cc996e0003eb82d6db9": {
+        "confirm_time_delay": 27.500000000000007,
+        "active_vehicle": 537,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "c6ee971299664b5b854b534daf8fef44": {
+        "confirm_time_delay": 27.800000000000004,
+        "active_vehicle": 540,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "96182ad1a7a943f6b148c22504f40da9": {
+        "confirm_time_delay": 27.800000000000004,
+        "active_vehicle": 540,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "31b265bbb3424ffc8718662c3c27ebce": {
+        "confirm_time_delay": 27.599999999999994,
+        "active_vehicle": 540,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "830bed5a01a24b8d8282ee6d9b6aa1fc": {
+        "confirm_time_delay": 27.799999999999997,
+        "active_vehicle": 540,
+        "txn_ac_weight": 44,
+        "consensus_condition": 40
+    },
+    "fd66090986b941589888ff445ef1ebc1": {
+        "confirm_time_delay": 27.799999999999997,
+        "active_vehicle": 540,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "38eeb17c32844c788d5c4d07f944f113": {
+        "confirm_time_delay": 28.300000000000004,
+        "active_vehicle": 546,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "510433354bf14daabbd1938dd25098bb": {
+        "confirm_time_delay": 28.4,
+        "active_vehicle": 546,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "db303ee519a14cfeab1b83db14ab838d": {
+        "confirm_time_delay": 28.199999999999996,
+        "active_vehicle": 546,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "3fdb3880a5bb432ab95fb20b492fb78e": {
+        "confirm_time_delay": 28.4,
+        "active_vehicle": 546,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "84c688129d7b411ab7de6f58279c6c9c": {
+        "confirm_time_delay": 28.400000000000006,
+        "active_vehicle": 546,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "3eb5dc7eb2e448f0bede1a41e2ec8244": {
+        "confirm_time_delay": 28.60000000000001,
+        "active_vehicle": 546,
+        "txn_ac_weight": 74,
+        "consensus_condition": 40
+    },
+    "f552a39ca9a4461681eb5f1ae6d02632": {
+        "confirm_time_delay": 28.60000000000001,
+        "active_vehicle": 546,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "3f7fc9800de74037b11d252b5948c340": {
+        "confirm_time_delay": 28.5,
+        "active_vehicle": 553,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "03110f8d39ab41c1bcd7f1be4064a443": {
+        "confirm_time_delay": 28.5,
+        "active_vehicle": 553,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "8a40fd340fa04c168eede31f970fbc5f": {
+        "confirm_time_delay": 28.599999999999994,
+        "active_vehicle": 553,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "2d1ad67dc4534fcc99ab16c86f89cdae": {
+        "confirm_time_delay": 28.4,
+        "active_vehicle": 553,
+        "txn_ac_weight": 70,
+        "consensus_condition": 40
+    },
+    "1823004a2f3e42a3af8618f74f8e92c3": {
+        "confirm_time_delay": 28.300000000000004,
+        "active_vehicle": 553,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "ceb29f3c06844f12a2de8f2ee2b67d19": {
+        "confirm_time_delay": 28.300000000000004,
+        "active_vehicle": 553,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "3ff92956f368490b87627c5928b50693": {
+        "confirm_time_delay": 28.89999999999999,
+        "active_vehicle": 556,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "9cf2129b68ed4632a042bc8dcdd848d0": {
+        "confirm_time_delay": 29.0,
+        "active_vehicle": 556,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "6ff84186eef94728a42d7eb0493697c5": {
+        "confirm_time_delay": 29.10000000000001,
+        "active_vehicle": 556,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "953d4a584f0046deb10cdbbf34e14342": {
+        "confirm_time_delay": 29.299999999999997,
+        "active_vehicle": 556,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "029e04123fca4e48bf05d047de376726": {
+        "confirm_time_delay": 29.400000000000006,
+        "active_vehicle": 556,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "93b65da0e024435d90682fa5a5c5ae8c": {
+        "confirm_time_delay": 29.200000000000003,
+        "active_vehicle": 556,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "45cb30364517412fb4d8b8738bee1abb": {
+        "confirm_time_delay": 29.700000000000003,
+        "active_vehicle": 560,
+        "txn_ac_weight": 74,
+        "consensus_condition": 40
+    },
+    "7358025574bb48f4aa95638522ac3f52": {
+        "confirm_time_delay": 29.400000000000006,
+        "active_vehicle": 560,
+        "txn_ac_weight": 69,
+        "consensus_condition": 40
+    },
+    "dbc5b7a0c96b4028b941f1d6592179ba": {
+        "confirm_time_delay": 29.400000000000006,
+        "active_vehicle": 560,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "4d6c4b8e27af4671b7aced0668eaf3b5": {
+        "confirm_time_delay": 29.0,
+        "active_vehicle": 560,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "cb7739f9d20a42c7ab678fd6090766a3": {
+        "confirm_time_delay": 29.299999999999997,
+        "active_vehicle": 560,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "ae4d29c69892484790deed051dea4749": {
+        "confirm_time_delay": 29.199999999999996,
+        "active_vehicle": 560,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "9c94ff4943ce437c8ff4d9078dbeadcd": {
+        "confirm_time_delay": 29.400000000000006,
+        "active_vehicle": 560,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "4d5ff523d6624062afa4daa638042ab7": {
+        "confirm_time_delay": 29.400000000000006,
+        "active_vehicle": 560,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "a9f9d4350748400ba3e07eac346b8fae": {
+        "confirm_time_delay": 29.6,
+        "active_vehicle": 562,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "6d805d96a6f247b398a24b157e0dc8ba": {
+        "confirm_time_delay": 29.400000000000006,
+        "active_vehicle": 562,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "1f70b30784f848a4a354fb70277b50f0": {
+        "confirm_time_delay": 29.900000000000006,
+        "active_vehicle": 562,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "28f5516b5d5243cab335c6c159c7fbb4": {
+        "confirm_time_delay": 29.900000000000006,
+        "active_vehicle": 562,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "eb1bb2136bc540f78c18d51368f16a78": {
+        "confirm_time_delay": 29.800000000000004,
+        "active_vehicle": 562,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "344b3472ff8242cf843d55bc1755a6a8": {
+        "confirm_time_delay": 29.60000000000001,
+        "active_vehicle": 562,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "88b9f9e77bad4f1db8a5d58945757d13": {
+        "confirm_time_delay": 29.799999999999997,
+        "active_vehicle": 565,
+        "txn_ac_weight": 71,
+        "consensus_condition": 40
+    },
+    "ad08befdff574bc393e07e741b55996b": {
+        "confirm_time_delay": 29.699999999999996,
+        "active_vehicle": 565,
+        "txn_ac_weight": 74,
+        "consensus_condition": 40
+    },
+    "4343b5333e694d18801e9553539ec562": {
+        "confirm_time_delay": 30.1,
+        "active_vehicle": 565,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "24ae58af6e744a42bd98e5e16a744d08": {
+        "confirm_time_delay": 30.1,
+        "active_vehicle": 565,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "0c25e6b0103e47ababa051f9f379821c": {
+        "confirm_time_delay": 30.599999999999994,
+        "active_vehicle": 566,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "5a8a514f66c141f3aeb953bcd8204623": {
+        "confirm_time_delay": 30.499999999999993,
+        "active_vehicle": 566,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "0b529a897bb14c09a0741b4ac4fd2f37": {
+        "confirm_time_delay": 30.400000000000006,
+        "active_vehicle": 566,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "a642257b8c1c4cf7b7ac437194f17586": {
+        "confirm_time_delay": 30.1,
+        "active_vehicle": 566,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "304c062ab8304b07b98b10e563269e0f": {
+        "confirm_time_delay": 30.5,
+        "active_vehicle": 566,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "03b7c013e539408bbc0623d257613d98": {
+        "confirm_time_delay": 30.5,
+        "active_vehicle": 566,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "37d93a456def4eaf94410cfd6db538c9": {
+        "confirm_time_delay": 30.700000000000003,
+        "active_vehicle": 571,
+        "txn_ac_weight": 44,
+        "consensus_condition": 40
+    },
+    "479bebd22c104d30814e3c1c0cab3042": {
+        "confirm_time_delay": 30.700000000000003,
+        "active_vehicle": 571,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "61d11b9589bd468fafdab2cc73b7d1b4": {
+        "confirm_time_delay": 30.700000000000003,
+        "active_vehicle": 571,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "e2c4dad15bf24c7caf935cfd6d94a88d": {
+        "confirm_time_delay": 30.799999999999997,
+        "active_vehicle": 571,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "69f66e1e7847445fbbb31e411cbd849d": {
+        "confirm_time_delay": 30.800000000000004,
+        "active_vehicle": 571,
+        "txn_ac_weight": 78,
+        "consensus_condition": 40
+    },
+    "93bbcc8ea47d4daab415098d983ec047": {
+        "confirm_time_delay": 30.800000000000004,
+        "active_vehicle": 571,
+        "txn_ac_weight": 80,
+        "consensus_condition": 40
+    },
+    "b6d7bc76e56c456ebce07e4400c82634": {
+        "confirm_time_delay": 30.6,
+        "active_vehicle": 571,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "cb4b251b136243988c45b735c0e62a98": {
+        "confirm_time_delay": 30.999999999999993,
+        "active_vehicle": 578,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "f370cbf2d56841d7be951f1a3cecbe7c": {
+        "confirm_time_delay": 31.300000000000004,
+        "active_vehicle": 578,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "390a80b8910e419ab3238ec3f6ce2377": {
+        "confirm_time_delay": 31.499999999999993,
+        "active_vehicle": 578,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "45bfde2f730d476cacff320484747f04": {
+        "confirm_time_delay": 31.599999999999994,
+        "active_vehicle": 578,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "7c35148c2e1a41cc9f109aab9ea77926": {
+        "confirm_time_delay": 31.5,
+        "active_vehicle": 578,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "cc679ba505fb4f5eb7702521f5cf87d4": {
+        "confirm_time_delay": 31.9,
+        "active_vehicle": 582,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "1add7ce984c347dc98bfb4dfc875bc38": {
+        "confirm_time_delay": 31.799999999999997,
+        "active_vehicle": 582,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "6eb99f03206044f28728d72a091b7033": {
+        "confirm_time_delay": 31.9,
+        "active_vehicle": 582,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "f6d395430f5546ebadd93ef0a646118a": {
+        "confirm_time_delay": 31.5,
+        "active_vehicle": 582,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "7016f548f7014720bfcccef7ce7dd9ee": {
+        "confirm_time_delay": 31.499999999999993,
+        "active_vehicle": 582,
+        "txn_ac_weight": 69,
+        "consensus_condition": 40
+    },
+    "10a879162cc34182bec98de1a782469d": {
+        "confirm_time_delay": 31.5,
+        "active_vehicle": 582,
+        "txn_ac_weight": 77,
+        "consensus_condition": 40
+    },
+    "94037c1ce7934a4aa6bbb3820e07bf90": {
+        "confirm_time_delay": 31.700000000000003,
+        "active_vehicle": 584,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "a8e5868e86db4b6798061fa6138035f8": {
+        "confirm_time_delay": 31.799999999999997,
+        "active_vehicle": 584,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "b53ae14a1c3d4649b6107323b1d47f09": {
+        "confirm_time_delay": 31.9,
+        "active_vehicle": 584,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "2dbb6ec5aba4424c801b82d605129b66": {
+        "confirm_time_delay": 31.999999999999993,
+        "active_vehicle": 584,
+        "txn_ac_weight": 75,
+        "consensus_condition": 40
+    },
+    "585cb2a46cdb4c3895ae225a38d2ae7a": {
+        "confirm_time_delay": 31.999999999999993,
+        "active_vehicle": 584,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "d4a52ccdc4c24e7da5da32d9a6422328": {
+        "confirm_time_delay": 32.1,
+        "active_vehicle": 584,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "da785b443656496392c853c02c66445b": {
+        "confirm_time_delay": 32.10000000000001,
+        "active_vehicle": 584,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "b727696a6adf4748b4781a08521a3033": {
+        "confirm_time_delay": 32.10000000000001,
+        "active_vehicle": 584,
+        "txn_ac_weight": 43,
+        "consensus_condition": 40
+    },
+    "df930f3ce96749e49689871b48f7dfa2": {
+        "confirm_time_delay": 32.0,
+        "active_vehicle": 592,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "f205c98267e64f1097508a1dbe6e73ca": {
+        "confirm_time_delay": 31.900000000000006,
+        "active_vehicle": 592,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "d78c40479e06449fa961243455df84ed": {
+        "confirm_time_delay": 32.0,
+        "active_vehicle": 592,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "569c74c478a64dd48ab99bf61ac636d3": {
+        "confirm_time_delay": 32.099999999999994,
+        "active_vehicle": 592,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "27fef129710c40dea1df3d8395b9db1e": {
+        "confirm_time_delay": 32.5,
+        "active_vehicle": 596,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "a340c16cae95463c9c665d3868b3e3d4": {
+        "confirm_time_delay": 32.2,
+        "active_vehicle": 596,
+        "txn_ac_weight": 75,
+        "consensus_condition": 40
+    },
+    "8700805ac20646e592c5b350297b05f3": {
+        "confirm_time_delay": 32.1,
+        "active_vehicle": 596,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "eb611ea241804c15a40fa094d5efbf06": {
+        "confirm_time_delay": 32.50000000000001,
+        "active_vehicle": 596,
+        "txn_ac_weight": 78,
+        "consensus_condition": 40
+    },
+    "3c2faa42a4384ebd91b1cb780605e252": {
+        "confirm_time_delay": 32.400000000000006,
+        "active_vehicle": 596,
+        "txn_ac_weight": 72,
+        "consensus_condition": 40
+    },
+    "51aa27d094ec453ebd5ae2093133b752": {
+        "confirm_time_delay": 32.599999999999994,
+        "active_vehicle": 596,
+        "txn_ac_weight": 70,
+        "consensus_condition": 40
+    },
+    "76352f4b969e44d6977728792e803299": {
+        "confirm_time_delay": 32.49999999999999,
+        "active_vehicle": 596,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "3cde9d37ebc342d5b20c076ba51378e7": {
+        "confirm_time_delay": 33.199999999999996,
+        "active_vehicle": 601,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "184ba123e755498182323d320933c603": {
+        "confirm_time_delay": 32.8,
+        "active_vehicle": 601,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "674eaeca0bca49e6b86f251b0aafc84f": {
+        "confirm_time_delay": 32.99999999999999,
+        "active_vehicle": 601,
+        "txn_ac_weight": 77,
+        "consensus_condition": 40
+    },
+    "c24b053a22854d0d89d7c1922ff25421": {
+        "confirm_time_delay": 33.099999999999994,
+        "active_vehicle": 601,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "78cc9da6b3e34775bd17e3ed73b18f2f": {
+        "confirm_time_delay": 33.3,
+        "active_vehicle": 605,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "c736d809134f496d9af4d77530847fbb": {
+        "confirm_time_delay": 33.199999999999996,
+        "active_vehicle": 605,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "9b99facc792647298a07ba878cdd8c70": {
+        "confirm_time_delay": 33.099999999999994,
+        "active_vehicle": 605,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "aca69b174802482ab18e7d1b60742dc9": {
+        "confirm_time_delay": 33.2,
+        "active_vehicle": 605,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "7833420f1c1f4468ac4e9eb39c330e39": {
+        "confirm_time_delay": 33.1,
+        "active_vehicle": 605,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "3b97ed320e964177943be59aad54c96e": {
+        "confirm_time_delay": 33.2,
+        "active_vehicle": 605,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "45acc804d3f247da80e1a2e4e5642c4c": {
+        "confirm_time_delay": 33.1,
+        "active_vehicle": 605,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "e2d412fd3b1c4105b941e8c8b980ba40": {
+        "confirm_time_delay": 33.599999999999994,
+        "active_vehicle": 611,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "2af45a425b41462e8b0c50241dc74bb5": {
+        "confirm_time_delay": 33.39999999999999,
+        "active_vehicle": 611,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "309bdc1a39c749379e804a01f747c5e2": {
+        "confirm_time_delay": 33.599999999999994,
+        "active_vehicle": 611,
+        "txn_ac_weight": 73,
+        "consensus_condition": 40
+    },
+    "03ac711e5d234342b62b1103839f3730": {
+        "confirm_time_delay": 33.5,
+        "active_vehicle": 611,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "122c69d7cf2f4a1cafc3e0cea5556127": {
+        "confirm_time_delay": 33.50000000000001,
+        "active_vehicle": 611,
+        "txn_ac_weight": 74,
+        "consensus_condition": 40
+    },
+    "eddfaf9d0bec40189d9b0d5b4d7b1725": {
+        "confirm_time_delay": 33.10000000000001,
+        "active_vehicle": 611,
+        "txn_ac_weight": 72,
+        "consensus_condition": 40
+    },
+    "544991038a484e27b2e441acdeaeeb72": {
+        "confirm_time_delay": 33.60000000000001,
+        "active_vehicle": 611,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "5f7b09de67fa4fd391f38400a4d800c8": {
+        "confirm_time_delay": 33.60000000000001,
+        "active_vehicle": 611,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "522591df76d5442a833419f3679c3b79": {
+        "confirm_time_delay": 33.900000000000006,
+        "active_vehicle": 613,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "fdeaa1ad30bf4fdeab14a06d7ae2d203": {
+        "confirm_time_delay": 33.800000000000004,
+        "active_vehicle": 613,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "35bfde0a8ff749829d7fff15139d9c3e": {
+        "confirm_time_delay": 33.99999999999999,
+        "active_vehicle": 613,
+        "txn_ac_weight": 43,
+        "consensus_condition": 40
+    },
+    "65f535975e8a4facae2b0575b5dcd7c3": {
+        "confirm_time_delay": 33.99999999999999,
+        "active_vehicle": 613,
+        "txn_ac_weight": 44,
+        "consensus_condition": 40
+    },
+    "5d6eb5034a9441ca84f3f1b3f6507b68": {
+        "confirm_time_delay": 34.199999999999996,
+        "active_vehicle": 613,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "e7a1ea5831d34a62ad1562783286cbb3": {
+        "confirm_time_delay": 34.099999999999994,
+        "active_vehicle": 613,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "3abe03fc1e2e4160bb49ba4dbb8847a3": {
+        "confirm_time_delay": 34.3,
+        "active_vehicle": 619,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "78728215e2954583a4c4a314b7eba307": {
+        "confirm_time_delay": 34.199999999999996,
+        "active_vehicle": 619,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "bc3f8943a30e48ae99aaae3d59ada080": {
+        "confirm_time_delay": 34.5,
+        "active_vehicle": 619,
+        "txn_ac_weight": 71,
+        "consensus_condition": 40
+    },
+    "752cd01b9b7f44afacceffa3361234be": {
+        "confirm_time_delay": 34.4,
+        "active_vehicle": 619,
+        "txn_ac_weight": 75,
+        "consensus_condition": 40
+    },
+    "25481c36e26f464397c622e96c88f517": {
+        "confirm_time_delay": 34.7,
+        "active_vehicle": 625,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "fdf90de016c24f5484e0a77f26bd8937": {
+        "confirm_time_delay": 35.10000000000001,
+        "active_vehicle": 625,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "a251daa0b2e84b71bd00a156e9e6d765": {
+        "confirm_time_delay": 34.900000000000006,
+        "active_vehicle": 625,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "2d837a93ffbc4153984de4bf522ff995": {
+        "confirm_time_delay": 35.1,
+        "active_vehicle": 625,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "3318f4c9f0364894827555ecfc2e766a": {
+        "confirm_time_delay": 35.0,
+        "active_vehicle": 625,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "f5f867df7bba45b396a447ede2635658": {
+        "confirm_time_delay": 35.39999999999999,
+        "active_vehicle": 629,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "765b00829bfe46f88502d9cd0499157d": {
+        "confirm_time_delay": 35.3,
+        "active_vehicle": 629,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "90e32bff6ff74e8fad3970678812eee1": {
+        "confirm_time_delay": 35.4,
+        "active_vehicle": 629,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "48826a60feb440bebcc71af5ae84e1b2": {
+        "confirm_time_delay": 35.3,
+        "active_vehicle": 629,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "23f31dd68f704734969a74d3608dc5e2": {
+        "confirm_time_delay": 35.300000000000004,
+        "active_vehicle": 629,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "3d499c20439d4b8da156ca609854624e": {
+        "confirm_time_delay": 35.4,
+        "active_vehicle": 629,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "bec6a739e4ec47e8bc40c7c726ba50f0": {
+        "confirm_time_delay": 35.599999999999994,
+        "active_vehicle": 629,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "d41376e9d94e41a8b97b7e0ee0c7cde1": {
+        "confirm_time_delay": 35.599999999999994,
+        "active_vehicle": 629,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "f2b18ceb6c764cf6a17d21125f0adb06": {
+        "confirm_time_delay": 35.9,
+        "active_vehicle": 632,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "f915e8b88ac04ca890044ab21f8ca89c": {
+        "confirm_time_delay": 35.9,
+        "active_vehicle": 632,
+        "txn_ac_weight": 53,
+        "consensus_condition": 40
+    },
+    "f0b83b06d2e14eec84c5345cb24a2972": {
+        "confirm_time_delay": 35.800000000000004,
+        "active_vehicle": 632,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "e3f947b2c3c24258830f56f2b74db90a": {
+        "confirm_time_delay": 35.7,
+        "active_vehicle": 632,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "15bfe644764c4b488eb41028bdbef04e": {
+        "confirm_time_delay": 35.900000000000006,
+        "active_vehicle": 632,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "58c0fcd345ff4643a76a625b170d07b8": {
+        "confirm_time_delay": 35.800000000000004,
+        "active_vehicle": 632,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "8603435adee04befac6f1538ea763d33": {
+        "confirm_time_delay": 36.0,
+        "active_vehicle": 635,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "f4e15326eb6e4c048d7e40a6c81de367": {
+        "confirm_time_delay": 36.0,
+        "active_vehicle": 635,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "162ecda4a9e346c89276759a243f905c": {
+        "confirm_time_delay": 36.0,
+        "active_vehicle": 635,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "f66e8d84cb65439a9d39b9e16a2ba097": {
+        "confirm_time_delay": 35.6,
+        "active_vehicle": 635,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "08060755273641d4a0f6bc5b93d83ed8": {
+        "confirm_time_delay": 35.8,
+        "active_vehicle": 635,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "0bc33d61cbe542fb90eb6346afc61cfa": {
+        "confirm_time_delay": 35.8,
+        "active_vehicle": 635,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "1deb5a709a824abb9979049c3eea6fdb": {
+        "confirm_time_delay": 36.199999999999996,
+        "active_vehicle": 637,
+        "txn_ac_weight": 79,
+        "consensus_condition": 40
+    },
+    "b7909b5fb72642e5b3a2f3579a15555c": {
+        "confirm_time_delay": 36.4,
+        "active_vehicle": 637,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "7ed0a4a565d64946b0f3324325510c17": {
+        "confirm_time_delay": 36.2,
+        "active_vehicle": 637,
+        "txn_ac_weight": 91,
+        "consensus_condition": 40
+    },
+    "199f2b1c6e03408f9a573d4109f28aea": {
+        "confirm_time_delay": 36.099999999999994,
+        "active_vehicle": 637,
+        "txn_ac_weight": 78,
+        "consensus_condition": 40
+    },
+    "fa934e5af7a74c75b91c0cba76a5e920": {
+        "confirm_time_delay": 36.3,
+        "active_vehicle": 637,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "d2d0319f88f34c20a100b1f4f8f95faa": {
+        "confirm_time_delay": 36.3,
+        "active_vehicle": 637,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "0e8d4edf247546e5ab1261f9cadf757a": {
+        "confirm_time_delay": 36.400000000000006,
+        "active_vehicle": 640,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "5231536158c945cb8f02881601be49c0": {
+        "confirm_time_delay": 36.60000000000001,
+        "active_vehicle": 640,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "e73a1a3f42f74d9cbc77eaa53b547ac1": {
+        "confirm_time_delay": 36.60000000000001,
+        "active_vehicle": 640,
+        "txn_ac_weight": 46,
+        "consensus_condition": 40
+    },
+    "e8b9dcfb4bd84f19bec51d79186f02c1": {
+        "confirm_time_delay": 36.60000000000001,
+        "active_vehicle": 640,
+        "txn_ac_weight": 73,
+        "consensus_condition": 40
+    },
+    "5a2012faa5ad4783a699927b742fc687": {
+        "confirm_time_delay": 36.5,
+        "active_vehicle": 640,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "15e6fc7a370040909d14a9f1cd8b4930": {
+        "confirm_time_delay": 37.10000000000001,
+        "active_vehicle": 643,
+        "txn_ac_weight": 72,
+        "consensus_condition": 40
+    },
+    "483426907ad64081ad6cd9e4460775de": {
+        "confirm_time_delay": 37.10000000000001,
+        "active_vehicle": 643,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "44d8a32f722641a7b333236d49e423fb": {
+        "confirm_time_delay": 37.10000000000001,
+        "active_vehicle": 643,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "59718e93141e47c6a1232d8cd9760236": {
+        "confirm_time_delay": 37.0,
+        "active_vehicle": 643,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "6949b64caeeb4fc0951d7adb17bfc00c": {
+        "confirm_time_delay": 37.2,
+        "active_vehicle": 643,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "56abb51b7ca94f0f91a272c0707509ef": {
+        "confirm_time_delay": 37.400000000000006,
+        "active_vehicle": 643,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "5af5237a93a94cd091b3357b83157cd9": {
+        "confirm_time_delay": 36.900000000000006,
+        "active_vehicle": 643,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "0cbe12576def4531ad11c9c4be7926af": {
+        "confirm_time_delay": 37.0,
+        "active_vehicle": 643,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "8a1c5f3c2c934843b8f831fe1aa085f6": {
+        "confirm_time_delay": 36.8,
+        "active_vehicle": 643,
+        "txn_ac_weight": 43,
+        "consensus_condition": 40
+    },
+    "28645c326888498f864ee8ad1512ea40": {
+        "confirm_time_delay": 37.099999999999994,
+        "active_vehicle": 647,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "00f71af1289846d7b74f836e80685801": {
+        "confirm_time_delay": 37.0,
+        "active_vehicle": 647,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "93dd7777e1b94eae88b5951a9c620d1d": {
+        "confirm_time_delay": 37.10000000000001,
+        "active_vehicle": 647,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "880de45e2c9d40ada7fb0e68882f6d50": {
+        "confirm_time_delay": 37.0,
+        "active_vehicle": 647,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "cba1299ab6104c239bc22cc80f5d32e4": {
+        "confirm_time_delay": 37.2,
+        "active_vehicle": 647,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "594c1ebfc239415f9740c37cb617a708": {
+        "confirm_time_delay": 37.400000000000006,
+        "active_vehicle": 651,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "f35126f69c7949af94d00d465aaff2a4": {
+        "confirm_time_delay": 37.2,
+        "active_vehicle": 651,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "cac0d4eafcbd474f9d143dbee36a72d6": {
+        "confirm_time_delay": 37.10000000000001,
+        "active_vehicle": 651,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "c7adfa82d6d9411f9ce880ec5656279e": {
+        "confirm_time_delay": 37.10000000000001,
+        "active_vehicle": 651,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "d706ba52ac274d64af3f82c3b4eabf2a": {
+        "confirm_time_delay": 37.0,
+        "active_vehicle": 651,
+        "txn_ac_weight": 80,
+        "consensus_condition": 40
+    },
+    "a7f901d281c2460bac0e1d2b022ef5d9": {
+        "confirm_time_delay": 36.900000000000006,
+        "active_vehicle": 651,
+        "txn_ac_weight": 69,
+        "consensus_condition": 40
+    },
+    "ef9123b2c05146a28bc9de5dcf0c432f": {
+        "confirm_time_delay": 36.80000000000001,
+        "active_vehicle": 651,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "84d4895251c142139876e4cd9d76f73d": {
+        "confirm_time_delay": 36.80000000000001,
+        "active_vehicle": 651,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "2414cfe0b4534fe8a127af05e1dee9b9": {
+        "confirm_time_delay": 37.10000000000001,
+        "active_vehicle": 651,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "96fcde2f84254957bc1e33c143976142": {
+        "confirm_time_delay": 37.10000000000001,
+        "active_vehicle": 651,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "5f5a1a81d8644027adb85b95e8e2e1ff": {
+        "confirm_time_delay": 37.599999999999994,
+        "active_vehicle": 655,
+        "txn_ac_weight": 79,
+        "consensus_condition": 40
+    },
+    "ac3ded9a30d74755858fbd299373c6b5": {
+        "confirm_time_delay": 37.099999999999994,
+        "active_vehicle": 655,
+        "txn_ac_weight": 80,
+        "consensus_condition": 40
+    },
+    "6588acc7514d49ea8f06d43a81f66ce5": {
+        "confirm_time_delay": 37.39999999999999,
+        "active_vehicle": 655,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "956796e6c6aa4c88a6d875251c5f8844": {
+        "confirm_time_delay": 37.39999999999999,
+        "active_vehicle": 655,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "ff75326c4a994172b31bc29452e93bf4": {
+        "confirm_time_delay": 37.39999999999999,
+        "active_vehicle": 655,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "73a7f15bbe4b48e3bdd7515d1567afb2": {
+        "confirm_time_delay": 37.3,
+        "active_vehicle": 655,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "4b4b4298d13c436fa8d1c981534aacd3": {
+        "confirm_time_delay": 37.7,
+        "active_vehicle": 658,
+        "txn_ac_weight": 48,
+        "consensus_condition": 40
+    },
+    "f8798099fcb943ceb2c20d3db6c0a79c": {
+        "confirm_time_delay": 37.7,
+        "active_vehicle": 658,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "a351b7275eb6400d961986f3e408eba7": {
+        "confirm_time_delay": 37.599999999999994,
+        "active_vehicle": 658,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "f5ad2da51e7e403f9046bbbe507aa9b6": {
+        "confirm_time_delay": 37.5,
+        "active_vehicle": 658,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "10d1c16943114e7b9ad4689907db8cc0": {
+        "confirm_time_delay": 37.5,
+        "active_vehicle": 658,
+        "txn_ac_weight": 70,
+        "consensus_condition": 40
+    },
+    "bbaa51c01f6d49f4840e30bcedf76a0b": {
+        "confirm_time_delay": 37.400000000000006,
+        "active_vehicle": 658,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "152f54debaa641d38af37e4a4b580328": {
+        "confirm_time_delay": 37.7,
+        "active_vehicle": 658,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "9d2136d797ad45aba999e4fcbc68c610": {
+        "confirm_time_delay": 37.5,
+        "active_vehicle": 658,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "f10e5c013f28451587116d4905175777": {
+        "confirm_time_delay": 37.599999999999994,
+        "active_vehicle": 663,
+        "txn_ac_weight": 50,
+        "consensus_condition": 40
+    },
+    "2102e0b5cad845e783494f5dbd20d83a": {
+        "confirm_time_delay": 37.599999999999994,
+        "active_vehicle": 663,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "a3db003cc6854f2aac1fa8f0ed6ece9b": {
+        "confirm_time_delay": 37.5,
+        "active_vehicle": 663,
+        "txn_ac_weight": 70,
+        "consensus_condition": 40
+    },
+    "c4a57446572a44e8a46edbe408d95dba": {
+        "confirm_time_delay": 37.5,
+        "active_vehicle": 663,
+        "txn_ac_weight": 73,
+        "consensus_condition": 40
+    },
+    "c8c51fa8ae2a421ba441c1360c1a75f9": {
+        "confirm_time_delay": 37.60000000000001,
+        "active_vehicle": 663,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "b9e206ed9d5c4e08a4a37ca35cc2bfcf": {
+        "confirm_time_delay": 37.60000000000001,
+        "active_vehicle": 663,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "4a2b421ade7d44169f08f6cb97437732": {
+        "confirm_time_delay": 38.2,
+        "active_vehicle": 668,
+        "txn_ac_weight": 88,
+        "consensus_condition": 40
+    },
+    "0cf3b8b1388843be9f3809a3f2b9f330": {
+        "confirm_time_delay": 38.0,
+        "active_vehicle": 668,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "5f4897e64e424e8191ca4f07c81fd8d3": {
+        "confirm_time_delay": 38.39999999999999,
+        "active_vehicle": 668,
+        "txn_ac_weight": 45,
+        "consensus_condition": 40
+    },
+    "582cd8fda59649c1b1667406480eba64": {
+        "confirm_time_delay": 38.39999999999999,
+        "active_vehicle": 668,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "58f92ca1096740c58d6299cb16f74256": {
+        "confirm_time_delay": 38.400000000000006,
+        "active_vehicle": 668,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "c1ef8e9c526047f4af929c80d5f66d90": {
+        "confirm_time_delay": 38.400000000000006,
+        "active_vehicle": 668,
+        "txn_ac_weight": 78,
+        "consensus_condition": 40
+    },
+    "b0ba94748d364c5e972cd1a6a3bcb4e2": {
+        "confirm_time_delay": 38.400000000000006,
+        "active_vehicle": 668,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "f355005a1859485ca963de67e2397fc0": {
+        "confirm_time_delay": 38.60000000000001,
+        "active_vehicle": 670,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "79f79614bbc74e84999388e63d2884c2": {
+        "confirm_time_delay": 38.60000000000001,
+        "active_vehicle": 670,
+        "txn_ac_weight": 65,
+        "consensus_condition": 40
+    },
+    "2313f831a2c948b784396737fe8f1a63": {
+        "confirm_time_delay": 38.80000000000001,
+        "active_vehicle": 670,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "d38a9e6f9c434cd9b81ef20a56e5c953": {
+        "confirm_time_delay": 38.30000000000001,
+        "active_vehicle": 670,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "7b7c40c13ce94ae994068a957ff4289c": {
+        "confirm_time_delay": 38.60000000000001,
+        "active_vehicle": 670,
+        "txn_ac_weight": 47,
+        "consensus_condition": 40
+    },
+    "da228115c6e94cf8b2146665c8416aeb": {
+        "confirm_time_delay": 38.5,
+        "active_vehicle": 670,
+        "txn_ac_weight": 52,
+        "consensus_condition": 40
+    },
+    "6de5c78383354a7ca74afa48e3afb371": {
+        "confirm_time_delay": 38.89999999999999,
+        "active_vehicle": 674,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "1abc307d7a324d8c9aed17bfd9cc8666": {
+        "confirm_time_delay": 39.10000000000001,
+        "active_vehicle": 674,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "0a4eb665338b496694444463e13485de": {
+        "confirm_time_delay": 39.2,
+        "active_vehicle": 674,
+        "txn_ac_weight": 77,
+        "consensus_condition": 40
+    },
+    "6d2f2f1b0c854174bafc44dda22dadef": {
+        "confirm_time_delay": 39.2,
+        "active_vehicle": 674,
+        "txn_ac_weight": 72,
+        "consensus_condition": 40
+    },
+    "e8be51534023427587c251a3b915bc4c": {
+        "confirm_time_delay": 38.8,
+        "active_vehicle": 674,
+        "txn_ac_weight": 76,
+        "consensus_condition": 40
+    },
+    "eaf715177c734232a439b7d4407fbaad": {
+        "confirm_time_delay": 39.099999999999994,
+        "active_vehicle": 682,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "90551e7c0a524f53bb5d3009e5f278e8": {
+        "confirm_time_delay": 39.099999999999994,
+        "active_vehicle": 682,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "27b8b32306634ab4b268c79496f868cb": {
+        "confirm_time_delay": 39.10000000000001,
+        "active_vehicle": 682,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "cf320c3a1bdc4c289c9ac5c59336809c": {
+        "confirm_time_delay": 39.10000000000001,
+        "active_vehicle": 682,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "701deead80f34e258635051e269d6b1c": {
+        "confirm_time_delay": 39.2,
+        "active_vehicle": 682,
+        "txn_ac_weight": 68,
+        "consensus_condition": 40
+    },
+    "10066fc3c2c847ebad4b736c41e616c8": {
+        "confirm_time_delay": 39.2,
+        "active_vehicle": 682,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "f2b212018a614f2c8f6b2ec2cf0568ec": {
+        "confirm_time_delay": 39.2,
+        "active_vehicle": 682,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "d18c33beb7fb463696e129e61ecbfb62": {
+        "confirm_time_delay": 39.599999999999994,
+        "active_vehicle": 687,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "64f1b4916fda441fa0c3614ce8e0aaeb": {
+        "confirm_time_delay": 39.900000000000006,
+        "active_vehicle": 687,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "92e15065aa174f99a93ab05b1cb3d5fb": {
+        "confirm_time_delay": 39.900000000000006,
+        "active_vehicle": 687,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "3aee17f870c040b2b1df3544fa6c11ae": {
+        "confirm_time_delay": 39.900000000000006,
+        "active_vehicle": 687,
+        "txn_ac_weight": 82,
+        "consensus_condition": 40
+    },
+    "52784e20b016423daa4b8289862de674": {
+        "confirm_time_delay": 39.8,
+        "active_vehicle": 687,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "fa714c86f7e14eca90740cbc7b499018": {
+        "confirm_time_delay": 39.80000000000001,
+        "active_vehicle": 687,
+        "txn_ac_weight": 83,
+        "consensus_condition": 40
+    },
+    "2725f40e21484185b258f2c58e71c190": {
+        "confirm_time_delay": 39.7,
+        "active_vehicle": 687,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "747f62bb66b44022b9b43838ce6939ab": {
+        "confirm_time_delay": 39.8,
+        "active_vehicle": 690,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "1ba5c6ac38124523b26d006847fb0481": {
+        "confirm_time_delay": 39.89999999999999,
+        "active_vehicle": 690,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "819ea57c846d4f389cde2c8136a02360": {
+        "confirm_time_delay": 39.8,
+        "active_vehicle": 690,
+        "txn_ac_weight": 64,
+        "consensus_condition": 40
+    },
+    "0c75f5be7afa4a3f9970263ec82d47eb": {
+        "confirm_time_delay": 40.0,
+        "active_vehicle": 690,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "df553a60540b402291745ed2ea915379": {
+        "confirm_time_delay": 39.89999999999999,
+        "active_vehicle": 690,
+        "txn_ac_weight": 41,
+        "consensus_condition": 40
+    },
+    "b6c42af161024ab5a9e56ffe00ea2276": {
+        "confirm_time_delay": 40.2,
+        "active_vehicle": 690,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "43a6f41f540e485ca7c26ea9bd279b47": {
+        "confirm_time_delay": 40.10000000000001,
+        "active_vehicle": 690,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "dd75ac8032444f9e863c9895ebdc3f32": {
+        "confirm_time_delay": 40.60000000000001,
+        "active_vehicle": 694,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "6e3c1f3aec664403b56dc96b3fd7dc18": {
+        "confirm_time_delay": 40.2,
+        "active_vehicle": 694,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "51c6ab380dfa43dca959e8f2c0e63ab8": {
+        "confirm_time_delay": 40.5,
+        "active_vehicle": 694,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "e0447c7c5f5941879aab83f0970ecfed": {
+        "confirm_time_delay": 40.69999999999999,
+        "active_vehicle": 696,
+        "txn_ac_weight": 79,
+        "consensus_condition": 40
+    },
+    "4590bf0b4c914706bde8842409b0a73f": {
+        "confirm_time_delay": 40.599999999999994,
+        "active_vehicle": 696,
+        "txn_ac_weight": 62,
+        "consensus_condition": 40
+    },
+    "9db8dca74fa54021971065b4783a4acd": {
+        "confirm_time_delay": 40.60000000000001,
+        "active_vehicle": 696,
+        "txn_ac_weight": 82,
+        "consensus_condition": 40
+    },
+    "c6edbb2efe154a36b2a25cd22d1950f8": {
+        "confirm_time_delay": 40.5,
+        "active_vehicle": 696,
+        "txn_ac_weight": 85,
+        "consensus_condition": 40
+    },
+    "e3002d685886457bb9450c44a1e48dc5": {
+        "confirm_time_delay": 41.0,
+        "active_vehicle": 696,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "16348087e4194147ae378e3eabb45735": {
+        "confirm_time_delay": 40.900000000000006,
+        "active_vehicle": 696,
+        "txn_ac_weight": 63,
+        "consensus_condition": 40
+    },
+    "16fc05ba4e914b3fa44530b86fab0857": {
+        "confirm_time_delay": 40.89999999999999,
+        "active_vehicle": 698,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "d8c8b524a81342748ecd03c601983fdd": {
+        "confirm_time_delay": 40.89999999999999,
+        "active_vehicle": 698,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "be9c4facf8f3455cbaa0440df10e4e39": {
+        "confirm_time_delay": 41.3,
+        "active_vehicle": 698,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    },
+    "76757e5080cf4c2cbc2cc92badf16855": {
+        "confirm_time_delay": 41.099999999999994,
+        "active_vehicle": 698,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "9ff4344da58b40388cff5154deb66111": {
+        "confirm_time_delay": 41.099999999999994,
+        "active_vehicle": 698,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "f0325526d65e426684f7bc2bdc13cc09": {
+        "confirm_time_delay": 41.0,
+        "active_vehicle": 698,
+        "txn_ac_weight": 49,
+        "consensus_condition": 40
+    },
+    "fe510c553a504ffa8b8ae0bb12101835": {
+        "confirm_time_delay": 41.10000000000001,
+        "active_vehicle": 698,
+        "txn_ac_weight": 73,
+        "consensus_condition": 40
+    },
+    "eaabc8bfb56d41c0988ed20b914da66f": {
+        "confirm_time_delay": 40.900000000000006,
+        "active_vehicle": 698,
+        "txn_ac_weight": 67,
+        "consensus_condition": 40
+    },
+    "fab5d4fbf766418db9f56e86a4b79355": {
+        "confirm_time_delay": 41.3,
+        "active_vehicle": 703,
+        "txn_ac_weight": 56,
+        "consensus_condition": 40
+    },
+    "331ab841803d48b4a190de2403259e46": {
+        "confirm_time_delay": 41.10000000000001,
+        "active_vehicle": 703,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "958f4d9518ed4e7ca3a11d4040f067c8": {
+        "confirm_time_delay": 40.900000000000006,
+        "active_vehicle": 703,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "1819b66ab61e445c8c308c44a0dcc4a8": {
+        "confirm_time_delay": 41.2,
+        "active_vehicle": 703,
+        "txn_ac_weight": 61,
+        "consensus_condition": 40
+    },
+    "2a5b63daaaee44399abbf89f8779c25a": {
+        "confirm_time_delay": 41.099999999999994,
+        "active_vehicle": 703,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "b1a3c937f033415a988dca5a81fabb60": {
+        "confirm_time_delay": 41.39999999999999,
+        "active_vehicle": 703,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "2bcbd6ee8a704d1394ecc1d434722761": {
+        "confirm_time_delay": 41.2,
+        "active_vehicle": 703,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "3a04f901b8104b8199c3fdc3801514b2": {
+        "confirm_time_delay": 41.7,
+        "active_vehicle": 706,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "1d955c30d2be4b7e8d6a717bef8bdd17": {
+        "confirm_time_delay": 41.7,
+        "active_vehicle": 706,
+        "txn_ac_weight": 57,
+        "consensus_condition": 40
+    },
+    "7feb51f3ff5a424fab67e76cd2e91fa5": {
+        "confirm_time_delay": 41.8,
+        "active_vehicle": 706,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "cf859a18ad45463f92a161a7105dde50": {
+        "confirm_time_delay": 41.8,
+        "active_vehicle": 706,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "bf6118b5e9ba4539be3960684f59b19c": {
+        "confirm_time_delay": 41.89999999999999,
+        "active_vehicle": 706,
+        "txn_ac_weight": 51,
+        "consensus_condition": 40
+    },
+    "11c44d2b83e5441681193f3107eb84fc": {
+        "confirm_time_delay": 41.8,
+        "active_vehicle": 706,
+        "txn_ac_weight": 54,
+        "consensus_condition": 40
+    },
+    "eaa5535964e74f8e85bb157160d4fcb5": {
+        "confirm_time_delay": 41.7,
+        "active_vehicle": 706,
+        "txn_ac_weight": 59,
+        "consensus_condition": 40
+    },
+    "39668b2dd4514a2b97612965876980a5": {
+        "confirm_time_delay": 41.7,
+        "active_vehicle": 706,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "e5f94f21103045f1a82d17012d70552a": {
+        "confirm_time_delay": 42.0,
+        "active_vehicle": 709,
+        "txn_ac_weight": 86,
+        "consensus_condition": 40
+    },
+    "027f6bdbca604ee39cf9b242aa516c42": {
+        "confirm_time_delay": 42.0,
+        "active_vehicle": 709,
+        "txn_ac_weight": 80,
+        "consensus_condition": 40
+    },
+    "7397855739874d63af395a66eba49ae4": {
+        "confirm_time_delay": 42.099999999999994,
+        "active_vehicle": 709,
+        "txn_ac_weight": 66,
+        "consensus_condition": 40
+    },
+    "1ff6643d84bc49eeac688eb1bbd40983": {
+        "confirm_time_delay": 42.0,
+        "active_vehicle": 709,
+        "txn_ac_weight": 58,
+        "consensus_condition": 40
+    },
+    "90e8aa3fc24a43debda63fec49fa46e6": {
+        "confirm_time_delay": 42.10000000000001,
+        "active_vehicle": 709,
+        "txn_ac_weight": 60,
+        "consensus_condition": 40
+    },
+    "e43c5f83a1914a298b760012319b2738": {
+        "confirm_time_delay": 42.0,
+        "active_vehicle": 709,
+        "txn_ac_weight": 55,
+        "consensus_condition": 40
+    }
+}

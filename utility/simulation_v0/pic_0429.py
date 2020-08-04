@@ -179,7 +179,7 @@ def vehicle_number_pic_func():
     # plt.ylim([0, 1])
     # plt.xlabel("Percentage of false messages", fontdict={'family': 'Times New Roman', 'size': 12})
     # plt.ylabel("Ratio of unfair ratings", fontdict={'family': 'Times New Roman', 'size': 12})
-    fig.savefig('(1)vehicle_number.pdf', dpi=300)
+    # fig.savefig('(1)vehicle_number.pdf', dpi=300)
     plt.show()
 
 
@@ -348,7 +348,7 @@ def vehilce_ditribution_pic():
     fig.tight_layout()
 
     # plt.grid(linestyle='-.')
-    plt.savefig('(2)transaction distribution.pdf')
+    # plt.savefig('(2)transaction distribution.pdf')
     plt.show()
 
 
@@ -441,7 +441,7 @@ def vehicle_to_tps():
 
     plt.xscale('log')
     plt.yscale('log')
-    plt.savefig('(5)TPS increase.pdf')
+    # plt.savefig('(5)TPS increase.pdf')
     plt.show()
 
 
@@ -450,5 +450,5 @@ if __name__ == "__main__":
     # vehilce_ditribution_pic()
     # vehicle_distribution_one_zone_pic(164)
     # account_vehicle_number()
-    vehicle_to_tps()
-    # count_all_trip()
+    # vehicle_to_tps()
+    count_all_trip()
