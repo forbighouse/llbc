@@ -427,54 +427,54 @@ if __name__ == "__main__":
     # tps = [(10, 40), (50, 150), (100, 200), (250, 80), (500, 160), (750, 160)]
     # tps = [(250, 400), (500, 550), (750, 160)]
 
-    tps = {
-        # "0.25": [(10, 25), (50, 100), (100, 200), (250, 400), (500, 1000), (750, 1500)],
-        "0.5": [(10, 30), (50, 150), (100, 250), (250, 600), (500, 1200), (750, 1700)],
-        "1": [(10, 40), (50, 200), (100, 400), (250, 1000), (500, 2000), (750, 3000)],
-    }
-
-    lst_each_tps_res = defaultdict(list)
-    for keys, sets in tps.items():
-        lst_tmp_ = {}
-        for i in sets:
-            lst_tmp_2 = []
-            _res = tps_to_confirm_time_no_real(i)
-            tag_num = 1
-            for bodys in _res.values():
-                if 30 < tag_num < 90:
-                    # lst_tmp_2.append(bodys["confirm_time_delay"])
-                    lst_tmp_2.append(bodys)
-                tag_num += 1
-            # lst_tmp_[i[0]] = lst_tmp_2
-            file_name = "TPS_json/" + str(i[0]) + "_" + str(i[1])
-            json_str = json.dumps(lst_tmp_2, indent=4)
-            with open(file_name, 'w') as json_file:
-                json_file.write((json_str))
-            gc.collect()
+    # tps = {
+    #     "0.25": [(10, 25), (50, 100), (100, 200), (250, 400), (500, 1000), (750, 1500)],
+    #     "0.5": [(10, 30), (50, 150), (100, 250), (250, 600), (500, 1200), (750, 1700)],
+    #     "1": [(10, 40), (50, 200), (100, 400), (250, 1000), (500, 2000), (750, 3000)],
+    # }
+    #
+    # lst_each_tps_res = defaultdict(list)
+    # for keys, sets in tps.items():
+    #     lst_tmp_ = {}
+    #     for i in sets:
+    #         lst_tmp_2 = []
+    #         _res = tps_to_confirm_time_no_real(i)
+    #         tag_num = 1
+    #         for bodys in _res.values():
+    #             if 30 < tag_num < 90:
+    #                 # lst_tmp_2.append(bodys["confirm_time_delay"])
+    #                 lst_tmp_2.append(bodys)
+    #             tag_num += 1
+    #         # lst_tmp_[i[0]] = lst_tmp_2
+    #         file_name = "TPS_json/" + str(i[0]) + "_" + str(i[1])
+    #         json_str = json.dumps(lst_tmp_2, indent=4)
+    #         with open(file_name, 'w') as json_file:
+    #             json_file.write((json_str))
+    #         gc.collect()
 
         # lst_each_tps_res[keys].append(lst_tmp_)
-
-
-
+        #
+        #
+        #
         # df = pd.DataFrame(lst_confirm_time)
         # print(df.describe())
 
 
     # lst_each_tps_res = []
-    # tps_path = [10, 50, 100, 250, 500, 750]
-    #
-    # for i in tps_path:
-    #     file_path = "TPS=" + str(i) + ".json"
-    #     json_dict = read_from_json(file_path)
-    #     lst_confirm_time = []
-    #     tag_num = 1
-    #     for body in json_dict.values():
-    #         if 30 < tag_num < 90:
-    #             lst_confirm_time.append(round(body["confirm_time_delay"], 2))
-    #         tag_num += 1
-    #     # lst_each_tps_res.append(lst_confirm_time)
-    #     df = pd.DataFrame(lst_confirm_time)
-    #     print(df.describe())
+    tps_path = [10, 50, 100, 250, 500, 750]
+
+    for i in tps_path:
+        file_path = "TPS=" + str(i) + ".json"
+        json_dict = read_from_json(file_path)
+        lst_confirm_time = []
+        tag_num = 1
+        for body in json_dict.values():
+            if 30 < tag_num < 90:
+                lst_confirm_time.append(round(body["confirm_time_delay"], 2))
+            tag_num += 1
+        # lst_each_tps_res.append(lst_confirm_time)
+        df = pd.DataFrame(lst_confirm_time)
+        print(df.describe())
 
 
 

@@ -412,7 +412,7 @@ def account_vehicle_number():
 
 
 def vehicle_to_tps():
-    def lines_func(x):
+    def lines_func1(x):
         y = []
         for i in x:
             _res = (0.5686 * i) - 4.3135
@@ -421,9 +421,8 @@ def vehicle_to_tps():
     input_vehicle_number = [25, 50, 75, 100, 250, 500, 750, 1000, 3500, 5000, 7500, 10000, 18000]
     input_line_number = np.arange(10, 18000, 10)
     input_line_number = list(input_line_number)
-    y_tps = lines_func(input_vehicle_number)
-    y_base = lines_func(input_line_number)
-
+    y_tps = lines_func1(input_vehicle_number)
+    y_base = lines_func1(input_line_number)
 
     fig, ax = plt.subplots(1, 1, figsize=(16, 6), dpi=300)
     ax.plot(input_line_number, y_base, label="Holiday 08 o'clock", color='red')
