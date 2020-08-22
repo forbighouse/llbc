@@ -192,8 +192,9 @@ def sort_key_dict(input_time):
     x17 = []
     y17 = []
     for i in z17:
-        x17.append(i[0])
-        y17.append(i[1])
+        if i[1] > 1:
+            x17.append(i[0])
+            y17.append(i[1])
     return x17, y17
 
 
@@ -207,8 +208,9 @@ def sort_key_dict_scle(input_time):
     x17 = []
     y17 = []
     for i in z17:
-        x17.append(i[0])
-        y17.append(round(((i[1]*3)), 1))
+        if i[1] >= 10:
+            x17.append(i[0])
+            y17.append(round(((i[1]*3)), 1))
     return x17, y17
 
 
@@ -253,8 +255,6 @@ def vehilce_ditribution_pic():
     d07_dict = read_from_json(distance_json_path07)
     d04_dict = read_from_json(distance_json_path04)
     d02_dict = read_from_json(distance_json_path02)
-
-
 
     # 车的请求，求事务
     x7_d_08, y7_d_08 = sort_key_dict_scle(d07_dict['8'])
@@ -446,8 +446,8 @@ def vehicle_to_tps():
 
 if __name__ == "__main__":
     # vehicle_number_pic_func()
-    # vehilce_ditribution_pic()
+    vehilce_ditribution_pic()
     # vehicle_distribution_one_zone_pic(164)
     # account_vehicle_number()
     # vehicle_to_tps()
-    count_all_trip()
+    # count_all_trip()

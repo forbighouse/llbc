@@ -42,7 +42,7 @@ def first_pic_func():
     plt.xlabel("Percentage of false messages", fontdict={'family': 'Times New Roman', 'size': 12})
     plt.ylabel("Ratio of unfair ratings", fontdict={'family': 'Times New Roman', 'size': 12})
     plt.grid(linestyle='-.')
-    plt.savefig('output/1.pdf')
+    # plt.savefig('output/1.pdf')
     plt.show()
 
 
@@ -71,7 +71,7 @@ def second_pic_func():
     plt.xlabel("Percentage of negative ratings", fontdict={'family': 'Times New Roman', 'size': 12})
     plt.ylabel("Trust value offsets", fontdict={'family': 'Times New Roman', 'size': 12})
     plt.grid(linestyle='-.')
-    plt.savefig('output/2.pdf')
+    # plt.savefig('output/2.pdf')
     plt.show()
 
 
@@ -129,20 +129,21 @@ def optimized_first_pic_func():
     ax.plot(x4, y4, color='b', linewidth=newlinewidth, marker='^', markersize=markersize,
             label='DRMWT with Malicious Nodes')
 
-    ax.hlines(0.5, x_newticks[0], x_newticks[-1], colors='0.5', linewidth=newlinewidth*2, linestyles="dashed")
+    ax.hlines(0.5, x_newticks[0], x_newticks[-1], colors='0.5', linewidth=newlinewidth*2, linestyles="dashed",
+              label='Threshold of answer inference δ')
     plt.legend(loc='upper left', prop={'size': 10})
 
     ax.set_xticks(x_newticks)
     ax.set_yticks(y_newticks)
     ax.set_xlabel("Percentage of fake response", fontdict={'size': 10})
     ax.set_ylabel("Ratio of false request result", fontdict={'size': 10})
-    ax.grid(True)
+    ax.grid(linestyle='-.')
     plt.xlim(x_newticks[0], 100)
     plt.ylim(0, 1)
 
 
     # fig.tight_layout()
-    fig.savefig('output/(4)ratio.pdf', dpi=300)
+    # fig.savefig('output/(4)ratio.pdf', dpi=300)
     plt.show()
 
 
@@ -248,7 +249,7 @@ def final_pic_func():
     ax[2].tick_params(labelsize=14)
 
 
-    fig.savefig('output/(3)TPS v2.pdf', dpi=300)
+    # fig.savefig('output/(3)TPS v2.pdf', dpi=300)
 
     plt.show()
     gc.collect()
@@ -257,5 +258,5 @@ def final_pic_func():
 if __name__ == "__main__":
     # first_pic_func()
     # second_pic_func()
-    # optimized_first_pic_func()
-    final_pic_func()
+    optimized_first_pic_func()
+    # final_pic_func()
