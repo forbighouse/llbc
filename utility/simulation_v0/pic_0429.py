@@ -348,7 +348,7 @@ def vehilce_ditribution_pic():
     fig.tight_layout()
 
     # plt.grid(linestyle='-.')
-    # plt.savefig('(2)transaction distribution.pdf')
+    plt.savefig('(2)transaction distribution.pdf')
     plt.show()
 
 
