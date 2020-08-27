@@ -198,6 +198,20 @@ def sort_key_dict(input_time):
     return x17, y17
 
 
+def sort_value_dict(input_time):
+    input_tuple_list = []
+    for i1,j1 in input_time.items():
+        input_tuple_list.append((j1, i1))
+    input_tuple_sort_list = sorted(input_tuple_list, reverse=True)
+    y17 = []
+    x17 = []
+    for i in input_tuple_sort_list:
+        y17.append(i[0])
+        x17.append(i[1])
+    return x17, y17
+
+
+
 def sort_key_dict_scle(input_time):
     # 把车的数量按10的4次方缩小
     key_list = input_time.keys()
@@ -207,10 +221,12 @@ def sort_key_dict_scle(input_time):
     z17 = [(k, input_time[str(k)]) for k in sorted(key_int_list)]
     x17 = []
     y17 = []
+    sum_ = 0
     for i in z17:
         if i[1] >= 10:
             x17.append(i[0])
             y17.append(round(((i[1]*3)), 1))
+            sum_ += round(((i[1]*3)), 1)
     return x17, y17
 
 
@@ -352,6 +368,78 @@ def vehilce_ditribution_pic():
     plt.show()
 
 
+def vehilce_ditribution_pic_new():
+
+    c07_dict = read_from_json(ditribution_json_path07)
+    c04_dict = read_from_json(ditribution_json_path04)
+    c02_dict = read_from_json(ditribution_json_path02)
+
+    d07_dict = read_from_json(distance_json_path07)
+    d04_dict = read_from_json(distance_json_path04)
+    d02_dict = read_from_json(distance_json_path02)
+
+    # 车的请求，求事务
+    x7_d_08, y7_d_08 = sort_key_dict_scle(d07_dict['8'])
+    x4_d_08, y4_d_08 = sort_key_dict_scle(d04_dict['8'])
+    x2_d_08, y2_d_08 = sort_key_dict_scle(d02_dict['8'])
+    x7_d_18, y7_d_18 = sort_key_dict_scle(d07_dict['18'])
+    x4_d_18, y4_d_18 = sort_key_dict_scle(d04_dict['18'])
+    x2_d_18, y2_d_18 = sort_key_dict_scle(d02_dict['18'])
+
+    # 车的数量，求分布
+    x7_08, y7_08 = sort_value_dict(c07_dict['8'])
+    x4_08, y4_08 = sort_value_dict(c04_dict['8'])
+    x2_08, y2_08 = sort_value_dict(c02_dict['8'])
+    x7_18, y7_18 = sort_value_dict(c07_dict['18'])
+    x4_18, y4_18 = sort_value_dict(c04_dict['18'])
+    x2_18, y2_18 = sort_value_dict(c02_dict['18'])
+
+    x7_08 = np.array(x7_08)
+    x4_08 = np.array(x4_08)
+    x2_08 = np.array(x2_08)
+    x7_18 = np.array(x7_18)
+    x4_18 = np.array(x4_18)
+    x2_18 = np.array(x2_18)
+
+    a08_ = np.intersect1d(x4_08, x2_08)
+    a08 = np.intersect1d(x7_08, a08_)
+    a18_ = np.intersect1d(x4_18, x2_18)
+    a18 = np.intersect1d(x7_18, a18_)
+
+    #
+    x08 = a08.tolist()
+    x18 = a18.tolist()
+
+    print("7_08:", count_txn_number(y7_d_08))
+    print("4_08:", count_txn_number(y4_d_08))
+    print("2_08:", count_txn_number(y2_d_08))
+    print("7_18:", count_txn_number(y7_d_18))
+    print("4_18:", count_txn_number(y4_d_18))
+    print("2_18:", count_txn_number(y2_d_18))
+
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+
+    # Example data
+    people = x7_08[:19]
+    y_pos = np.arange(len(people))
+
+    error = np.random.rand(len(people))
+
+    ax.barh(y_pos, y7_08[:19], xerr=error, align='center')
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(people)
+    ax.invert_yaxis()  # labels read top-to-bottom
+    ax.set_xlabel('Number of vehicles')
+    ax.set_ylabel('zone')
+
+    fig.tight_layout()
+
+    # plt.grid(linestyle='-.')
+    # plt.savefig('(2)transaction distribution.pdf')
+    plt.show()
+
+
 def account_vehicle_number():
     c04 = open(ditribution_json_path04, "r", encoding='UTF-8')
     out04 = c04.read()
@@ -446,7 +534,8 @@ def vehicle_to_tps():
 
 if __name__ == "__main__":
     # vehicle_number_pic_func()
-    vehilce_ditribution_pic()
+    # vehilce_ditribution_pic()
+    vehilce_ditribution_pic_new()
     # vehicle_distribution_one_zone_pic(164)
     # account_vehicle_number()
     # vehicle_to_tps()

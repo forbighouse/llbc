@@ -118,16 +118,16 @@ def optimized_first_pic_func():
     fig, ax = plt.subplots(1, 1, dpi=300)
     newlinewidth = 1
     markersize = 4
-    x_newticks = range(0, 105, 10)
+    x_newticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     y_newticks = np.arange(0, 1.1, 0.1)
     ax.plot(x3, y3, color='g', linewidth=newlinewidth, marker='v', markersize=markersize,
-            label='BDTM')
+            label='BDTM with Non-subjective fake response')
     ax.plot(x2, y2, color='k', linewidth=newlinewidth, marker='s', markersize=markersize,
-            label='DRMWT')
+            label='DRMWT with Non-subjective fake response')
     ax.plot(x, y, color='r', linewidth=newlinewidth, marker='o', markersize=markersize,
-            label='BDTM with Malicious Nodes')
+            label='BDTM with subjective fake response')
     ax.plot(x4, y4, color='b', linewidth=newlinewidth, marker='^', markersize=markersize,
-            label='DRMWT with Malicious Nodes')
+            label='DRMWT with subjective fake response')
 
     ax.hlines(0.5, x_newticks[0], x_newticks[-1], colors='0.5', linewidth=newlinewidth*2, linestyles="dashed",
               label='Threshold of answer inference δ')
@@ -141,9 +141,8 @@ def optimized_first_pic_func():
     plt.xlim(x_newticks[0], 100)
     plt.ylim(0, 1)
 
-
-    # fig.tight_layout()
-    # fig.savefig('output/(4)ratio.pdf', dpi=300)
+    fig.tight_layout()
+    fig.savefig('output/(4)ratio.pdf', dpi=300)
     plt.show()
 
 
@@ -334,9 +333,40 @@ def final_pic_func_test():
     gc.collect()
 
 
+def reputation_calculation(num_of_good, num_of_bad, consensus_behavior):
+
+    def func_f(x):
+        return x * x
+    theta_1 = func_f(num_of_good) / (func_f(num_of_good) + func_f(num_of_bad))
+    theta_2 = func_f(num_of_bad) / (func_f(num_of_good) + func_f(num_of_bad))
+    sigma_sharing_metric = ((theta_1 * num_of_good) - (theta_2 * num_of_bad)) / (num_of_good + num_of_bad)
+
+    def consensus_process(behaviors):
+        a = 0.0
+        b = 0.0
+        for i in behaviors:
+            a += i
+            b += abs(i)
+
+        return a / b
+    eta_consensus_metric = consensus_process(consensus_behavior)
+    return sigma_sharing_metric, eta_consensus_metric
+
+
+def reputation_process():
+    good_and_bad = range(100, -5, -5)
+    consensus = [1]
+    for i in good_and_bad:
+        sharing_res, consensus_res = reputation_calculation(i, 100-i, consensus)
+        print(sharing_res)
+        # print(consensus_res)
+        # print(0.5*sharing_res + 0.5*consensus_res)
+
+
 if __name__ == "__main__":
     # first_pic_func()
     # second_pic_func()
     # optimized_first_pic_func()
     # final_pic_func()
-    final_pic_func_test()
+    # final_pic_func_test()
+    reputation_process()
