@@ -211,7 +211,6 @@ def sort_value_dict(input_time):
     return x17, y17
 
 
-
 def sort_key_dict_scle(input_time):
     # 把车的数量按10的4次方缩小
     key_list = input_time.keys()
@@ -534,8 +533,8 @@ def vehicle_to_tps():
 
 if __name__ == "__main__":
     # vehicle_number_pic_func()
-    # vehilce_ditribution_pic()
-    vehilce_ditribution_pic_new()
+    vehilce_ditribution_pic()
+    # vehilce_ditribution_pic_new()
     # vehicle_distribution_one_zone_pic(164)
     # account_vehicle_number()
     # vehicle_to_tps()

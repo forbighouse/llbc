@@ -333,10 +333,10 @@ def final_pic_func_test():
     gc.collect()
 
 
-def reputation_calculation(num_of_good, num_of_bad, consensus_behavior):
+def reputation_calculation_v1(num_of_good, num_of_bad, consensus_behavior):
 
     def func_f(x):
-        return x * x
+        return x
     theta_1 = func_f(num_of_good) / (func_f(num_of_good) + func_f(num_of_bad))
     theta_2 = func_f(num_of_bad) / (func_f(num_of_good) + func_f(num_of_bad))
     sigma_sharing_metric = ((theta_1 * num_of_good) - (theta_2 * num_of_bad)) / (num_of_good + num_of_bad)
@@ -353,14 +353,112 @@ def reputation_calculation(num_of_good, num_of_bad, consensus_behavior):
     return sigma_sharing_metric, eta_consensus_metric
 
 
+def reputation_calculation_v2(num_of_good, num_of_bad, consensus_behavior):
+
+    def func_f(x):
+        return x * x * x
+    theta_1 = func_f(num_of_good) / (func_f(num_of_good) + func_f(num_of_bad))
+    theta_2 = func_f(num_of_bad) / (func_f(num_of_good) + func_f(num_of_bad))
+    sigma_sharing_metric = ((theta_1 * num_of_good) - (theta_2 * num_of_bad)) / (num_of_good + num_of_bad)
+
+    def consensus_process(behaviors):
+        a = 0.0
+        b = 0.0
+        for i in behaviors:
+            a += i
+            b += abs(i)
+
+        return a / b
+    eta_consensus_metric = consensus_process(consensus_behavior)
+    return sigma_sharing_metric, eta_consensus_metric
+
+
+def consensus_contri_generation(input_ratio, bad_para):
+    real_ration = (100-input_ratio) / 100
+    bad_contri = 10 * real_ration
+    default_consensus_contri_list = []
+    for i in range(10-int(bad_contri)):
+        default_consensus_contri_list.append(10)
+    for j in range(int(bad_contri)):
+        default_consensus_contri_list .append(bad_para)
+    return default_consensus_contri_list
+
+
+def normlization_func(input_value):
+    return (input_value - -1) / 2
+
+
 def reputation_process():
     good_and_bad = range(100, -5, -5)
-    consensus = [1]
+    consensus = [1, 1]
+    x_range = []
+    list_sharing_res_v1 = []
+    list_sharing_res_with_1_v1 = []
+    list_sharing_res_with_2_v1 = []
+
+    list_sharing_res_v2 = []
+    list_sharing_res_with_1_v2 = []
+    list_sharing_res_with_2_v2 = []
     for i in good_and_bad:
-        sharing_res, consensus_res = reputation_calculation(i, 100-i, consensus)
-        print(sharing_res)
-        # print(consensus_res)
-        # print(0.5*sharing_res + 0.5*consensus_res)
+        consensus_contri_list_1 = consensus_contri_generation(i, -10)
+        consensus_contri_list_2 = consensus_contri_generation(i, -20)
+        sharing_res_with_1_v1, consensus_res_with_1_v1 = reputation_calculation_v1(i, 100-i, consensus_contri_list_1)
+        sharing_res_with_2_v1, consensus_res_with_2_v1 = reputation_calculation_v1(i, 100-i, consensus_contri_list_2)
+        sharing_res_v1, consensus_res_v1 = reputation_calculation_v1(i, 100-i, consensus)
+
+        sharing_res_with_1_v2, consensus_res_with_1_v2 = reputation_calculation_v2(i, 100-i, consensus_contri_list_1)
+        sharing_res_with_2_v2, consensus_res_with_2_v2 = reputation_calculation_v2(i, 100-i, consensus_contri_list_2)
+        sharing_res_v2, consensus_res_v2 = reputation_calculation_v2(i, 100-i, consensus)
+
+        x_range.append(100-i)
+        list_sharing_res_v1.append(normlization_func(((0.5 * sharing_res_v1)+(0.5 * consensus_res_v1))))
+        list_sharing_res_with_1_v1.append(normlization_func(((0.5 * sharing_res_with_1_v1)+(0.5 * consensus_res_with_1_v1))))
+        list_sharing_res_with_2_v1.append(normlization_func(((0.5 * sharing_res_with_2_v1)+(0.5 * consensus_res_with_2_v1))))
+
+        list_sharing_res_v2.append(normlization_func(((0.5 * sharing_res_v2) + (0.5 * consensus_res_v2))))
+        list_sharing_res_with_1_v2.append(normlization_func(((0.5 * sharing_res_with_1_v2) + (0.5 * consensus_res_with_1_v2))))
+        list_sharing_res_with_2_v2.append(normlization_func(((0.5 * sharing_res_with_2_v2) + (0.5 * consensus_res_with_2_v2))))
+
+    x_TWSL_list = [10, 20, 30, 40, 50, 60, 70, 80]
+    y_TWSL_list = [0.9, 0.81, 0.71, 0.66, 0.59, 0.5, 0.41, 0.32]
+    fig, ax = plt.subplots(1, 1, dpi=300)
+    newlinewidth = 1
+    markersize = 4
+    x_newticks = range(10, 85, 5)
+    y_newticks = np.arange(0.0, 1.1, 0.1)
+
+    ax.plot([10, 80], [0.95, 0.61], color='k', linewidth=newlinewidth,
+            linestyle="dashed", label='TSL Scheme')
+    ax.plot(x_TWSL_list, y_TWSL_list, color='r', linewidth=newlinewidth, marker='o', markersize=markersize,
+            linestyle="dashed", label='TWSL Scheme')
+    ax.plot(x_range, list_sharing_res_v1, color='g', linewidth=newlinewidth, marker='v', markersize=markersize,
+            label='DRMWT without CM F(x)=${x}$')
+    ax.plot(x_range, list_sharing_res_v2, color='g', linewidth=newlinewidth, marker='v', markersize=markersize,
+            linestyle="dashdot", label='DRMWT without CM F(x)=${x^3}$')
+    ax.plot(x_range, list_sharing_res_with_1_v1, color='b', linewidth=newlinewidth, marker='^', markersize=markersize,
+            label='DRMWT with CM F(x)=${x}$')
+    ax.plot(x_range, list_sharing_res_with_1_v2, color='b', linewidth=newlinewidth, marker='^', markersize=markersize,
+            linestyle="dashdot", label='DRMWT with CM F(x)=${x^3}$')
+    ax.plot(x_range, list_sharing_res_with_2_v1, color='m', linewidth=newlinewidth, marker='p', markersize=markersize,
+            label='DRMWT with CM (lazy node) F(x)=${x}$')
+    ax.plot(x_range, list_sharing_res_with_2_v2, color='m', linewidth=newlinewidth, marker='p', markersize=markersize,
+            linestyle="dashdot", label='DRMWT with CM (lazy node) F(x)=${x^3}$')
+
+    ax.hlines(0.5, x_newticks[0], x_newticks[-1], colors='0.5', linewidth=newlinewidth*2, linestyles="dashed",
+              label='Threshold of answer inference δ')
+    plt.legend(loc='upper right', prop={'size': 8})
+
+    ax.set_xticks(x_newticks)
+    ax.set_yticks(y_newticks)
+    ax.set_xlabel("Percentage of misbehavior of an abnormal vehicle", fontdict={'size': 10})
+    ax.set_ylabel("Reputation value", fontdict={'size': 10})
+    ax.grid(linestyle='-.')
+    plt.xlim(10, 80)
+    plt.ylim(0.3, 1.0)
+
+    fig.tight_layout()
+    fig.savefig('output/(5)ratio.pdf', dpi=300)
+    plt.show()
 
 
 if __name__ == "__main__":
